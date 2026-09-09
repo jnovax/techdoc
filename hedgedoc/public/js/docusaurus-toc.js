@@ -18,7 +18,15 @@
 
     var headings = doc.querySelectorAll('h1, h2, h3');
     if (headings.length === 0) {
-      tocContainer.style.display = 'none';
+      // Retry once in case client-side markdown parsing is in progress
+      setTimeout(function () {
+        var retryHeadings = doc.querySelectorAll('h1, h2, h3');
+        if (retryHeadings.length > 0) {
+          initDocusaurusTOC();
+        } else {
+          tocContainer.style.display = 'none';
+        }
+      }, 200);
       return;
     }
 
