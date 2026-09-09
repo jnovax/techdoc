@@ -12,7 +12,7 @@ module.exports = {
       process: require.resolve('process/browser'),
       Buffer: ['buffer', 'Buffer'],
       Visibility: 'visibilityjs',
-      Cookies: 'js-cookie',
+      Cookies: ['js-cookie', 'default'],
       key: 'keymaster',
       $: 'jquery',
       jQuery: 'jquery',
