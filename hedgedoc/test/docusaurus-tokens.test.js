@@ -26,24 +26,43 @@ function runTests () {
 
   // Test 2: Kiểm tra sự tồn tại của CSS file và các biến token cốt lõi
   const cssPath = path.join(__dirname, '../public/css/docusaurus-theme.css')
-  if (fs.existsSync(cssPath)) {
-    const css = fs.readFileSync(cssPath, 'utf8')
-    const requiredTokens = [
-      '--ifm-font-family-base',
-      '--ifm-font-size-base',
-      '--ifm-line-height-base',
-      '--ifm-color-content',
-      '--ifm-h1-font-size',
-      '--ifm-h2-font-size',
-      '--ifm-h3-font-size'
-    ]
-    const missing = requiredTokens.filter(t => !css.includes(t))
-    if (missing.length > 0) {
-      console.log('Notice: Token check pending CSS update in Task 2. Missing:', missing)
-    }
-  }
+  assert.ok(fs.existsSync(cssPath), 'docusaurus-theme.css must exist')
+  const css = fs.readFileSync(cssPath, 'utf8')
+  const requiredTokens = [
+    '--ifm-font-family-base',
+    '--ifm-font-family-monospace',
+    '--ifm-font-size-base',
+    '--ifm-line-height-base',
+    '--ifm-leading',
+    '--ifm-color-content',
+    '--ifm-color-content-secondary',
+    '--ifm-color-primary',
+    '--ifm-h1-font-size',
+    '--ifm-h2-font-size',
+    '--ifm-h3-font-size',
+    '--ifm-h4-font-size',
+    '--ifm-heading-color',
+    '--ifm-alert-note-border',
+    '--ifm-alert-tip-border',
+    '--ifm-alert-info-border',
+    '--ifm-alert-warning-border',
+    '--ifm-alert-danger-border',
+    '--ifm-table-border-color',
+    '--ifm-table-head-background',
+    '--ifm-toc-border-color'
+  ]
+  requiredTokens.forEach(token => {
+    assert.ok(css.includes(token), `Missing required design token: ${token}`)
+  })
 
-  console.log('Docusaurus Design Tokens unit tests passed!')
+  // Test 3: Validate typography declarations
+  assert.ok(css.includes('16.5px'), 'Must specify 16.5px base font size')
+  assert.ok(css.includes('1.65'), 'Must specify 1.65 line height')
+  assert.ok(css.includes('#1c1e21'), 'Must specify #1c1e21 content color')
+  assert.ok(css.includes('border-collapse: separate'), 'Table must have separate border collapse')
+  assert.ok(css.includes('border-radius: 8px'), 'Table must have 8px border radius')
+
+  console.log('All Docusaurus Design Tokens tests passed successfully!')
 }
 
 if (typeof describe !== 'undefined') {
