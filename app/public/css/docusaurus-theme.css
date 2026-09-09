@@ -99,12 +99,11 @@ body.docusaurus-layout {
 .docusaurus-navbar-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   text-decoration: none !important;
-  font-weight: 800;
-  font-size: 18px;
-  color: var(--ifm-heading-color) !important;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  font-size: 19px;
+  color: #0f172a !important;
   transition: opacity 0.15s ease;
 }
 
@@ -113,10 +112,8 @@ body.docusaurus-layout {
 }
 
 .docusaurus-navbar-brand img {
-  height: 32px;
-  width: 32px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  height: 34px;
+  width: auto;
 }
 
 .docusaurus-navbar-separator {
