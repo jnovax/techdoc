@@ -9,6 +9,8 @@ module.exports = {
       filename: '[name].[contenthash:10].css'
     }),
     new rspack.ProvidePlugin({
+      process: require.resolve('process/browser'),
+      Buffer: ['buffer', 'Buffer'],
       Visibility: 'visibilityjs',
       Cookies: 'js-cookie',
       key: 'keymaster',
@@ -97,7 +99,7 @@ module.exports = {
           globOptions: {
             dot: false
           },
-          to: 'emojify.js/'
+          to: 'emojify.js/dist/'
         },
         {
           context: path.join(__dirname, 'node_modules/reveal.js'),
@@ -268,7 +270,9 @@ module.exports = {
     },
     fallback: {
       fs: false,
-      path: false
+      path: false,
+      process: require.resolve('process/browser'),
+      buffer: require.resolve('buffer/')
     }
   },
 
