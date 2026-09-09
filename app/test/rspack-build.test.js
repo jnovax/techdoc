@@ -19,7 +19,7 @@ function runTests () {
 
   // Test 2: rspack.common.js rules & SWC / LightningCSS configuration
   const commonContent = fs.readFileSync(commonPath, 'utf8')
-  assert.ok(commonContent.includes("css: true"), 'rspack.common.js must enable native LightningCSS with experiments.css: true')
+  assert.ok(commonContent.includes('CssExtractRspackPlugin'), 'rspack.common.js must use CssExtractRspackPlugin for CSS extraction and font path resolution')
   assert.ok(commonContent.includes("loader: 'builtin:swc-loader'"), 'rspack.common.js must use builtin:swc-loader')
   assert.ok(commonContent.includes("target: 'es2020'"), 'SWC target must be es2020 for modern evergreen browsers')
   assert.ok(!commonContent.includes('babel-polyfill'), 'rspack.common.js must NOT include legacy babel-polyfill')

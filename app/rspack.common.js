@@ -4,10 +4,10 @@ const path = require('path')
 
 module.exports = {
   name: 'app',
-  experiments: {
-    css: true
-  },
   plugins: [
+    new rspack.CssExtractRspackPlugin({
+      filename: '[name].[contenthash:10].css'
+    }),
     new rspack.ProvidePlugin({
       Visibility: 'visibilityjs',
       Cookies: 'js-cookie',
@@ -251,7 +251,10 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'public/build'),
     publicPath: 'build/',
-    filename: '[name].js'
+    filename: '[name].js',
+    clean: {
+      keep: /html[eE]xport/
+    }
   },
 
   resolve: {
@@ -332,7 +335,16 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        type: 'css'
+        use: [
+          {
+            loader: rspack.CssExtractRspackPlugin.loader,
+            options: {
+              publicPath: ''
+            }
+          },
+          'css-loader'
+        ],
+        type: 'javascript/auto'
       },
       {
         test: require.resolve('js-sequence-diagrams'),
@@ -347,7 +359,10 @@ module.exports = {
       },
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        type: 'asset/resource'
+        type: 'asset/resource',
+        generator: {
+          publicPath: ''
+        }
       },
       {
         test: /\.html$/,
@@ -360,6 +375,9 @@ module.exports = {
           dataUrlCondition: {
             maxSize: 5000
           }
+        },
+        generator: {
+          publicPath: ''
         }
       },
       {
@@ -369,6 +387,9 @@ module.exports = {
           dataUrlCondition: {
             maxSize: 5000
           }
+        },
+        generator: {
+          publicPath: ''
         }
       },
       {
@@ -378,6 +399,9 @@ module.exports = {
           dataUrlCondition: {
             maxSize: 10000
           }
+        },
+        generator: {
+          publicPath: ''
         }
       },
       {
@@ -387,6 +411,9 @@ module.exports = {
           dataUrlCondition: {
             maxSize: 10000
           }
+        },
+        generator: {
+          publicPath: ''
         }
       }
     ]
