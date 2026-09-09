@@ -11,6 +11,63 @@
       .replace(/\-\-+/g, '-');
   }
 
+  var ADMONITION_CONFIGS = {
+    note: { title: 'Note', icon: 'fa-info-circle' },
+    tip: { title: 'Tip', icon: 'fa-lightbulb-o' },
+    info: { title: 'Info', icon: 'fa-info' },
+    warning: { title: 'Warning', icon: 'fa-exclamation-triangle' },
+    danger: { title: 'Danger', icon: 'fa-fire' }
+  };
+
+  function parseCalloutType(text) {
+    if (!text) return null;
+    var match = text.match(/^\s*\[!(NOTE|TIP|INFO|WARNING|DANGER|IMPORTANT)\]\s*(.*)$/i);
+    if (match) {
+      var rawType = match[1].toLowerCase();
+      var type = rawType === 'important' ? 'warning' : rawType;
+      return { type: type, remaining: match[2] };
+    }
+    return null;
+  }
+
+  function decorateAdmonitions() {
+    var doc = document.getElementById('doc') || document.querySelector('.markdown-body');
+    if (!doc) return;
+
+    var blockquotes = doc.querySelectorAll('blockquote:not(.admonition-processed)');
+    blockquotes.forEach(function (bq) {
+      var firstP = bq.querySelector('p') || bq;
+      var text = firstP.textContent || '';
+      var parsed = parseCalloutType(text);
+      if (parsed) {
+        bq.classList.add('admonition-processed');
+        bq.classList.add('admonition-box');
+        bq.classList.add('alert--' + parsed.type);
+        bq.classList.add('admonition-' + parsed.type);
+
+        var cfg = ADMONITION_CONFIGS[parsed.type] || { title: parsed.type.toUpperCase(), icon: 'fa-info-circle' };
+
+        // Clean out the leading [!TAG]
+        for (var i = 0; i < firstP.childNodes.length; i++) {
+          var node = firstP.childNodes[i];
+          if (node.nodeType === 3 && node.nodeValue) { // Node.TEXT_NODE = 3
+            var m = node.nodeValue.match(/^\s*\[!(NOTE|TIP|INFO|WARNING|DANGER|IMPORTANT)\]\s*/i);
+            if (m) {
+              node.nodeValue = node.nodeValue.replace(/^\s*\[!(NOTE|TIP|INFO|WARNING|DANGER|IMPORTANT)\]\s*/i, '');
+              break;
+            }
+          }
+        }
+
+        var header = document.createElement('div');
+        header.className = 'admonition-heading';
+        header.innerHTML = '<i class="fa ' + cfg.icon + ' admonition-icon"></i> ' + cfg.title.toUpperCase();
+
+        bq.insertBefore(header, bq.firstChild);
+      }
+    });
+  }
+
   var observer = null;
 
   function buildTOC() {
@@ -18,6 +75,9 @@
     var tocContainer = document.getElementById('docusaurusToc');
     var mainContainer = document.querySelector('.docusaurus-container');
     if (!doc || !tocContainer) return false;
+
+    // Decorate admonitions when markdown content is available
+    decorateAdmonitions();
 
     // In modern documentation (like Docusaurus), TOC only lists h2 and h3 sections
     var headings = doc.querySelectorAll('h2, h3');
@@ -121,12 +181,14 @@
   }
 
   function init() {
+    decorateAdmonitions();
     var built = buildTOC();
     // If not built yet (e.g. client markdown rendering in progress), poll or observe
     if (!built) {
       var attempts = 0;
       var interval = setInterval(function () {
         attempts++;
+        decorateAdmonitions();
         if (buildTOC() || attempts > 15) {
           clearInterval(interval);
         }
@@ -134,9 +196,19 @@
     }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      slugify: slugify,
+      parseCalloutType: parseCalloutType,
+      ADMONITION_CONFIGS: ADMONITION_CONFIGS
+    };
+  }
+
+  if (typeof window !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   }
 })();
