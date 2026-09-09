@@ -192,7 +192,7 @@ module.exports = {
       'expose-loader?exposes=LZString!lz-string',
       'flowchart.js',
       'js-sequence-diagrams',
-      'expose-loader?exposes=io!socket.io-client',
+      'socket.io-client',
       'reveal-markdown',
       path.join(__dirname, 'public/js/index.js')
     ],
@@ -217,7 +217,7 @@ module.exports = {
       'expose-loader?exposes=moment!moment',
       'flowchart.js',
       'js-sequence-diagrams',
-      'expose-loader?exposes=io!socket.io-client',
+      'socket.io-client',
       'reveal-markdown',
       path.join(__dirname, 'public/js/pretty.js')
     ],
@@ -263,7 +263,8 @@ module.exports = {
     alias: {
       'bootstrap-tooltip': path.join(__dirname, 'public/vendor/bootstrap/tooltip.min.js'),
       'reveal-markdown': path.join(__dirname, 'public/js/reveal-markdown.js'),
-      raphael: path.join(__dirname, 'node_modules/raphael/raphael.no-deps.js')
+      raphael: path.join(__dirname, 'node_modules/raphael/raphael.no-deps.js'),
+      'socket.io-client': path.join(__dirname, 'node_modules/socket.io-client/dist/socket.io.js')
     },
     fallback: {
       fs: false,
@@ -272,7 +273,6 @@ module.exports = {
   },
 
   externals: {
-    'socket.io-client': 'io',
     jquery: '$',
     moment: 'moment',
     select2: 'select2',
