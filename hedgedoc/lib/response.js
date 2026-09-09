@@ -44,6 +44,25 @@ function showLogin (req, res, next) {
   res.render('login.ejs', data)
 }
 
+function extractSnippet (content, maxLength = 140) {
+  if (!content || typeof content !== 'string') return ''
+  let text = content
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`[^`]*`/g, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/!\[.*?\]\(.*?\)/g, ' ')
+    .replace(/\[(.*?)\]\(.*?\)/g, '$1')
+    .replace(/^[\s#>\-*+~_|=]+/gm, ' ')
+    .replace(/[*_~`#|]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+
+  if (text.length > maxLength) {
+    text = text.slice(0, maxLength).trim() + '...'
+  }
+  return text
+}
+
 async function showIndex (req, res, next) {
   const authStatus = req.isAuthenticated()
   let deleteToken = ''
@@ -104,12 +123,7 @@ async function showIndex (req, res, next) {
         }
       }
 
-      let snippet = (note.content || '')
-        .replace(/^[#>-]+\s+/gm, '')
-        .replace(/[`*_[\]()]/g, '')
-        .replace(/\n+/g, ' ')
-        .trim()
-      if (snippet.length > 140) snippet = snippet.slice(0, 140) + '...'
+      const snippet = extractSnippet(note.content)
 
       return {
         id: note.alias || note.shortid || note.id,
@@ -136,14 +150,7 @@ async function showIndex (req, res, next) {
           order: [['deletedAt', 'DESC']]
         })
         trashedNotes = rawTrashed.map(note => {
-          let snippet = (note.content || '')
-            .replace(/#+\s+.*?\n/g, ' ')
-            .replace(/!\[.*?\]\(.*?\)/g, ' ')
-            .replace(/\[.*?\]\(.*?\)/g, ' ')
-            .replace(/[`*_~>|]/g, ' ')
-            .replace(/\n+/g, ' ')
-            .trim()
-          if (snippet.length > 140) snippet = snippet.slice(0, 140) + '...'
+          const snippet = extractSnippet(note.content)
           return {
             id: note.alias || note.shortid || note.id,
             title: note.title || 'Ghi chú không tiêu đề',
