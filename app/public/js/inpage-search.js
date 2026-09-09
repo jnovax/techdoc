@@ -5,14 +5,26 @@
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
-  var searchBar = null;
-  var searchInput = null;
-  var searchCounter = null;
-  var prevBtn = null;
-  var nextBtn = null;
   var matches = [];
   var currentIndex = -1;
   var debounceTimer = null;
+
+  // Pop-up search bar (used in Edit mode)
+  var searchBar = null;
+  var popupInput = null;
+  var popupCounter = null;
+  var popupPrevBtn = null;
+  var popupNextBtn = null;
+
+  // Inline navbar search (used in Publish mode)
+  var navbarSearchEl = null;
+  var navbarInput = null;
+  var navbarCounter = null;
+  var navbarNav = null;
+  var navbarPrevBtn = null;
+  var navbarNextBtn = null;
+  var navbarClearBtn = null;
+  var navbarKbd = null;
 
   function getDocContainer() {
     return document.getElementById('doc') || document.querySelector('.markdown-body') || document.body;
@@ -35,20 +47,54 @@
     container.normalize();
     matches = [];
     currentIndex = -1;
-    updateCounter();
+    updateCounters();
   }
 
-  function updateCounter() {
-    if (!searchCounter) return;
-    if (matches.length === 0) {
-      searchCounter.textContent = searchInput && searchInput.value.trim() ? '0 / 0' : '';
-      if (prevBtn) prevBtn.disabled = true;
-      if (nextBtn) nextBtn.disabled = true;
-    } else {
-      searchCounter.textContent = (currentIndex + 1) + ' / ' + matches.length;
-      if (prevBtn) prevBtn.disabled = false;
-      if (nextBtn) nextBtn.disabled = false;
+  function updateCounters() {
+    var currentInput = getActiveInput();
+    var val = currentInput ? currentInput.value.trim() : '';
+
+    // Update popup counter
+    if (popupCounter) {
+      if (matches.length === 0) {
+        popupCounter.textContent = val ? '0 / 0' : '';
+        if (popupPrevBtn) popupPrevBtn.disabled = true;
+        if (popupNextBtn) popupNextBtn.disabled = true;
+      } else {
+        popupCounter.textContent = (currentIndex + 1) + ' / ' + matches.length;
+        if (popupPrevBtn) popupPrevBtn.disabled = false;
+        if (popupNextBtn) popupNextBtn.disabled = false;
+      }
     }
+
+    // Update navbar counter & controls
+    if (navbarCounter) {
+      if (!val) {
+        navbarCounter.style.display = 'none';
+        if (navbarNav) navbarNav.style.display = 'none';
+        if (navbarKbd) navbarKbd.style.display = '';
+      } else {
+        navbarCounter.style.display = '';
+        if (navbarNav) navbarNav.style.display = 'flex';
+        if (navbarKbd) navbarKbd.style.display = 'none';
+
+        if (matches.length === 0) {
+          navbarCounter.textContent = '0 / 0';
+          if (navbarPrevBtn) navbarPrevBtn.disabled = true;
+          if (navbarNextBtn) navbarNextBtn.disabled = true;
+        } else {
+          navbarCounter.textContent = (currentIndex + 1) + ' / ' + matches.length;
+          if (navbarPrevBtn) navbarPrevBtn.disabled = false;
+          if (navbarNextBtn) navbarNextBtn.disabled = false;
+        }
+      }
+    }
+  }
+
+  function getActiveInput() {
+    if (navbarInput && document.activeElement === navbarInput) return navbarInput;
+    if (popupInput && document.activeElement === popupInput) return popupInput;
+    return navbarInput || popupInput;
   }
 
   function performSearch(keyword) {
@@ -80,7 +126,7 @@
             if (tag === 'script' || tag === 'style' || tag === 'noscript' || tag === 'textarea' || tag === 'input') {
               return NodeFilter.FILTER_REJECT;
             }
-            if (parent.closest('.techdoc-search-bar') || parent.closest('.techdoc-search-trigger')) {
+            if (parent.closest('.techdoc-search-bar') || parent.closest('.techdoc-navbar-search') || parent.closest('.techdoc-search-trigger')) {
               return NodeFilter.FILTER_REJECT;
             }
           }
@@ -127,7 +173,7 @@
     if (matches.length > 0) {
       goToMatch(0);
     } else {
-      updateCounter();
+      updateCounters();
     }
   }
 
@@ -140,7 +186,7 @@
     currentIndex = (index + matches.length) % matches.length;
     var currentMatch = matches[currentIndex];
     currentMatch.classList.add('techdoc-search-current');
-    updateCounter();
+    updateCounters();
 
     currentMatch.scrollIntoView({
       behavior: 'smooth',
@@ -148,26 +194,87 @@
     });
   }
 
-  function openSearchBar() {
-    if (!searchBar) {
-      createSearchBar();
+  // --- Inline Navbar Search Setup ---
+  function initNavbarSearch() {
+    navbarSearchEl = document.getElementById('techdocNavbarSearch') || document.querySelector('.techdoc-navbar-search');
+    if (!navbarSearchEl) return;
+
+    navbarInput = navbarSearchEl.querySelector('.techdoc-navbar-search-input');
+    navbarCounter = navbarSearchEl.querySelector('.techdoc-navbar-search-counter');
+    navbarNav = navbarSearchEl.querySelector('.techdoc-navbar-search-nav');
+    navbarPrevBtn = navbarSearchEl.querySelector('.search-prev-btn');
+    navbarNextBtn = navbarSearchEl.querySelector('.search-next-btn');
+    navbarClearBtn = navbarSearchEl.querySelector('.search-clear-btn');
+    navbarKbd = navbarSearchEl.querySelector('.techdoc-navbar-search-kbd');
+
+    if (navbarInput) {
+      navbarInput.addEventListener('input', function () {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function () {
+          performSearch(navbarInput.value);
+        }, 150);
+      });
+
+      navbarInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (e.shiftKey) {
+            goToMatch(currentIndex - 1);
+          } else {
+            goToMatch(currentIndex + 1);
+          }
+        } else if (e.key === 'Escape') {
+          navbarInput.value = '';
+          clearHighlights();
+          navbarInput.blur();
+        }
+      });
     }
-    searchBar.style.display = 'flex';
-    searchInput.focus();
-    searchInput.select();
-    if (searchInput.value.trim()) {
-      performSearch(searchInput.value);
+
+    if (navbarPrevBtn) {
+      navbarPrevBtn.addEventListener('click', function () {
+        goToMatch(currentIndex - 1);
+      });
+    }
+
+    if (navbarNextBtn) {
+      navbarNextBtn.addEventListener('click', function () {
+        goToMatch(currentIndex + 1);
+      });
+    }
+
+    if (navbarClearBtn) {
+      navbarClearBtn.addEventListener('click', function () {
+        if (navbarInput) navbarInput.value = '';
+        clearHighlights();
+        if (navbarInput) navbarInput.focus();
+      });
     }
   }
 
-  function closeSearchBar() {
+  // --- Popup Search Bar Setup (for Edit view) ---
+  function openPopupSearchBar() {
+    if (!searchBar) {
+      createPopupSearchBar();
+    }
+    searchBar.style.display = 'flex';
+    setTimeout(function () {
+      popupInput.focus();
+      popupInput.select();
+    }, 50);
+    if (popupInput.value.trim()) {
+      performSearch(popupInput.value);
+    }
+  }
+
+  function closePopupSearchBar() {
     if (searchBar) {
       searchBar.style.display = 'none';
     }
     clearHighlights();
   }
 
-  function createSearchBar() {
+  function createPopupSearchBar() {
     if (searchBar) return;
     searchBar = document.createElement('div');
     searchBar.className = 'techdoc-search-bar';
@@ -178,51 +285,51 @@
     icon.style.fontSize = '13px';
     searchBar.appendChild(icon);
 
-    searchInput = document.createElement('input');
-    searchInput.type = 'text';
-    searchInput.className = 'techdoc-search-input';
-    searchInput.placeholder = 'Tìm trong bài viết...';
-    searchBar.appendChild(searchInput);
+    popupInput = document.createElement('input');
+    popupInput.type = 'text';
+    popupInput.className = 'techdoc-search-input';
+    popupInput.placeholder = 'Tìm trong bài viết...';
+    searchBar.appendChild(popupInput);
 
-    searchCounter = document.createElement('span');
-    searchCounter.className = 'techdoc-search-counter';
-    searchBar.appendChild(searchCounter);
+    popupCounter = document.createElement('span');
+    popupCounter.className = 'techdoc-search-counter';
+    searchBar.appendChild(popupCounter);
 
-    prevBtn = document.createElement('button');
-    prevBtn.className = 'techdoc-search-btn';
-    prevBtn.title = 'Kết quả trước (Shift+Enter)';
-    prevBtn.innerHTML = '<i class="fa fa-chevron-up"></i>';
-    prevBtn.disabled = true;
-    prevBtn.addEventListener('click', function () {
+    popupPrevBtn = document.createElement('button');
+    popupPrevBtn.className = 'techdoc-search-btn';
+    popupPrevBtn.title = 'Kết quả trước (Shift+Enter)';
+    popupPrevBtn.innerHTML = '<i class="fa fa-chevron-up"></i>';
+    popupPrevBtn.disabled = true;
+    popupPrevBtn.addEventListener('click', function () {
       goToMatch(currentIndex - 1);
     });
-    searchBar.appendChild(prevBtn);
+    searchBar.appendChild(popupPrevBtn);
 
-    nextBtn = document.createElement('button');
-    nextBtn.className = 'techdoc-search-btn';
-    nextBtn.title = 'Kết quả tiếp theo (Enter)';
-    nextBtn.innerHTML = '<i class="fa fa-chevron-down"></i>';
-    nextBtn.disabled = true;
-    nextBtn.addEventListener('click', function () {
+    popupNextBtn = document.createElement('button');
+    popupNextBtn.className = 'techdoc-search-btn';
+    popupNextBtn.title = 'Kết quả tiếp theo (Enter)';
+    popupNextBtn.innerHTML = '<i class="fa fa-chevron-down"></i>';
+    popupNextBtn.disabled = true;
+    popupNextBtn.addEventListener('click', function () {
       goToMatch(currentIndex + 1);
     });
-    searchBar.appendChild(nextBtn);
+    searchBar.appendChild(popupNextBtn);
 
     var closeBtn = document.createElement('button');
     closeBtn.className = 'techdoc-search-btn close-btn';
     closeBtn.title = 'Đóng (Esc)';
     closeBtn.innerHTML = '<i class="fa fa-times"></i>';
-    closeBtn.addEventListener('click', closeSearchBar);
+    closeBtn.addEventListener('click', closePopupSearchBar);
     searchBar.appendChild(closeBtn);
 
-    searchInput.addEventListener('input', function () {
+    popupInput.addEventListener('input', function () {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(function () {
-        performSearch(searchInput.value);
+        performSearch(popupInput.value);
       }, 150);
     });
 
-    searchInput.addEventListener('keydown', function (e) {
+    popupInput.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') {
         e.preventDefault();
         if (e.shiftKey) {
@@ -231,21 +338,27 @@
           goToMatch(currentIndex + 1);
         }
       } else if (e.key === 'Escape') {
-        closeSearchBar();
+        closePopupSearchBar();
       }
     });
 
     document.body.appendChild(searchBar);
   }
 
+  // --- Global Keyboard and Click Handlers ---
   document.addEventListener('click', function (e) {
-    var trigger = e.target.closest('.techdoc-search-nav-trigger, .techdoc-search-trigger');
+    var trigger = e.target.closest('.techdoc-search-nav-trigger');
     if (trigger) {
       e.preventDefault();
-      if (searchBar && searchBar.style.display !== 'none') {
-        closeSearchBar();
+      if (navbarInput) {
+        navbarInput.focus();
+        navbarInput.select();
       } else {
-        openSearchBar();
+        if (searchBar && searchBar.style.display !== 'none') {
+          closePopupSearchBar();
+        } else {
+          openPopupSearchBar();
+        }
       }
     }
   });
@@ -253,15 +366,30 @@
   document.addEventListener('keydown', function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
       var activeEl = document.activeElement;
-      if (activeEl && (activeEl.tagName === 'TEXTAREA' || (activeEl.tagName === 'INPUT' && activeEl !== searchInput) || (activeEl.closest && activeEl.closest('.CodeMirror')))) {
-        return; // Allow native find in CodeMirror or other inputs
+      if (activeEl && (activeEl.tagName === 'TEXTAREA' || (activeEl.tagName === 'INPUT' && activeEl !== popupInput && activeEl !== navbarInput) || (activeEl.closest && activeEl.closest('.CodeMirror')))) {
+        return; // Allow native find in CodeMirror or standard inputs
       }
       e.preventDefault();
-      openSearchBar();
+      if (navbarInput) {
+        navbarInput.focus();
+        navbarInput.select();
+      } else {
+        openPopupSearchBar();
+      }
     } else if (e.key === 'Escape') {
       if (searchBar && searchBar.style.display !== 'none') {
-        closeSearchBar();
+        closePopupSearchBar();
+      } else if (navbarInput && navbarInput.value) {
+        navbarInput.value = '';
+        clearHighlights();
+        navbarInput.blur();
       }
     }
   });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNavbarSearch);
+  } else {
+    initNavbarSearch();
+  }
 })();

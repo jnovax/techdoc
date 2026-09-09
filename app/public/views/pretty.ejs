@@ -43,9 +43,17 @@
         </div>
 
         <div class="docusaurus-navbar-right">
-            <button type="button" class="docusaurus-flat-btn techdoc-search-nav-trigger" title="Tìm trong tài liệu (Ctrl+F)">
-                <i class="fa fa-search"></i> <span class="hidden-xs">Tìm kiếm</span>
-            </button>
+            <div class="techdoc-navbar-search" id="techdocNavbarSearch">
+                <i class="fa fa-search techdoc-navbar-search-icon"></i>
+                <input type="text" class="techdoc-navbar-search-input" placeholder="Tìm trong bài..." aria-label="Tìm kiếm trong tài liệu">
+                <span class="techdoc-navbar-search-counter" style="display: none;"></span>
+                <div class="techdoc-navbar-search-nav" style="display: none;">
+                    <button type="button" class="techdoc-navbar-search-btn search-prev-btn" title="Kết quả trước (Shift+Enter)"><i class="fa fa-chevron-up"></i></button>
+                    <button type="button" class="techdoc-navbar-search-btn search-next-btn" title="Kết quả tiếp theo (Enter)"><i class="fa fa-chevron-down"></i></button>
+                    <button type="button" class="techdoc-navbar-search-btn search-clear-btn" title="Xóa tìm kiếm (Esc)"><i class="fa fa-times"></i></button>
+                </div>
+                <kbd class="techdoc-navbar-search-kbd hidden-xs">Ctrl F</kbd>
+            </div>
             <span class="docusaurus-view-badge hidden-xs">
                 <i class="fa fa-eye"></i> <%- viewcount %> lượt xem
             </span>

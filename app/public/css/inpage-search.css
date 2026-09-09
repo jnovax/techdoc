@@ -158,3 +158,117 @@ mark.techdoc-search-match.techdoc-search-current {
     flex: 1;
   }
 }
+
+/* --- Inline Navbar Search (Publish view) --- */
+.techdoc-navbar-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  padding: 4px 10px 4px 12px;
+  gap: 8px;
+  transition: all 0.2s ease;
+  min-width: 220px;
+  max-width: 340px;
+  height: 36px;
+  box-sizing: border-box;
+}
+
+.techdoc-navbar-search:focus-within {
+  background: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  max-width: 380px;
+}
+
+.techdoc-navbar-search-icon {
+  color: #64748b;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.techdoc-navbar-search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13.5px;
+  color: #0f172a;
+  width: 100%;
+  padding: 0;
+  min-width: 0;
+}
+
+.techdoc-navbar-search-input::placeholder {
+  color: #94a3b8;
+}
+
+.techdoc-navbar-search-kbd {
+  display: inline-block;
+  font-family: inherit;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #64748b;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 1px 5px;
+  line-height: 1.4;
+  white-space: nowrap;
+  flex-shrink: 0;
+  pointer-events: none;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.techdoc-navbar-search-counter {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #2563eb;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 0 2px;
+}
+
+.techdoc-navbar-search-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.techdoc-navbar-search-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s;
+}
+
+.techdoc-navbar-search-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.techdoc-navbar-search-btn.search-clear-btn:hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+@media (max-width: 768px) {
+  .techdoc-navbar-search {
+    min-width: 130px;
+    max-width: 180px;
+  }
+  .techdoc-navbar-search-kbd {
+    display: none !important;
+  }
+}

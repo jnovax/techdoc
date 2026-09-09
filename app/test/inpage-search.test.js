@@ -39,7 +39,8 @@ function runTests () {
   const inpageJs = fs.readFileSync(path.join(__dirname, '../public/js/inpage-search.js'), 'utf8')
 
   assert.ok(editorHeaderHtml.includes('techdoc-search-nav-trigger'), 'Editor navbar must include search trigger button')
-  assert.ok(prettyHtml.includes('techdoc-search-nav-trigger'), 'Publish navbar must include search trigger button')
+  assert.ok(prettyHtml.includes('techdoc-navbar-search'), 'Publish navbar must include inline techdoc-navbar-search input')
+  assert.ok(inpageCss.includes('.techdoc-navbar-search'), 'inpage-search.css must style .techdoc-navbar-search')
   assert.ok(inpageCss.includes('.techdoc-search-trigger {\n  display: none !important;'), 'Floating search trigger must be hidden to prevent TOC overlap')
   assert.ok(!inpageJs.includes('document.body.appendChild(trigger)'), 'inpage-search.js must NOT inject floating trigger into DOM')
 
