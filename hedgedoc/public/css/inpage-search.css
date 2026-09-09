@@ -1,0 +1,144 @@
+/* In-Page Content Search Widget Styles */
+
+.hedgedoc-search-trigger {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9998;
+  font-size: 18px;
+  transition: all 0.2s ease;
+}
+
+.hedgedoc-search-trigger:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+  transform: scale(1.05);
+}
+
+.hedgedoc-search-bar {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 9999;
+  background: #ffffff;
+  border-radius: 28px;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.14);
+  padding: 6px 8px 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  animation: hedgedocSearchFadeIn 0.2s ease;
+}
+
+@keyframes hedgedocSearchFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hedgedoc-search-input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #1e293b;
+  background: transparent;
+  width: 170px;
+  padding: 4px 0;
+}
+
+.hedgedoc-search-input::placeholder {
+  color: #94a3b8;
+}
+
+.hedgedoc-search-counter {
+  font-size: 12px;
+  color: #64748b;
+  min-width: 48px;
+  text-align: center;
+  user-select: none;
+  font-weight: 500;
+}
+
+.hedgedoc-search-btn {
+  background: transparent;
+  border: none;
+  color: #475569;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.15s;
+  padding: 0;
+}
+
+.hedgedoc-search-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.hedgedoc-search-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.hedgedoc-search-btn.close-btn {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.hedgedoc-search-btn.close-btn:hover {
+  color: #ef4444;
+  background: #fee2e2;
+}
+
+/* Document highlighting */
+mark.hedgedoc-search-match {
+  background-color: #fef08a !important;
+  color: #1e293b !important;
+  border-radius: 2px;
+  padding: 0 1px;
+  transition: background-color 0.15s ease-in-out;
+}
+
+mark.hedgedoc-search-match.hedgedoc-search-current {
+  background-color: #f97316 !important;
+  color: #ffffff !important;
+  outline: 2px solid #ea580c;
+  box-shadow: 0 0 6px rgba(249, 115, 22, 0.4);
+}
+
+@media (max-width: 600px) {
+  .hedgedoc-search-bar {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    border-radius: 12px;
+  }
+  .hedgedoc-search-input {
+    width: 100%;
+    flex: 1;
+  }
+}

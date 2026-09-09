@@ -1,0 +1,202 @@
+<div class="portal-wrapper">
+    <header class="portal-navbar">
+        <a href="<%- serverURL %>/" class="portal-brand">
+            <img src="<%- serverURL %>/banner/banner_vertical_color.svg" alt="HedgeDoc">
+            <span>Tài Liệu & Ghi Chú</span>
+        </a>
+
+        <div class="portal-search-bar">
+            <i class="fa fa-search portal-search-icon"></i>
+            <input type="text" id="portalSearch" class="portal-search-input" placeholder="Tìm kiếm tài liệu theo tiêu đề...">
+        </div>
+
+        <div class="portal-actions">
+            <% if (!signin) { %>
+                <% if (allowAnonymous && !disableNoteCreation) { %>
+                    <a href="<%- serverURL %>/new" class="portal-btn portal-btn-outline">
+                        <i class="fa fa-plus"></i> <span class="hidden-xs">Ghi chú khách</span>
+                    </a>
+                <% } %>
+                <a href="<%- serverURL %>/login" class="portal-btn portal-btn-primary">
+                    <i class="fa fa-sign-in"></i> Đăng nhập
+                </a>
+            <% } else { %>
+                <% if (!disableNoteCreation) { %>
+                    <a href="<%- serverURL %>/new" class="portal-btn portal-btn-success">
+                        <i class="fa fa-plus"></i> Tạo ghi chú mới
+                    </a>
+                <% } %>
+                <span class="dropdown">
+                    <button class="portal-btn portal-btn-outline dropdown-toggle" type="button" id="userMenuBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-user-circle"></i> <span class="hidden-xs">Tài khoản</span> <i class="fa fa-caret-down"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenuBtn">
+                        <li><a href="<%- serverURL %>/me/export"><i class="fa fa-cloud-download fa-fw"></i> <%= __('Export user data') %></a></li>
+                        <li><a class="ui-delete-user" href="#" data-toggle="modal" data-target=".delete-user-modal"><i class="fa fa-trash fa-fw"></i> <%= __('Delete user') %></a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="<%- serverURL %>/logout"><i class="fa fa-sign-out fa-fw"></i> <%= __('Sign Out') %></a></li>
+                    </ul>
+                </span>
+            <% } %>
+        </div>
+    </header>
+
+    <% if (infoMessage && infoMessage.length > 0) { %>
+        <div style="max-width: 1240px; margin: 16px auto 0; padding: 0 24px;">
+            <div class="alert alert-info"><%= infoMessage %></div>
+        </div>
+    <% } %>
+    <% if (errorMessage && errorMessage.length > 0) { %>
+        <div style="max-width: 1240px; margin: 16px auto 0; padding: 0 24px;">
+            <div class="alert alert-danger"><%= errorMessage %></div>
+        </div>
+    <% } %>
+
+    <main class="portal-container">
+        <div class="portal-header">
+            <h1 class="portal-heading">Kho Tri Thức & Ghi Chú</h1>
+            <p class="portal-subheading">Xem, tìm kiếm và cộng tác các tài liệu Markdown trong hệ thống</p>
+        </div>
+
+        <div class="portal-tabs">
+            <button class="portal-tab-btn active" data-filter="all">Tất cả (<%= (notes || []).length %>)</button>
+            <button class="portal-tab-btn" data-filter="public">Công khai</button>
+            <% if (signin) { %>
+                <button class="portal-tab-btn" data-filter="protected">Nội bộ (Protected)</button>
+                <button class="portal-tab-btn" data-filter="mine">Của tôi & Bản nháp</button>
+            <% } %>
+        </div>
+
+        <div class="portal-grid" id="notesGrid">
+            <% if (!notes || notes.length === 0) { %>
+                <div class="portal-empty" id="emptyNotice">
+                    <i class="fa fa-folder-open-o fa-3x"></i>
+                    <h3>Chưa có tài liệu nào</h3>
+                    <p>Hiện chưa có ghi chú nào phù hợp với quyền truy cập của bạn.</p>
+                </div>
+            <% } else { %>
+                <% notes.forEach(function(note) { 
+                    var badgeClass = 'public';
+                    var badgeLabel = 'Công khai';
+                    var filterType = 'public';
+                    if (note.permission === 'protected' || note.permission === 'limited') {
+                        badgeClass = 'protected';
+                        badgeLabel = 'Nội bộ';
+                        filterType = 'protected';
+                    } else if (note.permission === 'private') {
+                        badgeClass = 'private';
+                        badgeLabel = 'Bản nháp / Riêng tư';
+                        filterType = 'private';
+                    }
+                %>
+                    <a href="<%- serverURL %>/<%- note.id %>" class="note-card" data-filter="<%- filterType %>" data-mine="<%- note.isOwner ? 'true' : 'false' %>" data-title="<%- (note.title || '').toLowerCase() %>">
+                        <div>
+                            <span class="note-badge <%- badgeClass %>">
+                                <% if (badgeClass === 'public') { %><i class="fa fa-globe"></i><% } %>
+                                <% if (badgeClass === 'protected') { %><i class="fa fa-lock"></i><% } %>
+                                <% if (badgeClass === 'private') { %><i class="fa fa-user-secret"></i><% } %>
+                                <%- badgeLabel %>
+                            </span>
+                            <h2 class="note-title"><%- note.title %></h2>
+                            <p class="note-snippet"><%- note.snippet %></p>
+                        </div>
+                        <div class="note-footer">
+                            <div class="note-author">
+                                <i class="fa fa-user-circle"></i>
+                                <span><%- note.authorName %></span>
+                            </div>
+                            <div>
+                                <i class="fa fa-eye"></i> <%- note.viewcount %> lượt xem
+                            </div>
+                        </div>
+                    </a>
+                <% }); %>
+            <% } %>
+        </div>
+    </main>
+
+    <footer class="mastfoot" style="background: #ffffff; border-top: 1px solid #e2e8f0; padding: 24px 0; text-align: center; color: #64748b; font-size: 13px;">
+        <div class="inner">
+            <p>
+                <%- __('Powered by %s', '<a href="https://hedgedoc.org" style="color: #2563eb;">HedgeDoc</a>') %> | <a href="<%- serverURL %>/s/release-notes" target="_blank" rel="noopener" style="color: #64748b;"><%= __('Releases') %></a> | <a href="<%- sourceURL %>" target="_blank" rel="noopener" style="color: #64748b;"><%= __('Source Code') %></a>
+            </p>
+        </div>
+    </footer>
+</div>
+
+<!-- delete user modal -->
+<div class="modal fade delete-user-modal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="deleteUserModalLabel"><%= __('Are you sure?') %></h4>
+            </div>
+            <div class="modal-body">
+                <h5><%= __('Do you really want to delete your user account?') %></h5>
+                <strong><%= __('This will delete your account, all notes that are owned by you and remove all references to your account from other notes.') %></strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><%= __('Cancel') %></button>
+                <a type="button" class="btn btn-danger" href="<%- serverURL %>/me/delete/<%- deleteToken %>"><%= __('Yes, do it!') %></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../shared/signin-modal') %>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var searchInput = document.getElementById('portalSearch');
+    var tabButtons = document.querySelectorAll('.portal-tab-btn');
+    var cards = document.querySelectorAll('.note-card');
+    var emptyNotice = document.getElementById('emptyNotice');
+
+    var currentFilter = 'all';
+    var currentKeyword = '';
+
+    function filterCards() {
+        var visibleCount = 0;
+        cards.forEach(function (card) {
+            var cardFilter = card.getAttribute('data-filter');
+            var isMine = card.getAttribute('data-mine') === 'true';
+            var cardTitle = card.getAttribute('data-title') || '';
+
+            var matchesTab = true;
+            if (currentFilter === 'public') {
+                matchesTab = (cardFilter === 'public');
+            } else if (currentFilter === 'protected') {
+                matchesTab = (cardFilter === 'protected');
+            } else if (currentFilter === 'mine') {
+                matchesTab = isMine;
+            }
+
+            var matchesKeyword = !currentKeyword || cardTitle.indexOf(currentKeyword) !== -1;
+
+            if (matchesTab && matchesKeyword) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function (e) {
+            currentKeyword = (e.target.value || '').trim().toLowerCase();
+            filterCards();
+        });
+    }
+
+    tabButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            tabButtons.forEach(function (b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            currentFilter = this.getAttribute('data-filter');
+            filterCards();
+        });
+    });
+});
+</script>
