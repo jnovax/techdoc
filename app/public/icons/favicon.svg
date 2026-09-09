@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="favGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#favGrad)" />
+  <g transform="translate(14, 14)">
+    <!-- Document Page Fold -->
+    <path d="M 65 0 L 100 35 L 75 35 A 10 10 0 0 1 65 25 Z" fill="#93c5fd" />
+    <!-- Code Brackets -->
+    <path d="M 33 55 L 21 68 L 33 81" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <path d="M 67 55 L 79 68 L 67 81" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <line x1="54" y1="52" x2="46" y2="84" stroke="#ffffff" stroke-width="6" stroke-linecap="round" />
+  </g>
+</svg>

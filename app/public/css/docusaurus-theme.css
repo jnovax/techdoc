@@ -1,0 +1,596 @@
+/* ==========================================================================
+   Docusaurus Modern Documentation Theme for TechDoc
+   Based on Docusaurus v3 Infima Design Tokens & Typography System
+   ========================================================================== */
+
+:root {
+  /* Font Families */
+  --ifm-font-family-base: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --ifm-font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Typography Sizing & Line Heights */
+  --ifm-font-size-base: 16.5px;
+  --ifm-line-height-base: 1.65;
+  --ifm-leading: 1.25rem;
+
+  /* Core Colors */
+  --ifm-color-content: #1c1e21;
+  --ifm-color-content-secondary: #525860;
+  --ifm-color-primary: #2563eb;
+  --ifm-color-primary-dark: #1d4ed8;
+  --ifm-background-color: #ffffff;
+
+  /* Heading Sizes & Colors */
+  --ifm-h1-font-size: 2.5rem;   /* 40px */
+  --ifm-h2-font-size: 2.0rem;   /* 32px */
+  --ifm-h3-font-size: 1.5rem;   /* 24px */
+  --ifm-h4-font-size: 1.25rem;  /* 20px */
+  --ifm-heading-color: #0f172a;
+
+  /* Admonition Callouts */
+  --ifm-alert-note-border: #2563eb;
+  --ifm-alert-note-bg: #eff6ff;
+  --ifm-alert-note-text: #1e40af;
+
+  --ifm-alert-tip-border: #00a400;
+  --ifm-alert-tip-bg: #e6f6e6;
+  --ifm-alert-tip-text: #004d00;
+
+  --ifm-alert-info-border: #54c7ec;
+  --ifm-alert-info-bg: #eef9fd;
+  --ifm-alert-info-text: #0b4c63;
+
+  --ifm-alert-warning-border: #ffba00;
+  --ifm-alert-warning-bg: #fff9e6;
+  --ifm-alert-warning-text: #664a00;
+
+  --ifm-alert-danger-border: #fa383e;
+  --ifm-alert-danger-bg: #ffebec;
+  --ifm-alert-danger-text: #641719;
+
+  /* Tables & Navigation */
+  --ifm-table-border-color: #ebedf0;
+  --ifm-table-head-background: #f6f8fa;
+  --ifm-toc-border-color: #ebedf0;
+  --ifm-toc-link-color: #525860;
+  --ifm-toc-link-active: #2563eb;
+}
+
+/* --- Global Reset & Root Layout --- */
+body.docusaurus-layout {
+  background-color: var(--ifm-background-color) !important;
+  color: var(--ifm-color-content) !important;
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: var(--ifm-font-size-base) !important;
+  line-height: var(--ifm-line-height-base) !important;
+  letter-spacing: -0.003em !important;
+  text-shadow: none !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* --- Sticky Modern Navbar --- */
+.docusaurus-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 60px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.docusaurus-navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.docusaurus-navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none !important;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--ifm-heading-color) !important;
+  letter-spacing: -0.02em;
+  transition: opacity 0.15s ease;
+}
+
+.docusaurus-navbar-brand:hover {
+  opacity: 0.85;
+}
+
+.docusaurus-navbar-brand img {
+  height: 32px;
+  width: 32px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.docusaurus-navbar-separator {
+  color: #cbd5e1;
+  font-weight: 300;
+  font-size: 18px;
+  user-select: none;
+}
+
+.docusaurus-navbar-title {
+  color: var(--ifm-color-content-secondary);
+  font-weight: 600;
+  font-size: 15px;
+  max-width: 420px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.docusaurus-navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.docusaurus-view-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background-color: #f1f5f9;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ifm-color-content-secondary);
+}
+
+.docusaurus-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.docusaurus-nav-btn-outline {
+  color: #334155 !important;
+  border-color: #cbd5e1;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.docusaurus-nav-btn-outline:hover {
+  background: #f8fafc;
+  color: #0f172a !important;
+  border-color: #94a3b8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.docusaurus-nav-btn-primary {
+  color: #ffffff !important;
+  background-color: var(--ifm-color-primary);
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
+}
+
+.docusaurus-nav-btn-primary:hover {
+  background-color: var(--ifm-color-primary-dark);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4);
+}
+
+.docusaurus-nav-btn-danger {
+  color: #dc2626 !important;
+  border-color: #fecaca;
+  background: #fff;
+}
+
+.docusaurus-nav-btn-danger:hover {
+  background-color: #fef2f2;
+  border-color: #f87171;
+  color: #b91c1c !important;
+}
+
+/* --- Documentation Content Container --- */
+.docusaurus-container {
+  display: flex;
+  justify-content: center;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 28px 96px;
+  transition: max-width 0.2s ease;
+}
+
+.docusaurus-container.has-toc {
+  max-width: 1200px;
+  justify-content: space-between;
+  gap: 52px;
+}
+
+.docusaurus-main-content {
+  flex: 1;
+  max-width: 840px;
+  min-width: 0;
+  width: 100%;
+}
+
+/* --- Right Sticky TOC Sidebar --- */
+.docusaurus-toc-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 80px;
+  height: fit-content;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  padding-left: 18px;
+  border-left: 1px solid var(--ifm-toc-border-color);
+}
+
+.docusaurus-toc-sidebar:empty {
+  display: none !important;
+}
+
+.docusaurus-toc-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--ifm-color-content-secondary);
+  margin-bottom: 12px;
+}
+
+.docusaurus-toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.docusaurus-toc-item {
+  margin-bottom: 4px;
+}
+
+.docusaurus-toc-item.level-3 {
+  padding-left: 14px;
+}
+
+.docusaurus-toc-link {
+  display: block;
+  font-size: 14px;
+  color: var(--ifm-toc-link-color);
+  text-decoration: none !important;
+  line-height: 1.45;
+  padding: 4px 0 4px 10px;
+  border-left: 2px solid transparent;
+  transition: all 0.15s ease;
+  border-radius: 0 4px 4px 0;
+}
+
+.docusaurus-toc-link:hover {
+  color: var(--ifm-toc-link-active);
+  background-color: rgba(37, 99, 235, 0.04);
+}
+
+.docusaurus-toc-link.active {
+  color: var(--ifm-toc-link-active) !important;
+  font-weight: 600 !important;
+  border-left-color: var(--ifm-toc-link-active) !important;
+  background-color: rgba(37, 99, 235, 0.06);
+}
+
+/* --- Docusaurus Typography & Elements --- */
+#doc.markdown-body,
+.markdown-body {
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: var(--ifm-font-size-base) !important;
+  line-height: var(--ifm-line-height-base) !important;
+  color: var(--ifm-color-content) !important;
+  letter-spacing: -0.003em !important;
+  text-shadow: none !important;
+}
+
+/* Headings */
+#doc.markdown-body h1,
+.markdown-body h1 {
+  font-size: var(--ifm-h1-font-size) !important;
+  font-weight: 700 !important;
+  color: var(--ifm-heading-color) !important;
+  margin-top: 0 !important;
+  margin-bottom: 1.5rem !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.25 !important;
+  padding-bottom: 0.5rem !important;
+  border-bottom: 1px solid var(--ifm-toc-border-color) !important;
+}
+
+#doc.markdown-body h2,
+.markdown-body h2 {
+  font-size: var(--ifm-h2-font-size) !important;
+  font-weight: 700 !important;
+  color: var(--ifm-heading-color) !important;
+  border-bottom: 1px solid var(--ifm-toc-border-color) !important;
+  padding-bottom: 0.35rem !important;
+  margin-top: 2.5rem !important;
+  margin-bottom: 1.25rem !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.35 !important;
+}
+
+#doc.markdown-body h3,
+.markdown-body h3 {
+  font-size: var(--ifm-h3-font-size) !important;
+  font-weight: 600 !important;
+  color: var(--ifm-heading-color) !important;
+  margin-top: 2.0rem !important;
+  margin-bottom: 0.85rem !important;
+  letter-spacing: -0.015em !important;
+  line-height: 1.4 !important;
+}
+
+#doc.markdown-body h4,
+.markdown-body h4 {
+  font-size: var(--ifm-h4-font-size) !important;
+  font-weight: 600 !important;
+  color: var(--ifm-heading-color) !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* Body Text & Paragraphs */
+#doc.markdown-body p,
+.markdown-body p {
+  font-size: var(--ifm-font-size-base) !important;
+  line-height: var(--ifm-line-height-base) !important;
+  color: var(--ifm-color-content) !important;
+  margin-top: 0 !important;
+  margin-bottom: var(--ifm-leading) !important;
+}
+
+/* Lists */
+#doc.markdown-body ul,
+#doc.markdown-body ol,
+.markdown-body ul,
+.markdown-body ol {
+  font-size: var(--ifm-font-size-base) !important;
+  line-height: var(--ifm-line-height-base) !important;
+  color: var(--ifm-color-content) !important;
+  padding-left: 1.75rem !important;
+  margin-bottom: var(--ifm-leading) !important;
+}
+
+#doc.markdown-body li,
+.markdown-body li {
+  font-size: var(--ifm-font-size-base) !important;
+  line-height: var(--ifm-line-height-base) !important;
+  margin-bottom: 0.25rem !important;
+}
+
+/* Code Blocks */
+#doc.markdown-body pre,
+.markdown-body pre {
+  background-color: #1e1e2e !important;
+  border-radius: 8px !important;
+  border: 1px solid #313244 !important;
+  padding: 18px 22px !important;
+  color: #cdd6f4 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+  margin: 1.5rem 0 !important;
+  overflow-x: auto !important;
+  line-height: 1.6 !important;
+}
+
+#doc.markdown-body code,
+.markdown-body code {
+  font-family: var(--ifm-font-family-monospace) !important;
+}
+
+#doc.markdown-body :not(pre) > code,
+.markdown-body :not(pre) > code {
+  background-color: #f1f5f9 !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #e11d48 !important;
+  font-size: 88% !important;
+  border-radius: 4px !important;
+  padding: 2px 6px !important;
+  font-weight: 500 !important;
+}
+
+/* Tables — Docusaurus Card-Style Rounded Tables */
+#doc.markdown-body table,
+.markdown-body table {
+  display: table !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border: 1px solid var(--ifm-table-border-color) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  margin: 2rem 0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  background-color: #ffffff !important;
+}
+
+#doc.markdown-body table th,
+.markdown-body table th {
+  background-color: var(--ifm-table-head-background) !important;
+  color: var(--ifm-heading-color) !important;
+  font-size: 14.5px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  padding: 12px 16px !important;
+  border-bottom: 2px solid var(--ifm-table-border-color) !important;
+  border-right: 1px solid var(--ifm-table-border-color) !important;
+  border-top: none !important;
+  border-left: none !important;
+  text-align: left !important;
+}
+
+#doc.markdown-body table td,
+.markdown-body table td {
+  font-size: 16px !important;
+  line-height: 1.65 !important;
+  color: var(--ifm-color-content) !important;
+  padding: 12px 16px !important;
+  border-bottom: 1px solid var(--ifm-table-border-color) !important;
+  border-right: 1px solid var(--ifm-table-border-color) !important;
+  border-top: none !important;
+  border-left: none !important;
+  vertical-align: middle !important;
+}
+
+#doc.markdown-body table tr:last-child td,
+.markdown-body table tr:last-child td {
+  border-bottom: none !important;
+}
+
+#doc.markdown-body table tr td:last-child,
+#doc.markdown-body table tr th:last-child,
+.markdown-body table tr td:last-child,
+.markdown-body table tr th:last-child {
+  border-right: none !important;
+}
+
+#doc.markdown-body table tr:hover td,
+.markdown-body table tr:hover td {
+  background-color: #fbfcfe !important;
+}
+
+/* Images */
+#doc.markdown-body img,
+.markdown-body img {
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07) !important;
+  margin: 1rem 0 !important;
+}
+
+#doc.markdown-body table img,
+.markdown-body table img {
+  max-height: 200px !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Base Blockquotes & Infima Admonitions */
+#doc.markdown-body blockquote,
+.markdown-body blockquote {
+  border-left: 4px solid var(--ifm-alert-note-border) !important;
+  background-color: var(--ifm-alert-note-bg) !important;
+  padding: 14px 18px !important;
+  border-radius: 0 8px 8px 0 !important;
+  color: var(--ifm-alert-note-text) !important;
+  font-size: 16px !important;
+  margin: 1.5rem 0 !important;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.05) !important;
+}
+
+#doc.markdown-body blockquote p,
+.markdown-body blockquote p {
+  color: inherit !important;
+  font-size: 16px !important;
+  margin-bottom: 0 !important;
+}
+
+#doc.markdown-body blockquote p:not(:last-child),
+.markdown-body blockquote p:not(:last-child) {
+  margin-bottom: 0.5rem !important;
+}
+
+/* Admonition Classes (Docusaurus Infima Style) */
+.alert--note,
+.admonition-note {
+  border-left-color: var(--ifm-alert-note-border) !important;
+  background-color: var(--ifm-alert-note-bg) !important;
+  color: var(--ifm-alert-note-text) !important;
+}
+
+.alert--tip,
+.admonition-tip {
+  border-left-color: var(--ifm-alert-tip-border) !important;
+  background-color: var(--ifm-alert-tip-bg) !important;
+  color: var(--ifm-alert-tip-text) !important;
+}
+
+.alert--info,
+.admonition-info {
+  border-left-color: var(--ifm-alert-info-border) !important;
+  background-color: var(--ifm-alert-info-bg) !important;
+  color: var(--ifm-alert-info-text) !important;
+}
+
+.alert--warning,
+.admonition-warning {
+  border-left-color: var(--ifm-alert-warning-border) !important;
+  background-color: var(--ifm-alert-warning-bg) !important;
+  color: var(--ifm-alert-warning-text) !important;
+}
+
+.alert--danger,
+.admonition-danger {
+  border-left-color: var(--ifm-alert-danger-border) !important;
+  background-color: var(--ifm-alert-danger-bg) !important;
+  color: var(--ifm-alert-danger-text) !important;
+}
+
+.admonition-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.admonition-icon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 15px;
+}
+
+/* Horizontal Rule */
+#doc.markdown-body hr,
+.markdown-body hr {
+  height: 1px !important;
+  background-color: var(--ifm-toc-border-color) !important;
+  border: none !important;
+  margin: 2.5rem 0 !important;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1024px) {
+  .docusaurus-toc-sidebar {
+    display: none !important;
+  }
+  .docusaurus-container {
+    padding: 24px 16px 60px;
+  }
+  .docusaurus-navbar {
+    padding: 0 16px;
+  }
+  .docusaurus-navbar-title {
+    max-width: 220px;
+  }
+}

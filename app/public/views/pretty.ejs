@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <% if(typeof robots !== 'undefined' && robots) { %>
+    <meta name="robots" content="<%= robots %>">
+    <% } %>
+    <% if(typeof description !== 'undefined' && description) { %>
+    <meta name="description" content="<%= description %>">
+    <% } %>
+    <% for (var og in opengraph) { %>
+    <% if (Object.keys(opengraph).includes(og) && typeof opengraph[og] === 'string' && opengraph[og].trim() !== '') { %>
+    <meta property="og:<%= og %>" content="<%= opengraph[og] %>">
+    <% }} if (!Object.keys(opengraph).includes('image')) { %>
+    <meta property="og:image" content="<%- serverURL %>/icons/android-chrome-512x512.png">
+    <meta property="og:image:alt" content="TechDoc logo">
+    <meta property="og:image:type" content="image/png">
+    <% } %>
+    <base href="<%- serverURL %>/">
+    <title><%= title %></title>
+    <%- include('includes/favicon.ejs') %>
+    <link rel="stylesheet" href='<%- serverURL %>/build/emojify.js/dist/css/basic/emojify.min.css'>
+    <%- include('build/pretty-pack-header') %>
+    <link rel="stylesheet" href="<%- serverURL %>/css/inpage-search.css">
+    <link rel="stylesheet" href="<%- serverURL %>/css/docusaurus-theme.css?v=20260909_docusaurus_v3">
+</head>
+
+<body class="docusaurus-layout" style="display:none;">
+    <!-- Docusaurus Modern Sticky Navbar -->
+    <header class="docusaurus-navbar">
+        <div class="docusaurus-navbar-left">
+            <a href="<%- serverURL %>/" class="docusaurus-navbar-brand">
+                <img src="<%- serverURL %>/icons/apple-touch-icon.png" alt="TechDoc">
+                <span>TechDoc</span>
+            </a>
+            <span class="docusaurus-navbar-separator">/</span>
+            <span class="docusaurus-navbar-title"><%= title.replace(/ - TechDoc$/, '') %></span>
+        </div>
+
+        <div class="docusaurus-navbar-right">
+            <span class="docusaurus-view-badge hidden-xs">
+                <i class="fa fa-eye"></i> <%- viewcount %> lượt xem
+            </span>
+            <a href="<%- serverURL %>/" class="docusaurus-nav-btn docusaurus-nav-btn-outline" title="Quay lại danh sách ghi chú">
+                <i class="fa fa-arrow-left"></i> <span class="hidden-xs">Trang chủ</span>
+            </a>
+            <a href="#" class="docusaurus-nav-btn docusaurus-nav-btn-primary ui-edit" title="Chỉnh sửa tài liệu">
+                <i class="fa fa-pencil"></i> <span class="hidden-xs">Chỉnh sửa</span>
+            </a>
+            <% if (typeof isOwner !== 'undefined' && isOwner) { %>
+            <button type="button" class="docusaurus-nav-btn docusaurus-nav-btn-danger ui-trash" title="Chuyển tài liệu vào thùng rác">
+                <i class="fa fa-trash-o"></i> <span class="hidden-xs">Chuyển vào thùng rác</span>
+            </button>
+            <% } %>
+        </div>
+    </header>
+
+    <!-- Main Container: Golden-Ratio Reading Column + Sticky TOC Sidebar -->
+    <div class="docusaurus-container">
+        <main class="docusaurus-main-content">
+            <div id="doc" class="markdown-body" <% if (lang) { %> lang="<%= lang %>"<% } %>><%= body %></div>
+            <% if(typeof disqus !== 'undefined' && disqus && !dnt) { %>
+            <div style="margin-top: 50px;">
+                <%- include('shared/disqus') %>
+            </div>
+            <% } %>
+        </main>
+
+        <aside id="docusaurusToc" class="docusaurus-toc-sidebar"></aside>
+    </div>
+
+    <!-- Hidden compatibility elements for pretty-pack-scripts -->
+    <span class="ui-lastchange" style="display:none;" data-createtime="<%- createtime %>" data-updatetime="<%- updatetime %>"></span>
+    <div class="ui-toc" style="display:none;"></div>
+    <!-- Trash Confirm Modal -->
+    <div class="modal fade pretty-trash-modal" tabindex="-1" role="dialog" aria-labelledby="prettyTrashModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="prettyTrashModalLabel"><i class="fa fa-trash-o text-danger"></i> Chuyển vào thùng rác?</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn chuyển tài liệu này vào thùng rác không?</p>
+                    <small class="text-muted">Bạn có thể khôi phục lại tài liệu trong tab Thùng rác trên trang chủ.</small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-danger" id="prettyTrashConfirmBtn">Chuyển vào thùng rác</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="<%= serverURL %>/js/mathjax-config-extra.js"></script>
+<script src="<%- serverURL %>/build/MathJax/MathJax.js" defer></script>
+<script src="<%- serverURL %>/build/MathJax/config/TeX-AMS-MML_HTMLorMML.js" defer></script>
+<script src="<%- serverURL %>/build/MathJax/config/Safe.js" defer></script>
+<%- include('build/pretty-pack-scripts') %>
+<script src="<%- serverURL %>/js/inpage-search.js" defer></script>
+<script src="<%- serverURL %>/js/docusaurus-toc.js?v=20260909_docusaurus_v3" defer></script>
+<script src="<%- serverURL %>/js/pretty-trash.js?v=20260909_1" defer></script>
+<%- include('shared/ga') %>
