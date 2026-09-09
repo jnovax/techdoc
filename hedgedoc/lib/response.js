@@ -169,7 +169,8 @@ async function showIndex (req, res, next) {
       imprint: fs.existsSync(path.join(config.docsPath, 'imprint.md')),
       privacyStatement: fs.existsSync(path.join(config.docsPath, 'privacy.md')),
       termsOfUse: fs.existsSync(path.join(config.docsPath, 'terms-of-use.md')),
-      deleteToken
+      deleteToken,
+      cspNonce: res.locals.nonce
     }
 
     res.render('index.ejs', data)

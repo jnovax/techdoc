@@ -1,5 +1,7 @@
 'use strict'
 const assert = require('assert')
+const fs = require('fs')
+const path = require('path')
 
 function buildWhereClause (user) {
   if (!user) {
@@ -21,7 +23,18 @@ function runTests () {
   assert.strictEqual(userWhere.$or.length, 2)
   assert.strictEqual(userWhere.$or[1].ownerId, 'user-123')
   assert.strictEqual(userWhere.$or[1].permission, 'private')
-  console.log('Portal query logic tests passed!')
+
+  // Verify external script assets exist
+  const portalJsPath = path.join(__dirname, '../public/js/portal.js')
+  assert.ok(fs.existsSync(portalJsPath), 'portal.js must exist')
+  const portalJs = fs.readFileSync(portalJsPath, 'utf8')
+  assert.ok(portalJs.includes("currentFilter === 'trash'"), 'portal.js must handle trash filter')
+  assert.ok(portalJs.includes('.portal-tab-btn'), 'portal.js must handle tab clicks')
+
+  const prettyTrashJsPath = path.join(__dirname, '../public/js/pretty-trash.js')
+  assert.ok(fs.existsSync(prettyTrashJsPath), 'pretty-trash.js must exist')
+
+  console.log('Portal query & script logic tests passed!')
 }
 
 if (typeof describe !== 'undefined') {
