@@ -84,9 +84,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     savedAt: {
       type: DataTypes.DATE
+    },
+    deletedAt: {
+      type: DataTypes.DATE
     }
   }, {
-    paranoid: false,
+    paranoid: true,
     hooks: {
       beforeCreate: function (note, options) {
         return new Promise(function (resolve, reject) {

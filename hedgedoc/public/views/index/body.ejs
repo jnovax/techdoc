@@ -1,3 +1,33 @@
+<style>
+.btn-trash-action {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 15px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.btn-trash-action:hover {
+    background: #fee2e2;
+    color: #e11d48;
+}
+.note-card-trash {
+    border-left: 4px solid #f43f5e !important;
+    background: #fffafa !important;
+    cursor: default;
+}
+.note-card-trash:hover {
+    transform: none !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+}
+.badge-trash {
+    background: #fee2e2 !important;
+    color: #dc2626 !important;
+}
+</style>
+
 <div class="portal-wrapper">
     <header class="portal-navbar">
         <a href="<%- serverURL %>/" class="portal-brand">
@@ -59,22 +89,25 @@
         </div>
 
         <div class="portal-tabs">
-            <button class="portal-tab-btn active" data-filter="all">Tất cả (<%= (notes || []).length %>)</button>
+            <button class="portal-tab-btn active" data-filter="all">Tất cả (<span id="allCount"><%= (notes || []).length %></span>)</button>
             <button class="portal-tab-btn" data-filter="public">Công khai</button>
             <% if (signin) { %>
                 <button class="portal-tab-btn" data-filter="protected">Nội bộ (Protected)</button>
                 <button class="portal-tab-btn" data-filter="mine">Của tôi & Bản nháp</button>
+                <button class="portal-tab-btn" data-filter="trash" style="color: #e11d48;">
+                    <i class="fa fa-trash-o"></i> Thùng rác (<span id="trashCount"><%= (trashedNotes || []).length %></span>)
+                </button>
             <% } %>
         </div>
 
         <div class="portal-grid" id="notesGrid">
-            <% if (!notes || notes.length === 0) { %>
-                <div class="portal-empty" id="emptyNotice">
-                    <i class="fa fa-folder-open-o fa-3x"></i>
-                    <h3>Chưa có tài liệu nào</h3>
-                    <p>Hiện chưa có ghi chú nào phù hợp với quyền truy cập của bạn.</p>
-                </div>
-            <% } else { %>
+            <div class="portal-empty" id="emptyNotice" style="<%= (!notes || notes.length === 0) && (!trashedNotes || trashedNotes.length === 0) ? 'display: block;' : 'display: none;' %>">
+                <i class="fa fa-folder-open-o fa-3x" id="emptyNoticeIcon"></i>
+                <h3 id="emptyNoticeTitle">Chưa có tài liệu nào</h3>
+                <p id="emptyNoticeDesc">Hiện chưa có ghi chú nào phù hợp với quyền truy cập của bạn.</p>
+            </div>
+
+            <% if (notes && notes.length > 0) { %>
                 <% notes.forEach(function(note) { 
                     var badgeClass = 'public';
                     var badgeLabel = 'Công khai';
@@ -91,12 +124,19 @@
                 %>
                     <a href="<%- serverURL %>/<%- note.id %>" class="note-card" data-filter="<%- filterType %>" data-mine="<%- note.isOwner ? 'true' : 'false' %>" data-title="<%- (note.title || '').toLowerCase() %>">
                         <div>
-                            <span class="note-badge <%- badgeClass %>">
-                                <% if (badgeClass === 'public') { %><i class="fa fa-globe"></i><% } %>
-                                <% if (badgeClass === 'protected') { %><i class="fa fa-lock"></i><% } %>
-                                <% if (badgeClass === 'private') { %><i class="fa fa-user-secret"></i><% } %>
-                                <%- badgeLabel %>
-                            </span>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <span class="note-badge <%- badgeClass %>">
+                                    <% if (badgeClass === 'public') { %><i class="fa fa-globe"></i><% } %>
+                                    <% if (badgeClass === 'protected') { %><i class="fa fa-lock"></i><% } %>
+                                    <% if (badgeClass === 'private') { %><i class="fa fa-user-secret"></i><% } %>
+                                    <%- badgeLabel %>
+                                </span>
+                                <% if (note.isOwner) { %>
+                                    <button type="button" class="btn-trash-action" data-note-id="<%- note.id %>" data-note-title="<%- note.title %>" title="Chuyển vào thùng rác">
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
+                                <% } %>
+                            </div>
                             <h2 class="note-title"><%- note.title %></h2>
                             <p class="note-snippet"><%- note.snippet %></p>
                         </div>
@@ -110,6 +150,43 @@
                             </div>
                         </div>
                     </a>
+                <% }); %>
+            <% } %>
+
+            <% if (signin && trashedNotes && trashedNotes.length > 0) { %>
+                <% trashedNotes.forEach(function(tNote) { 
+                    var tSnippet = (tNote.content || '')
+                        .replace(/^[#>-]+\s+/gm, '')
+                        .replace(/[`*_[\]()]/g, '')
+                        .replace(/\n+/g, ' ')
+                        .trim();
+                    if (tSnippet.length > 140) tSnippet = tSnippet.slice(0, 140) + '...';
+                    if (!tSnippet) tSnippet = 'Không có nội dung mô tả';
+                %>
+                    <div class="note-card note-card-trash" data-filter="trash" data-mine="true" data-id="<%- tNote.id %>" data-title="<%- (tNote.title || '').toLowerCase() %>" style="display: none;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <span class="note-badge badge-trash">
+                                    <i class="fa fa-trash"></i> Đã xóa
+                                </span>
+                            </div>
+                            <h2 class="note-title" style="color: #64748b; text-decoration: line-through;"><%- tNote.title || 'Ghi chú không tiêu đề' %></h2>
+                            <p class="note-snippet"><%- tSnippet %></p>
+                        </div>
+                        <div class="note-footer" style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="font-size: 12px; color: #94a3b8;">
+                                <i class="fa fa-clock-o"></i> <%= tNote.deletedAt ? new Date(tNote.deletedAt).toLocaleDateString('vi-VN') : '' %>
+                            </div>
+                            <div class="note-trash-actions" style="display: flex; gap: 8px;">
+                                <button type="button" class="btn btn-sm btn-outline-primary btn-restore-action" data-note-id="<%- tNote.id %>" data-note-title="<%- tNote.title || '' %>" title="Khôi phục ghi chú" style="font-size: 12px; padding: 4px 10px; border: 1px solid #3b82f6; color: #2563eb; background: #eff6ff; border-radius: 4px; cursor: pointer;">
+                                    <i class="fa fa-undo"></i> Khôi phục
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger btn-force-delete-action" data-note-id="<%- tNote.id %>" data-note-title="<%- tNote.title || '' %>" title="Xóa vĩnh viễn" style="font-size: 12px; padding: 4px 10px; border: 1px solid #ef4444; color: #dc2626; background: #fef2f2; border-radius: 4px; cursor: pointer;">
+                                    <i class="fa fa-trash"></i> Xóa vĩnh viễn
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 <% }); %>
             <% } %>
         </div>
@@ -144,27 +221,114 @@
     </div>
 </div>
 
+<!-- soft delete confirm modal -->
+<div class="modal fade trash-confirm-modal" tabindex="-1" role="dialog" aria-labelledby="trashModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="trashModalLabel"><i class="fa fa-trash-o text-warning"></i> Chuyển vào thùng rác?</h4>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn chuyển tài liệu <strong id="trashModalNoteTitle"></strong> vào thùng rác?</p>
+                <small class="text-muted">Bạn có thể khôi phục lại tài liệu này bất cứ lúc nào trong tab Thùng rác.</small>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-warning" id="trashModalConfirmBtn">Chuyển vào thùng rác</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- force delete danger modal -->
+<div class="modal fade force-delete-modal" tabindex="-1" role="dialog" aria-labelledby="forceDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="border-top: 4px solid #dc2626;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="forceDeleteModalLabel" style="color: #dc2626;"><i class="fa fa-exclamation-triangle"></i> Xóa vĩnh viễn?</h4>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa vĩnh viễn tài liệu <strong id="forceDeleteModalNoteTitle"></strong> không?</p>
+                <div class="alert alert-danger" style="margin-bottom: 0; padding: 8px 12px; font-size: 13px;">
+                    <strong>Cảnh báo:</strong> Hành động này <u>KHÔNG THỂ HOÀN TÁC</u>. Mọi lịch sử sửa đổi và nội dung sẽ bị xóa hoàn toàn khỏi cơ sở dữ liệu.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="forceDeleteModalConfirmBtn">Xác nhận xóa vĩnh viễn</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <%- include('../shared/signin-modal') %>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     var searchInput = document.getElementById('portalSearch');
     var tabButtons = document.querySelectorAll('.portal-tab-btn');
-    var cards = document.querySelectorAll('.note-card');
     var emptyNotice = document.getElementById('emptyNotice');
 
     var currentFilter = 'all';
     var currentKeyword = '';
 
+    function showModal(selector) {
+        if (window.jQuery && typeof window.jQuery(selector).modal === 'function') {
+            window.jQuery(selector).modal('show');
+        } else {
+            var el = document.querySelector(selector);
+            if (el) {
+                el.classList.add('in');
+                el.style.display = 'block';
+            }
+        }
+    }
+
+    function hideModal(selector) {
+        if (window.jQuery && typeof window.jQuery(selector).modal === 'function') {
+            window.jQuery(selector).modal('hide');
+        } else {
+            var el = document.querySelector(selector);
+            if (el) {
+                el.classList.remove('in');
+                el.style.display = 'none';
+            }
+        }
+    }
+
+    // Modal dismiss fallback
+    document.addEventListener('click', function (e) {
+        if (e.target.matches('[data-dismiss="modal"]') || e.target.closest('[data-dismiss="modal"]')) {
+            var modal = e.target.closest('.modal');
+            if (modal) {
+                if (window.jQuery && typeof window.jQuery(modal).modal === 'function') {
+                    window.jQuery(modal).modal('hide');
+                } else {
+                    modal.classList.remove('in');
+                    modal.style.display = 'none';
+                }
+            }
+        }
+    });
+
     function filterCards() {
         var visibleCount = 0;
-        cards.forEach(function (card) {
+        var currentCards = document.querySelectorAll('.note-card');
+        currentCards.forEach(function (card) {
             var cardFilter = card.getAttribute('data-filter');
             var isMine = card.getAttribute('data-mine') === 'true';
             var cardTitle = card.getAttribute('data-title') || '';
 
-            var matchesTab = true;
-            if (currentFilter === 'public') {
+            var matchesTab = false;
+            if (currentFilter === 'trash') {
+                matchesTab = (cardFilter === 'trash');
+            } else if (cardFilter === 'trash') {
+                matchesTab = false;
+            } else if (currentFilter === 'all') {
+                matchesTab = true;
+            } else if (currentFilter === 'public') {
                 matchesTab = (cardFilter === 'public');
             } else if (currentFilter === 'protected') {
                 matchesTab = (cardFilter === 'protected');
@@ -181,6 +345,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 card.style.display = 'none';
             }
         });
+
+        if (emptyNotice) {
+            if (visibleCount === 0) {
+                emptyNotice.style.display = 'block';
+                var icon = document.getElementById('emptyNoticeIcon');
+                var title = document.getElementById('emptyNoticeTitle');
+                var desc = document.getElementById('emptyNoticeDesc');
+                if (currentFilter === 'trash') {
+                    if (icon) icon.className = 'fa fa-trash-o fa-3x';
+                    if (title) title.textContent = 'Thùng rác trống';
+                    if (desc) desc.textContent = 'Không có tài liệu nào trong thùng rác.';
+                } else {
+                    if (icon) icon.className = 'fa fa-folder-open-o fa-3x';
+                    if (title) title.textContent = 'Chưa có tài liệu nào';
+                    if (desc) desc.textContent = 'Hiện chưa có ghi chú nào phù hợp với quyền truy cập của bạn.';
+                }
+            } else {
+                emptyNotice.style.display = 'none';
+            }
+        }
     }
 
     if (searchInput) {
@@ -198,5 +382,173 @@ document.addEventListener('DOMContentLoaded', function () {
             filterCards();
         });
     });
+
+    // Soft delete handling
+    var pendingTrashNoteId = null;
+    var pendingTrashCard = null;
+
+    document.addEventListener('click', function (e) {
+        var trashBtn = e.target.closest('.btn-trash-action');
+        if (trashBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            pendingTrashNoteId = trashBtn.getAttribute('data-note-id');
+            pendingTrashCard = trashBtn.closest('.note-card');
+            var noteTitle = trashBtn.getAttribute('data-note-title') || 'tài liệu này';
+            var titleEl = document.getElementById('trashModalNoteTitle');
+            if (titleEl) titleEl.textContent = noteTitle;
+            showModal('.trash-confirm-modal');
+        }
+    });
+
+    var trashModalConfirmBtn = document.getElementById('trashModalConfirmBtn');
+    if (trashModalConfirmBtn) {
+        trashModalConfirmBtn.addEventListener('click', function () {
+            if (!pendingTrashNoteId) return;
+            trashModalConfirmBtn.disabled = true;
+            fetch('<%- serverURL %>/' + encodeURIComponent(pendingTrashNoteId) + '/trash', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            }).then(function (res) {
+                return res.json();
+            }).then(function (data) {
+                trashModalConfirmBtn.disabled = false;
+                hideModal('.trash-confirm-modal');
+                if (data && data.success) {
+                    if (pendingTrashCard) {
+                        pendingTrashCard.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                        pendingTrashCard.style.opacity = '0';
+                        pendingTrashCard.style.transform = 'scale(0.9)';
+                        setTimeout(function () {
+                            pendingTrashCard.remove();
+                            filterCards();
+                        }, 300);
+                    }
+                    var allCountEl = document.getElementById('allCount');
+                    if (allCountEl) {
+                        var c = parseInt(allCountEl.textContent, 10) || 0;
+                        allCountEl.textContent = Math.max(0, c - 1);
+                    }
+                    var trashCountEl = document.getElementById('trashCount');
+                    if (trashCountEl) {
+                        var tc = parseInt(trashCountEl.textContent, 10) || 0;
+                        trashCountEl.textContent = tc + 1;
+                    }
+                } else {
+                    alert(data && data.error ? data.error : 'Không thể chuyển vào thùng rác');
+                }
+            }).catch(function () {
+                trashModalConfirmBtn.disabled = false;
+                hideModal('.trash-confirm-modal');
+                alert('Có lỗi xảy ra khi chuyển tài liệu vào thùng rác.');
+            });
+        });
+    }
+
+    // Restore note handling
+    document.addEventListener('click', function (e) {
+        var restoreBtn = e.target.closest('.btn-restore-action');
+        if (restoreBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            var noteId = restoreBtn.getAttribute('data-note-id');
+            var card = restoreBtn.closest('.note-card');
+            restoreBtn.disabled = true;
+            fetch('<%- serverURL %>/' + encodeURIComponent(noteId) + '/restore', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            }).then(function (res) {
+                return res.json();
+            }).then(function (data) {
+                restoreBtn.disabled = false;
+                if (data && data.success) {
+                    if (card) {
+                        card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.9)';
+                        setTimeout(function () {
+                            card.remove();
+                            filterCards();
+                        }, 300);
+                    }
+                    var trashCountEl = document.getElementById('trashCount');
+                    if (trashCountEl) {
+                        var tc = parseInt(trashCountEl.textContent, 10) || 0;
+                        trashCountEl.textContent = Math.max(0, tc - 1);
+                    }
+                    var allCountEl = document.getElementById('allCount');
+                    if (allCountEl) {
+                        var c = parseInt(allCountEl.textContent, 10) || 0;
+                        allCountEl.textContent = c + 1;
+                    }
+                } else {
+                    alert(data && data.error ? data.error : 'Không thể khôi phục tài liệu');
+                }
+            }).catch(function () {
+                restoreBtn.disabled = false;
+                alert('Có lỗi xảy ra khi khôi phục tài liệu.');
+            });
+        }
+    });
+
+    // Force delete handling
+    var pendingForceId = null;
+    var pendingForceCard = null;
+
+    document.addEventListener('click', function (e) {
+        var forceBtn = e.target.closest('.btn-force-delete-action');
+        if (forceBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            pendingForceId = forceBtn.getAttribute('data-note-id');
+            pendingForceCard = forceBtn.closest('.note-card');
+            var noteTitle = forceBtn.getAttribute('data-note-title') || 'tài liệu này';
+            var titleEl = document.getElementById('forceDeleteModalNoteTitle');
+            if (titleEl) titleEl.textContent = noteTitle;
+            showModal('.force-delete-modal');
+        }
+    });
+
+    var forceDeleteModalConfirmBtn = document.getElementById('forceDeleteModalConfirmBtn');
+    if (forceDeleteModalConfirmBtn) {
+        forceDeleteModalConfirmBtn.addEventListener('click', function () {
+            if (!pendingForceId) return;
+            forceDeleteModalConfirmBtn.disabled = true;
+            fetch('<%- serverURL %>/' + encodeURIComponent(pendingForceId) + '/force-delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            }).then(function (res) {
+                return res.json();
+            }).then(function (data) {
+                forceDeleteModalConfirmBtn.disabled = false;
+                hideModal('.force-delete-modal');
+                if (data && data.success) {
+                    if (pendingForceCard) {
+                        pendingForceCard.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                        pendingForceCard.style.opacity = '0';
+                        pendingForceCard.style.transform = 'scale(0.9)';
+                        setTimeout(function () {
+                            pendingForceCard.remove();
+                            filterCards();
+                        }, 300);
+                    }
+                    var trashCountEl = document.getElementById('trashCount');
+                    if (trashCountEl) {
+                        var tc = parseInt(trashCountEl.textContent, 10) || 0;
+                        trashCountEl.textContent = Math.max(0, tc - 1);
+                    }
+                } else {
+                    alert(data && data.error ? data.error : 'Không thể xóa vĩnh viễn tài liệu');
+                }
+            }).catch(function () {
+                forceDeleteModalConfirmBtn.disabled = false;
+                hideModal('.force-delete-modal');
+                alert('Có lỗi xảy ra khi xóa vĩnh viễn tài liệu.');
+            });
+        });
+    }
+
+    // Initial filter run
+    filterCards();
 });
 </script>

@@ -31,6 +31,14 @@ router.get('/s/:shortid/:action', noteController.publishNoteActions)
 router.get('/p/:shortid', slide.showPublishSlide)
 // publish slide actions
 router.get('/p/:shortid/:action', slide.publishSlideActions)
+
+// trash, restore, force delete note
+router.post('/:noteId/trash', noteController.trashNote)
+router.post('/:noteId/restore', noteController.restoreNote)
+router.post('/:noteId/force-delete', noteController.forceDeleteNote)
+
+require('../indexRouter')
+
 // get note by id
 router.get('/:noteId', noteController.showNote)
 // note actions
