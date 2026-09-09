@@ -51,12 +51,12 @@ if (config.allowEmailRegister) {
     }).spread(function (user, created) {
       if (user && created) {
         logger.debug('user registered: ' + user.id)
-        req.flash('info', "You've successfully registered, please sign in.")
-        return res.redirect(config.serverURL + '/')
+        req.flash('info', 'Đăng ký tài khoản thành công! Vui lòng đăng nhập.')
+        return res.redirect(config.serverURL + '/login')
       }
       logger.debug('registration failed. user: ', user)
-      req.flash('error', 'Failed to register your account.')
-      return res.redirect(config.serverURL + '/')
+      req.flash('error', 'Tài khoản email này đã được đăng ký trước đó.')
+      return res.redirect(config.serverURL + '/login')
     }).catch(function (err) {
       logger.error('auth callback failed: ' + err)
       return errors.errorInternalError(res)
