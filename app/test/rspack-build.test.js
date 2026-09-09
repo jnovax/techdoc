@@ -24,7 +24,7 @@ function runTests () {
   assert.ok(commonContent.includes("target: 'es2020'"), 'SWC target must be es2020 for modern evergreen browsers')
   assert.ok(!commonContent.includes('babel-polyfill'), 'rspack.common.js must NOT include legacy babel-polyfill')
   assert.ok(!commonContent.includes('crypto.createHash'), 'rspack.common.js must NOT require crypto monkey-patching')
-  assert.ok(commonContent.includes('rspack.HtmlRspackPlugin'), 'rspack.common.js must use HtmlRspackPlugin')
+  assert.ok(commonContent.includes('HtmlRspackPlugin'), 'rspack.common.js must use HtmlRspackPlugin')
   assert.ok(commonContent.includes('rspack.CopyRspackPlugin'), 'rspack.common.js must use CopyRspackPlugin')
   assert.ok(commonContent.includes('rspack.ProvidePlugin'), 'rspack.common.js must use ProvidePlugin')
 

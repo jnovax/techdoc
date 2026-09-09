@@ -1,5 +1,7 @@
 const rspack = require('@rspack/core')
+const HtmlRspackPlugin = require('html-rspack-plugin')
 const path = require('path')
+const _ = require('lodash')
 
 module.exports = {
   name: 'save-as-html',
@@ -27,10 +29,20 @@ module.exports = {
     filename: '[name].js'
   },
   plugins: [
-    new rspack.HtmlRspackPlugin({
+    new HtmlRspackPlugin({
       template: 'public/views/htmlexport.ejs',
       filename: 'htmlexport.html',
-      inject: false
+      inject: false,
+      templateParameters: (compilation, assets, assetTags, options) => ({
+        compilation,
+        webpackConfig: compilation.options,
+        htmlWebpackPlugin: {
+          tags: assetTags,
+          files: assets,
+          options
+        },
+        _
+      })
     })
   ]
 }

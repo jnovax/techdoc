@@ -1,4 +1,5 @@
 const rspack = require('@rspack/core')
+const HtmlRspackPlugin = require('html-rspack-plugin')
 const path = require('path')
 
 module.exports = {
@@ -17,56 +18,56 @@ module.exports = {
       moment: 'moment',
       CodeMirror: '@hedgedoc/codemirror-5/lib/codemirror.js'
     }),
-    new rspack.HtmlRspackPlugin({
+    new HtmlRspackPlugin({
       template: 'public/views/includes/header.ejs',
       chunks: ['font-pack', 'index-styles-pack', 'index-styles', 'index'],
       filename: path.join(__dirname, 'public/views/build/index-pack-header.ejs'),
       inject: false,
       chunksSortMode: 'manual'
     }),
-    new rspack.HtmlRspackPlugin({
+    new HtmlRspackPlugin({
       template: 'public/views/includes/scripts.ejs',
       chunks: ['common', 'index-pack'],
       filename: path.join(__dirname, 'public/views/build/index-pack-scripts.ejs'),
       inject: false,
       chunksSortMode: 'manual'
     }),
-    new rspack.HtmlRspackPlugin({
+    new HtmlRspackPlugin({
       template: 'public/views/includes/header.ejs',
       chunks: ['font-pack', 'cover-styles-pack', 'cover'],
       filename: path.join(__dirname, 'public/views/build/cover-pack-header.ejs'),
       inject: false,
       chunksSortMode: 'manual'
     }),
-    new rspack.HtmlRspackPlugin({
+    new HtmlRspackPlugin({
       template: 'public/views/includes/scripts.ejs',
       chunks: ['common', 'cover-pack'],
       filename: path.join(__dirname, 'public/views/build/cover-pack-scripts.ejs'),
       inject: false,
       chunksSortMode: 'manual'
     }),
-    new rspack.HtmlRspackPlugin({
+    new HtmlRspackPlugin({
       template: 'public/views/includes/header.ejs',
       chunks: ['font-pack', 'pretty-styles-pack', 'pretty-styles', 'pretty'],
       filename: path.join(__dirname, 'public/views/build/pretty-pack-header.ejs'),
       inject: false,
       chunksSortMode: 'manual'
     }),
-    new rspack.HtmlRspackPlugin({
+    new HtmlRspackPlugin({
       template: 'public/views/includes/scripts.ejs',
       chunks: ['common', 'pretty-pack'],
       filename: path.join(__dirname, 'public/views/build/pretty-pack-scripts.ejs'),
       inject: false,
       chunksSortMode: 'manual'
     }),
-    new rspack.HtmlRspackPlugin({
+    new HtmlRspackPlugin({
       template: 'public/views/includes/header.ejs',
       chunks: ['font-pack', 'slide-styles-pack', 'slide-styles', 'slide'],
       filename: path.join(__dirname, 'public/views/build/slide-pack-header.ejs'),
       inject: false,
       chunksSortMode: 'manual'
     }),
-    new rspack.HtmlRspackPlugin({
+    new HtmlRspackPlugin({
       template: 'public/views/includes/scripts.ejs',
       chunks: ['slide-pack'],
       filename: path.join(__dirname, 'public/views/build/slide-pack-scripts.ejs'),
@@ -91,8 +92,8 @@ module.exports = {
           to: 'fonts/'
         },
         {
-          context: path.join(__dirname, 'node_modules/emojify.js'),
-          from: 'dist/**/*',
+          context: path.join(__dirname, 'node_modules/emojify.js/dist'),
+          from: '**/*',
           globOptions: {
             dot: false
           },
@@ -155,7 +156,7 @@ module.exports = {
       'expose-loader?exposes=LZString!lz-string',
       'flowchart.js',
       'js-sequence-diagrams',
-      'expose-loader?exposes=RevealMarkdown!reveal-markdown',
+      'reveal-markdown',
       path.join(__dirname, 'public/js/index.js')
     ],
     'index-styles': [
@@ -192,13 +193,13 @@ module.exports = {
       'flowchart.js',
       'js-sequence-diagrams',
       'expose-loader?exposes=io!socket.io-client',
-      'expose-loader?exposes=RevealMarkdown!reveal-markdown',
+      'reveal-markdown',
       path.join(__dirname, 'public/js/index.js')
     ],
     pretty: [
       'flowchart.js',
       'js-sequence-diagrams',
-      'expose-loader?exposes=RevealMarkdown!reveal-markdown',
+      'reveal-markdown',
       path.join(__dirname, 'public/js/pretty.js')
     ],
     'pretty-styles': [
@@ -217,14 +218,14 @@ module.exports = {
       'flowchart.js',
       'js-sequence-diagrams',
       'expose-loader?exposes=io!socket.io-client',
-      'expose-loader?exposes=RevealMarkdown!reveal-markdown',
+      'reveal-markdown',
       path.join(__dirname, 'public/js/pretty.js')
     ],
     slide: [
       'flowchart.js',
       'js-sequence-diagrams',
       'expose-loader?exposes=Reveal!reveal.js',
-      'expose-loader?exposes=RevealMarkdown!reveal-markdown',
+      'reveal-markdown',
       path.join(__dirname, 'public/js/slide.js')
     ],
     'slide-styles': [
@@ -242,7 +243,7 @@ module.exports = {
       'flowchart.js',
       'js-sequence-diagrams',
       'expose-loader?exposes=Reveal!reveal.js',
-      'expose-loader?exposes=RevealMarkdown!reveal-markdown',
+      'reveal-markdown',
       path.join(__dirname, 'public/js/slide.js')
     ]
   },
@@ -260,6 +261,10 @@ module.exports = {
       'bootstrap-tooltip': path.join(__dirname, 'public/vendor/bootstrap/tooltip.min.js'),
       'reveal-markdown': path.join(__dirname, 'public/js/reveal-markdown.js'),
       raphael: path.join(__dirname, 'node_modules/raphael/raphael.no-deps.js')
+    },
+    fallback: {
+      fs: false,
+      path: false
     }
   },
 
@@ -273,6 +278,13 @@ module.exports = {
 
   module: {
     rules: [
+      {
+        test: require.resolve(path.join(__dirname, 'public/js/reveal-markdown.js')),
+        loader: 'expose-loader',
+        options: {
+          exposes: 'RevealMarkdown'
+        }
+      },
       {
         test: /\.mjs$/,
         type: 'javascript/auto'
@@ -307,7 +319,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: [/node_modules/, /public\/vendor/],
+        exclude: [/node_modules/, /public\/vendor/, /reveal-markdown\.js$/],
         loader: 'builtin:swc-loader',
         options: {
           jsc: {

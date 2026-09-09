@@ -32,7 +32,7 @@ else
       -v "${APP_DIR}:/app:z" \
       -w /app \
       node:22-alpine \
-      sh -c "npm install --include=dev && npx rspack build --config rspack.prod.js"
+      sh -c "npm install --include=dev --legacy-peer-deps && npx rspack build --config rspack.prod.js"
   else
     echo "Error: Neither rspack nor podman/docker found. Please install @rspack/cli or run with podman/docker." >&2
     exit 1

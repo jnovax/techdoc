@@ -18,7 +18,13 @@ module.exports = [
         new rspack.SwcJsMinimizerRspackPlugin({
           format: {
             comments: false
-          }
+          },
+          exclude: [
+            /MathJax/,
+            /emojify\.js/,
+            /reveal\.js\/plugin\/markdown\/marked\.js/,
+            /constrain-object\.min\.js/
+          ]
         }),
         new rspack.LightningCssMinimizerRspackPlugin()
       ],
