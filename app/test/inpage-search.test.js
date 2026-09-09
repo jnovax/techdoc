@@ -30,6 +30,19 @@ function runTests () {
   assert.strictEqual(getNextIndex(2, 3, 'prev'), 1)
   assert.strictEqual(getNextIndex(1, 3, 'prev'), 0)
 
+  // Test 4: Navbar search button integration
+  const fs = require('fs')
+  const path = require('path')
+  const editorHeaderHtml = fs.readFileSync(path.join(__dirname, '../public/views/techdoc/header.ejs'), 'utf8')
+  const prettyHtml = fs.readFileSync(path.join(__dirname, '../public/views/pretty.ejs'), 'utf8')
+  const inpageCss = fs.readFileSync(path.join(__dirname, '../public/css/inpage-search.css'), 'utf8')
+  const inpageJs = fs.readFileSync(path.join(__dirname, '../public/js/inpage-search.js'), 'utf8')
+
+  assert.ok(editorHeaderHtml.includes('techdoc-search-nav-trigger'), 'Editor navbar must include search trigger button')
+  assert.ok(prettyHtml.includes('techdoc-search-nav-trigger'), 'Publish navbar must include search trigger button')
+  assert.ok(inpageCss.includes('.techdoc-search-trigger {\n  display: none !important;'), 'Floating search trigger must be hidden to prevent TOC overlap')
+  assert.ok(!inpageJs.includes('document.body.appendChild(trigger)'), 'inpage-search.js must NOT inject floating trigger into DOM')
+
   console.log('In-page search logic tests passed!')
 }
 

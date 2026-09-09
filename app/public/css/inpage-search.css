@@ -1,37 +1,19 @@
 /* In-Page Content Search Widget Styles */
 
 .techdoc-search-trigger {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: #ffffff;
-  color: #334155;
-  border: 1px solid #cbd5e1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 9998;
-  font-size: 18px;
-  transition: all 0.2s ease;
+  display: none !important;
 }
 
-.techdoc-search-trigger:hover {
-  background: #2563eb;
-  color: #ffffff;
-  border-color: #2563eb;
-  transform: scale(1.05);
+.techdoc-search-nav-trigger {
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .techdoc-search-bar {
   position: fixed;
-  top: 20px;
+  top: 58px;
   right: 24px;
-  z-index: 9999;
+  z-index: 100000;
   background: #ffffff;
   border-radius: 28px;
   border: 1px solid #cbd5e1;
@@ -114,6 +96,40 @@
   background: #fee2e2;
 }
 
+/* Night theme support for search bar */
+.night .techdoc-search-bar {
+  background: #1e293b;
+  border-color: #475569;
+  color: #f8fafc;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+.night .techdoc-search-input {
+  color: #f8fafc;
+}
+
+.night .techdoc-search-input::placeholder {
+  color: #64748b;
+}
+
+.night .techdoc-search-counter {
+  color: #94a3b8;
+}
+
+.night .techdoc-search-btn {
+  color: #94a3b8;
+}
+
+.night .techdoc-search-btn:hover {
+  background: #334155;
+  color: #f8fafc;
+}
+
+.night .techdoc-search-btn.close-btn:hover {
+  background: #451a1a;
+  color: #f87171;
+}
+
 /* Document highlighting */
 mark.techdoc-search-match {
   background-color: #fef08a !important;
@@ -132,7 +148,7 @@ mark.techdoc-search-match.techdoc-search-current {
 
 @media (max-width: 600px) {
   .techdoc-search-bar {
-    top: 10px;
+    top: 54px;
     right: 10px;
     left: 10px;
     border-radius: 12px;

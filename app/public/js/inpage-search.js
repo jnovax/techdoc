@@ -238,25 +238,22 @@
     document.body.appendChild(searchBar);
   }
 
-  function createTriggerButton() {
-    var trigger = document.createElement('button');
-    trigger.className = 'techdoc-search-trigger';
-    trigger.title = 'Tìm kiếm trong trang (Ctrl+F)';
-    trigger.innerHTML = '<i class="fa fa-search"></i>';
-    trigger.addEventListener('click', function () {
+  document.addEventListener('click', function (e) {
+    var trigger = e.target.closest('.techdoc-search-nav-trigger, .techdoc-search-trigger');
+    if (trigger) {
+      e.preventDefault();
       if (searchBar && searchBar.style.display !== 'none') {
         closeSearchBar();
       } else {
         openSearchBar();
       }
-    });
-    document.body.appendChild(trigger);
-  }
+    }
+  });
 
   document.addEventListener('keydown', function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
       var activeEl = document.activeElement;
-      if (activeEl && (activeEl.tagName === 'TEXTAREA' || (activeEl.tagName === 'INPUT' && activeEl !== searchInput))) {
+      if (activeEl && (activeEl.tagName === 'TEXTAREA' || (activeEl.tagName === 'INPUT' && activeEl !== searchInput) || (activeEl.closest && activeEl.closest('.CodeMirror')))) {
         return; // Allow native find in CodeMirror or other inputs
       }
       e.preventDefault();
@@ -267,10 +264,4 @@
       }
     }
   });
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', createTriggerButton);
-  } else {
-    createTriggerButton();
-  }
 })();
