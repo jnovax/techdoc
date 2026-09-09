@@ -135,7 +135,9 @@ exports.getPublishData = function (req, res, note, callback) {
     disqus: meta.disqus,
     cspNonce: res.locals.nonce,
     dnt: req.headers.dnt,
-    opengraph: ogdata
+    opengraph: ogdata,
+    noteId: note.alias || note.shortid || models.Note.encodeNoteId(note.id),
+    isOwner: req.isAuthenticated() && ((note.owner && note.owner.id === req.user.id) || (note.ownerId && note.ownerId === req.user.id))
   }
   callback(data)
 }

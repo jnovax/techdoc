@@ -124,10 +124,46 @@ async function showIndex (req, res, next) {
       }
     })
 
+    let trashedNotes = []
+    if (authStatus && req.user && req.user.id) {
+      try {
+        const rawTrashed = await models.Note.findAll({
+          where: {
+            ownerId: req.user.id,
+            deletedAt: { [models.Sequelize.Op.ne]: null }
+          },
+          paranoid: false,
+          order: [['deletedAt', 'DESC']]
+        })
+        trashedNotes = rawTrashed.map(note => {
+          let snippet = (note.content || '')
+            .replace(/#+\s+.*?\n/g, ' ')
+            .replace(/!\[.*?\]\(.*?\)/g, ' ')
+            .replace(/\[.*?\]\(.*?\)/g, ' ')
+            .replace(/[`*_~>|]/g, ' ')
+            .replace(/\n+/g, ' ')
+            .trim()
+          if (snippet.length > 140) snippet = snippet.slice(0, 140) + '...'
+          return {
+            id: note.alias || note.shortid || note.id,
+            title: note.title || 'Ghi chú không tiêu đề',
+            snippet: snippet || 'Không có nội dung mô tả',
+            permission: note.permission,
+            viewcount: note.viewcount || 0,
+            deletedAt: note.deletedAt,
+            isOwner: true
+          }
+        })
+      } catch (trashErr) {
+        logger.error('Error querying trashed notes:', trashErr)
+      }
+    }
+
     const data = {
       signin: authStatus,
       user: req.user || null,
       notes: catalogNotes,
+      trashedNotes: trashedNotes || [],
       infoMessage: req.flash('info'),
       errorMessage: req.flash('error'),
       imprint: fs.existsSync(path.join(config.docsPath, 'imprint.md')),
@@ -143,6 +179,7 @@ async function showIndex (req, res, next) {
       signin: authStatus,
       user: req.user || null,
       notes: [],
+      trashedNotes: [],
       infoMessage: req.flash('info'),
       errorMessage: req.flash('error'),
       imprint: false,

@@ -37,8 +37,6 @@ router.post('/:noteId/trash', noteController.trashNote)
 router.post('/:noteId/restore', noteController.restoreNote)
 router.post('/:noteId/force-delete', noteController.forceDeleteNote)
 
-require('../indexRouter')
-
 // get note by id
 router.get('/:noteId', noteController.showNote)
 // note actions

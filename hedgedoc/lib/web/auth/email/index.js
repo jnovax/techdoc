@@ -38,7 +38,7 @@ passport.use(new LocalStrategy({
 }))
 
 if (config.allowEmailRegister) {
-  emailAuth.post('/register', rateLimit.userEndpoints, urlencodedParser, function (req, res, next) {
+  emailAuth.post(['/register', '/auth/email/register'], rateLimit.userEndpoints, urlencodedParser, function (req, res, next) {
     if (!req.body.email || !req.body.password) return errors.errorBadRequest(res)
     if (!validator.isEmail(req.body.email)) return errors.errorBadRequest(res)
     models.User.findOrCreate({
@@ -64,7 +64,7 @@ if (config.allowEmailRegister) {
   })
 }
 
-emailAuth.post('/login', rateLimit.userEndpoints, urlencodedParser, function (req, res, next) {
+emailAuth.post(['/login', '/auth/email/login'], rateLimit.userEndpoints, urlencodedParser, function (req, res, next) {
   if (!req.body.email || !req.body.password) return errors.errorBadRequest(res)
   if (!validator.isEmail(req.body.email)) return errors.errorBadRequest(res)
   passport.authenticate('local', function (err, user, info) {

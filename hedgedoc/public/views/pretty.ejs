@@ -53,7 +53,7 @@
             <a href="#" class="docusaurus-nav-btn docusaurus-nav-btn-primary ui-edit" title="Chỉnh sửa tài liệu">
                 <i class="fa fa-pencil"></i> <span class="hidden-xs">Chỉnh sửa</span>
             </a>
-            <% if ((typeof ownerprofile !== 'undefined' && ownerprofile && typeof owner !== 'undefined' && typeof lastchangeuser !== 'undefined' && owner === lastchangeuser) || (typeof owner !== 'undefined' && owner && typeof ownerprofile !== 'undefined' && ownerprofile)) { %>
+            <% if (typeof isOwner !== 'undefined' && isOwner) { %>
             <button type="button" class="docusaurus-nav-btn docusaurus-nav-btn-danger ui-trash" title="Chuyển tài liệu vào thùng rác">
                 <i class="fa fa-trash-o"></i> <span class="hidden-xs">Chuyển vào thùng rác</span>
             </button>
