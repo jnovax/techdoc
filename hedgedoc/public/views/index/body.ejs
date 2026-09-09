@@ -133,7 +133,7 @@
                         filterType = 'private';
                     }
                 %>
-                    <a href="<%- serverURL %>/<%- note.id %>" class="note-card" data-filter="<%- filterType %>" data-mine="<%- note.isOwner ? 'true' : 'false' %>" data-title="<%- (note.title || '').toLowerCase() %>">
+                    <a href="<%- serverURL %>/<%- note.id %>" class="note-card" data-filter="<%- filterType %>" data-mine="<%- note.isOwner ? 'true' : 'false' %>" data-title="<%- (note.title || '').toLowerCase() %>" data-id="<%- note.id %>" data-permission="<%- note.permission %>" data-snippet="<%= note.snippet %>" data-author="<%= note.authorName %>" data-viewcount="<%= note.viewcount %>">
                         <div>
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <span class="note-badge <%- badgeClass %>">
@@ -168,7 +168,7 @@
                 <% trashedNotes.forEach(function(tNote) { 
                     var tSnippet = tNote.snippet || 'Không có nội dung mô tả';
                 %>
-                    <div class="note-card note-card-trash" data-filter="trash" data-mine="true" data-id="<%- tNote.id %>" data-title="<%- (tNote.title || '').toLowerCase() %>" style="display: none;">
+                    <div class="note-card note-card-trash" data-filter="trash" data-mine="true" data-id="<%- tNote.id %>" data-title="<%- (tNote.title || '').toLowerCase() %>" data-permission="<%- tNote.permission || 'freely' %>" data-snippet="<%= tSnippet %>" data-viewcount="<%= tNote.viewcount || 0 %>" style="display: none;">
                         <div>
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <span class="note-badge badge-trash">
@@ -270,5 +270,5 @@
 
 <%- include('../shared/signin-modal') %>
 
-<script src="<%- serverURL %>/js/portal.js?v=20260909_1" defer></script>
+<script src="<%- serverURL %>/js/portal.js?v=20260909_2" defer></script>
 

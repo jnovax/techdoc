@@ -13,6 +13,16 @@
     return window.location.origin;
   }
 
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   function showModal(selector) {
     if (window.jQuery && typeof window.jQuery(selector).modal === 'function') {
       window.jQuery(selector).modal('show');
@@ -35,6 +45,101 @@
         el.style.display = 'none';
       }
     }
+  }
+
+  function createTrashedCard(noteId, title, snippet, permission, viewcount, deletedAtStr) {
+    var card = document.createElement('div');
+    card.className = 'note-card note-card-trash';
+    card.setAttribute('data-filter', 'trash');
+    card.setAttribute('data-mine', 'true');
+    card.setAttribute('data-id', noteId);
+    card.setAttribute('data-title', (title || '').toLowerCase());
+    card.setAttribute('data-permission', permission || 'freely');
+    card.setAttribute('data-snippet', snippet || '');
+    card.setAttribute('data-viewcount', viewcount || 0);
+    card.style.display = 'none';
+
+    var dateText = deletedAtStr ? new Date(deletedAtStr).toLocaleDateString('vi-VN') : new Date().toLocaleDateString('vi-VN');
+
+    card.innerHTML =
+      '<div>' +
+        '<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
+          '<span class="note-badge badge-trash">' +
+            '<i class="fa fa-trash"></i> Đã xóa' +
+          '</span>' +
+        '</div>' +
+        '<h2 class="note-title" style="color: #64748b; text-decoration: line-through;">' + escapeHtml(title || 'Ghi chú không tiêu đề') + '</h2>' +
+        '<p class="note-snippet">' + escapeHtml(snippet || 'Không có nội dung mô tả') + '</p>' +
+      '</div>' +
+      '<div class="note-footer" style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center;">' +
+        '<div style="font-size: 12px; color: #94a3b8;">' +
+          '<i class="fa fa-clock-o"></i> ' + dateText +
+        '</div>' +
+        '<div class="note-trash-actions" style="display: flex; gap: 8px;">' +
+          '<button type="button" class="btn btn-sm btn-outline-primary btn-restore-action" data-note-id="' + escapeHtml(noteId) + '" data-note-title="' + escapeHtml(title || '') + '" title="Khôi phục ghi chú" style="font-size: 12px; padding: 4px 10px; border: 1px solid #3b82f6; color: #2563eb; background: #eff6ff; border-radius: 4px; cursor: pointer;">' +
+            '<i class="fa fa-undo"></i> Khôi phục' +
+          '</button>' +
+          '<button type="button" class="btn btn-sm btn-outline-danger btn-force-delete-action" data-note-id="' + escapeHtml(noteId) + '" data-note-title="' + escapeHtml(title || '') + '" title="Xóa vĩnh viễn" style="font-size: 12px; padding: 4px 10px; border: 1px solid #ef4444; color: #dc2626; background: #fef2f2; border-radius: 4px; cursor: pointer;">' +
+            '<i class="fa fa-trash"></i> Xóa vĩnh viễn' +
+          '</button>' +
+        '</div>' +
+      '</div>';
+    return card;
+  }
+
+  function createActiveCard(serverURL, noteId, title, snippet, permission, authorName, viewcount) {
+    var filterType = 'public';
+    var badgeClass = 'public';
+    var badgeLabel = 'Công khai';
+    var badgeIcon = 'fa-globe';
+
+    if (permission === 'protected' || permission === 'limited') {
+      filterType = 'protected';
+      badgeClass = 'protected';
+      badgeLabel = 'Nội bộ';
+      badgeIcon = 'fa-lock';
+    } else if (permission === 'private') {
+      filterType = 'private';
+      badgeClass = 'private';
+      badgeLabel = 'Bản nháp / Riêng tư';
+      badgeIcon = 'fa-user-secret';
+    }
+
+    var card = document.createElement('a');
+    card.href = serverURL + '/' + encodeURIComponent(noteId);
+    card.className = 'note-card';
+    card.setAttribute('data-filter', filterType);
+    card.setAttribute('data-mine', 'true');
+    card.setAttribute('data-id', noteId);
+    card.setAttribute('data-title', (title || '').toLowerCase());
+    card.setAttribute('data-permission', permission || 'freely');
+    card.setAttribute('data-snippet', snippet || '');
+    card.setAttribute('data-author', authorName || 'Của tôi');
+    card.setAttribute('data-viewcount', viewcount || 0);
+
+    card.innerHTML =
+      '<div>' +
+        '<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
+          '<span class="note-badge ' + badgeClass + '">' +
+            '<i class="fa ' + badgeIcon + '"></i> ' + badgeLabel +
+          '</span>' +
+          '<button type="button" class="btn-trash-action" data-note-id="' + escapeHtml(noteId) + '" data-note-title="' + escapeHtml(title || '') + '" title="Chuyển vào thùng rác">' +
+            '<i class="fa fa-trash-o"></i>' +
+          '</button>' +
+        '</div>' +
+        '<h2 class="note-title">' + escapeHtml(title || 'Ghi chú không tiêu đề') + '</h2>' +
+        '<p class="note-snippet">' + escapeHtml(snippet || 'Không có nội dung mô tả') + '</p>' +
+      '</div>' +
+      '<div class="note-footer">' +
+        '<div class="note-author">' +
+          '<i class="fa fa-user-circle"></i>' +
+          '<span>' + escapeHtml(authorName || 'Của tôi') + '</span>' +
+        '</div>' +
+        '<div>' +
+          '<i class="fa fa-eye"></i> ' + (viewcount || 0) + ' lượt xem' +
+        '</div>' +
+      '</div>';
+    return card;
   }
 
   var currentFilter = 'all';
@@ -158,15 +263,32 @@
         trashModalConfirmBtn.disabled = false;
         hideModal('.trash-confirm-modal');
         if (data && data.success) {
+          var noteId = pendingTrashNoteId;
+          var title = '';
+          var snippet = '';
+          var permission = 'freely';
+          var viewcount = 0;
+
           if (pendingTrashCard) {
-            pendingTrashCard.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            title = (pendingTrashCard.querySelector('.note-title') ? pendingTrashCard.querySelector('.note-title').textContent : '').trim();
+            snippet = pendingTrashCard.getAttribute('data-snippet') || (pendingTrashCard.querySelector('.note-snippet') ? pendingTrashCard.querySelector('.note-snippet').textContent : '').trim();
+            permission = pendingTrashCard.getAttribute('data-permission') || 'freely';
+            viewcount = pendingTrashCard.getAttribute('data-viewcount') || 0;
+
+            pendingTrashCard.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
             pendingTrashCard.style.opacity = '0';
             pendingTrashCard.style.transform = 'scale(0.9)';
             setTimeout(function () {
               pendingTrashCard.remove();
-              filterCards();
-            }, 300);
+            }, 250);
           }
+
+          var grid = document.getElementById('notesGrid');
+          if (grid) {
+            var trashedCard = createTrashedCard(noteId, title, snippet, permission, viewcount, new Date().toISOString());
+            grid.appendChild(trashedCard);
+          }
+
           var allCountEl = document.getElementById('allCount');
           if (allCountEl) {
             var c = parseInt(allCountEl.textContent, 10) || 0;
@@ -177,6 +299,8 @@
             var tc = parseInt(trashCountEl.textContent, 10) || 0;
             trashCountEl.textContent = tc + 1;
           }
+
+          setTimeout(filterCards, 260);
         } else {
           alert(data && data.error ? data.error : 'Không thể chuyển vào thùng rác');
         }
@@ -206,15 +330,32 @@
       }).then(function (data) {
         restoreBtn.disabled = false;
         if (data && data.success) {
+          var title = '';
+          var snippet = '';
+          var permission = 'freely';
+          var viewcount = 0;
+          var authorName = 'Của tôi';
+
           if (card) {
-            card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            title = (card.querySelector('.note-title') ? card.querySelector('.note-title').textContent : '').trim();
+            snippet = card.getAttribute('data-snippet') || (card.querySelector('.note-snippet') ? card.querySelector('.note-snippet').textContent : '').trim();
+            permission = card.getAttribute('data-permission') || 'freely';
+            viewcount = card.getAttribute('data-viewcount') || 0;
+
+            card.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
             card.style.opacity = '0';
             card.style.transform = 'scale(0.9)';
             setTimeout(function () {
               card.remove();
-              filterCards();
-            }, 300);
+            }, 250);
           }
+
+          var grid = document.getElementById('notesGrid');
+          if (grid) {
+            var activeCard = createActiveCard(serverURL, noteId, title, snippet, permission, authorName, viewcount);
+            grid.insertBefore(activeCard, grid.firstChild);
+          }
+
           var trashCountEl = document.getElementById('trashCount');
           if (trashCountEl) {
             var tc = parseInt(trashCountEl.textContent, 10) || 0;
@@ -225,6 +366,8 @@
             var c = parseInt(allCountEl.textContent, 10) || 0;
             allCountEl.textContent = c + 1;
           }
+
+          setTimeout(filterCards, 260);
         } else {
           alert(data && data.error ? data.error : 'Không thể khôi phục tài liệu');
         }
@@ -270,13 +413,13 @@
         hideModal('.force-delete-modal');
         if (data && data.success) {
           if (pendingForceCard) {
-            pendingForceCard.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            pendingForceCard.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
             pendingForceCard.style.opacity = '0';
             pendingForceCard.style.transform = 'scale(0.9)';
             setTimeout(function () {
               pendingForceCard.remove();
               filterCards();
-            }, 300);
+            }, 250);
           }
           var trashCountEl = document.getElementById('trashCount');
           if (trashCountEl) {
