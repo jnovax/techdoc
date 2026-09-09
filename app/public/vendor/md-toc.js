@@ -125,7 +125,12 @@
     if (!this.options.targetId) {
       this.el.appendChild(this.toc)
     } else {
-      document.getElementById(this.options.targetId).appendChild(this.toc)
+      var targetNode = document.getElementById(this.options.targetId)
+      if (targetNode) {
+        targetNode.appendChild(this.toc)
+      } else {
+        this.el.appendChild(this.toc)
+      }
     }
     var self = this
     if (this.tocTop > -1) {

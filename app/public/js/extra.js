@@ -532,12 +532,18 @@ export function finishView (view) {
     // mathjax
   const mathjaxdivs = view.find('span.mathjax.raw').removeClass('raw').toArray()
   try {
-    if (mathjaxdivs.length > 1) {
-      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub, mathjaxdivs])
-      window.MathJax.Hub.Queue(window.viewAjaxCallback)
-    } else if (mathjaxdivs.length > 0) {
-      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub, mathjaxdivs[0]])
-      window.MathJax.Hub.Queue(window.viewAjaxCallback)
+    if (window.MathJax && window.MathJax.Hub) {
+      if (mathjaxdivs.length > 1) {
+        window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub, mathjaxdivs])
+        if (typeof window.viewAjaxCallback === 'function') {
+          window.MathJax.Hub.Queue(window.viewAjaxCallback)
+        }
+      } else if (mathjaxdivs.length > 0) {
+        window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub, mathjaxdivs[0]])
+        if (typeof window.viewAjaxCallback === 'function') {
+          window.MathJax.Hub.Queue(window.viewAjaxCallback)
+        }
+      }
     }
   } catch (err) {
     console.warn(err)
@@ -795,6 +801,7 @@ function checkExpandToggle () {
 // toc
 export function generateToc (id) {
   const target = $(`#${id}`)
+  if (target.length === 0) return
   target.html('')
   /* eslint-disable no-unused-vars */
   const toc = new window.Toc('doc', {
