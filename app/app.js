@@ -231,6 +231,25 @@ app.set('views', config.viewPath)
 app.engine('ejs', ejs.renderFile)
 // set view engine
 app.set('view engine', 'ejs')
+// In development or when assets are rebuilt on the host, disable template cache so new chunks are reflected immediately
+if (config.debug || process.env.NODE_ENV !== 'production' || process.env.CMD_VIEW_CACHE === 'false') {
+  app.disable('view cache')
+  ejs.cache = null
+}
+// Disable caching for server-rendered HTML so browsers always fetch fresh
+// chunk hashes after a build. Static assets are still cached via content hash.
+app.use((req, res, next) => {
+  const render = res.render.bind(res)
+  res.render = function (view, options, callback) {
+    // Override any Cache-Control set by controllers — must-revalidate ensures
+    // browsers always check for fresh HTML (with updated chunk hashes) after a build.
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate')
+    res.set('Pragma', 'no-cache')
+    res.set('Expires', '0')
+    return render(view, options, callback)
+  }
+  next()
+})
 // set generally available variables for all views
 app.locals.serverURL = config.serverURL
 app.locals.sourceURL = config.sourceURL

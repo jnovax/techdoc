@@ -1,14 +1,43 @@
-FROM quay.io/hedgedoc/hedgedoc:1.12.0
+# ==========================================
+# Stage 1: Build Assets & Frontend Bundles
+# ==========================================
+FROM node:22-alpine AS builder
 
-USER root
+WORKDIR /home/node/app
 
-# Copy customized source files and assets
-COPY --chown=hedgedoc:hedgedoc app.js /hedgedoc/app.js
-COPY --chown=hedgedoc:hedgedoc lib/ /hedgedoc/lib/
-COPY --chown=hedgedoc:hedgedoc public/ /hedgedoc/public/
-COPY --chown=hedgedoc:hedgedoc locales/ /hedgedoc/locales/
+RUN apk add --no-cache python3 make g++ bash
 
-USER hedgedoc
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn/ .yarn/
+
+RUN corepack enable && yarn install
+
+COPY . .
+
+RUN yarn build
+
+# ==========================================
+# Stage 2: Production Runtime
+# ==========================================
+FROM node:22-alpine AS runner
+
+WORKDIR /home/node/app
+ENV NODE_ENV=production
+
+RUN apk add --no-cache curl
+
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn/ .yarn/
+
+RUN corepack enable && yarn workspaces focus --production
+
+COPY app.js ./
+COPY lib/ ./lib/
+COPY locales/ ./locales/
+COPY bin/ ./bin/
+COPY --from=builder /home/node/app/public/ ./public/
+
+USER node
 
 EXPOSE 3000
 

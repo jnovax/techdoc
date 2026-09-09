@@ -217,6 +217,7 @@ module.exports = {
     ],
     'pretty-pack': [
       'expose-loader?exposes=moment!moment',
+      'expose-loader?exposes=emojify!emojify.js',
       'flowchart.js',
       'js-sequence-diagrams',
       'socket.io-client',

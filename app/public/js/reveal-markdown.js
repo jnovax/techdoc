@@ -14,7 +14,7 @@ import { md } from './extra'
     root.RevealMarkdown = factory()
     root.RevealMarkdown.initialize()
   }
-}(this, function () {
+}(typeof window !== 'undefined' ? window : globalThis, function () {
   const DEFAULT_SLIDE_SEPARATOR = '^\r?\n---\r?\n$'
   const DEFAULT_NOTES_SEPARATOR = '^note:'
   const DEFAULT_ELEMENT_ATTRIBUTES_SEPARATOR = '\\.element\\s*?(.+?)$'

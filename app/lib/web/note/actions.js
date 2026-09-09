@@ -25,7 +25,7 @@ exports.getInfo = function getInfo (req, res, note) {
     'Access-Control-Allow-Origin': '*', // allow CORS as API
     'Access-Control-Allow-Headers': 'Range',
     'Access-Control-Expose-Headers': 'Cache-Control, Content-Encoding, Content-Range',
-    'Cache-Control': 'private', // only cache by client
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
     'X-Robots-Tag': 'noindex, nofollow' // prevent crawling
   })
   res.send(data)
@@ -63,7 +63,7 @@ exports.getRevision = function getRevision (req, res, note) {
           'Access-Control-Allow-Origin': '*', // allow CORS as API
           'Access-Control-Allow-Headers': 'Range',
           'Access-Control-Expose-Headers': 'Cache-Control, Content-Encoding, Content-Range',
-          'Cache-Control': 'private', // only cache by client
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
           'X-Robots-Tag': 'noindex, nofollow' // prevent crawling
         })
         res.send(content)
@@ -84,7 +84,7 @@ exports.getRevision = function getRevision (req, res, note) {
         'Access-Control-Allow-Origin': '*', // allow CORS as API
         'Access-Control-Allow-Headers': 'Range',
         'Access-Control-Expose-Headers': 'Cache-Control, Content-Encoding, Content-Range',
-        'Cache-Control': 'private', // only cache by client
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
         'X-Robots-Tag': 'noindex, nofollow' // prevent crawling
       })
       res.send(out)

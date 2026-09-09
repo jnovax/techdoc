@@ -1,4 +1,4 @@
-/* global _ */
+import _ from 'lodash'
 // Inject line numbers for sync scroll.
 
 import markdownitContainer from 'markdown-it-container'

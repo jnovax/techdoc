@@ -33,7 +33,7 @@ exports.showPublishSlide = function (req, res, next) {
       }
       noteUtil.getPublishData(req, res, note, (data) => {
         res.set({
-          'Cache-Control': 'private' // only cache by client
+          'Cache-Control': 'no-cache, no-store, must-revalidate'
         })
         return res.render('slide.ejs', data)
       })

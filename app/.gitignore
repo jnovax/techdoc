@@ -1,7 +1,3 @@
-# ==========================================
-# HedgeDoc App .gitignore
-# ==========================================
-
 # Binaries & Executable Folders
 bin/
 obj/

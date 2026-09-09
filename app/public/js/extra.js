@@ -5,6 +5,15 @@ import Prism from 'prismjs'
 import PDFObject from 'pdfobject'
 import { saveAs } from 'file-saver'
 import filterXSS from 'xss'
+import Viz from 'viz.js'
+import mermaid from 'mermaid'
+import abcjs from 'abcjs'
+import hljs from 'highlight.js'
+import emojify from 'emojify.js'
+
+if (typeof window !== 'undefined') {
+  window.emojify = window.emojify || emojify
+}
 
 import getUIElements from './lib/editor/ui-elements'
 import { escapeHtml, unescapeHtml } from './utils'
@@ -362,19 +371,14 @@ export function finishView (view) {
   // graphviz
   const graphvizs = view.find('div.graphviz.raw').removeClass('raw')
   graphvizs.each(function (key, value) {
-    let $value
+    const $value = $(value)
+    const $ele = $(value).parent().parent()
     try {
-      $value = $(value)
-      const $ele = $(value).parent().parent()
-      require.ensure([], function (require) {
-        const Viz = require('viz.js')
-        const graphviz = Viz($value.text())
-        if (!graphviz) throw Error('viz.js output empty graph')
-        $value.html(graphviz)
-
-        $ele.addClass('graphviz')
-        $value.children().unwrap().unwrap()
-      })
+      const graphviz = Viz($value.text())
+      if (!graphviz) throw Error('viz.js output empty graph')
+      $value.html(graphviz)
+      $ele.addClass('graphviz')
+      $value.children().unwrap().unwrap()
     } catch (err) {
       $value.unwrap()
       $value.parent().append(`<div class="alert alert-warning">${escapeHtml(err)}</div>`)
@@ -386,41 +390,34 @@ export function finishView (view) {
   mermaids.each((key, value) => {
     const $value = $(value)
     const $ele = $(value).closest('pre')
-    require.ensure([], function (require) {
-      try {
-        const mermaid = require('mermaid').default
-        mermaid.startOnLoad = false
-        mermaid.mermaidAPI.parse($value.text())
-        $ele.addClass('mermaid')
-        $ele.text($value.text())
-        mermaid.init(undefined, $ele)
-      } catch (err) {
-        let errormessage = err
-        if (err.str) {
-          errormessage = err.str
-        }
-        $value.unwrap()
-        $value.parent().append(`<div class="alert alert-warning">${escapeHtml(errormessage)}</div>`)
-        console.warn(errormessage)
+    try {
+      mermaid.startOnLoad = false
+      mermaid.mermaidAPI.parse($value.text())
+      $ele.addClass('mermaid')
+      $ele.text($value.text())
+      mermaid.init(undefined, $ele)
+    } catch (err) {
+      let errormessage = err
+      if (err.str) {
+        errormessage = err.str
       }
-    })
+      $value.unwrap()
+      $value.parent().append(`<div class="alert alert-warning">${escapeHtml(errormessage)}</div>`)
+      console.warn(errormessage)
+    }
   })
   // abc.js
   const abcs = view.find('div.abc.raw').removeClass('raw')
   abcs.each((key, value) => {
-    let $value
+    const $value = $(value)
+    const $ele = $(value).parent().parent()
     try {
-      $value = $(value)
-      const $ele = $(value).parent().parent()
-      require.ensure([], function (require) {
-        const abcjs = require('abcjs')
-        abcjs.renderAbc(value, $value.text())
-        $ele.addClass('abc')
-        $value.children().unwrap().unwrap()
-        const svg = $ele.find('> svg')
-        svg[0].setAttribute('viewBox', `0 0 ${svg.attr('width')} ${svg.attr('height')}`)
-        svg[0].setAttribute('preserveAspectRatio', 'xMidYMid meet')
-      })
+      abcjs.renderAbc(value, $value.text())
+      $ele.addClass('abc')
+      $value.children().unwrap().unwrap()
+      const svg = $ele.find('> svg')
+      svg[0].setAttribute('viewBox', `0 0 ${svg.attr('width')} ${svg.attr('height')}`)
+      svg[0].setAttribute('preserveAspectRatio', 'xMidYMid meet')
     } catch (err) {
       $value.unwrap()
       $value.parent().append(`<div class="alert alert-warning">${escapeHtml(err)}</div>`)
@@ -518,21 +515,15 @@ export function finishView (view) {
             value: Prism.highlight(code, Prism.languages.makefile)
           }
         } else {
-          require.ensure([], function (require) {
-            const hljs = require('highlight.js')
-            code = unescapeHtml(code)
-            const languages = hljs.listLanguages()
-            if (!languages.includes(reallang)) {
-              result = hljs.highlightAuto(code)
-            } else {
-              result = hljs.highlight(code, {
-                language: reallang
-              })
-            }
-            if (codeDiv.length > 0) codeDiv.html(result.value)
-            else langDiv.html(result.value)
-          })
-          return
+          code = unescapeHtml(code)
+          const languages = hljs.listLanguages()
+          if (!languages.includes(reallang)) {
+            result = hljs.highlightAuto(code)
+          } else {
+            result = hljs.highlight(code, {
+              language: reallang
+            })
+          }
         }
         if (codeDiv.length > 0) codeDiv.html(result.value)
         else langDiv.html(result.value)
@@ -1090,16 +1081,19 @@ md.use(MarkdownItEmojiPlugin, {
   shortcuts: {}
 })
 
-window.emojify.setConfig({
-  blacklist: {
-    elements: ['script', 'textarea', 'a', 'pre', 'code', 'svg'],
-    classes: ['no-emojify']
-  },
-  img_dir: `${serverurl}/build/emojify.js/dist/images/basic`,
-  ignore_emoticons: true
-})
+const currentEmojify = (typeof window !== 'undefined' && window.emojify) || emojify
+if (currentEmojify && typeof currentEmojify.setConfig === 'function') {
+  currentEmojify.setConfig({
+    blacklist: {
+      elements: ['script', 'textarea', 'a', 'pre', 'code', 'svg'],
+      classes: ['no-emojify']
+    },
+    img_dir: `${serverurl}/build/emojify.js/dist/images/basic`,
+    ignore_emoticons: true
+  })
+}
 
-md.renderer.rules.emoji = (token, idx) => window.emojify.replace(`:${token[idx].markup}:`)
+md.renderer.rules.emoji = (token, idx) => (currentEmojify && typeof currentEmojify.replace === 'function') ? currentEmojify.replace(`:${token[idx].markup}:`) : `:${token[idx].markup}:`
 
 function renderContainer (tokens, idx, options, env, self) {
   tokens[idx].attrJoin('role', 'alert')
@@ -1244,11 +1238,12 @@ const pdfPlugin = new MarkdownItRegexpPlugin(
   }
 )
 
+const emojiNamesList = (currentEmojify && currentEmojify.emojiNames) ? currentEmojify.emojiNames : []
 const emojijsPlugin = new MarkdownItRegexpPlugin(
   // regexp to match emoji shortcodes :something:
   // We generate an universal regex that guaranteed only contains the
   // emojies we have available. This should prevent all false-positives
-  new RegExp(':(' + window.emojify.emojiNames.map((item) => { return RegExp.escape(item) }).join('|') + '):', 'i'),
+  new RegExp(':(' + emojiNamesList.map((item) => { return RegExp.escape(item) }).join('|') + '):', 'i'),
 
   (match, utils) => {
     const emoji = match[1].toLowerCase()

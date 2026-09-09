@@ -46,7 +46,7 @@ exports.showPublishNote = function (req, res, next) {
       }
       noteUtil.getPublishData(req, res, note, (data) => {
         res.set({
-          'Cache-Control': 'private' // only cache by client
+          'Cache-Control': 'no-cache, no-store, must-revalidate'
         })
         return res.render('pretty.ejs', data)
       })
@@ -72,7 +72,7 @@ exports.showNote = function (req, res, next) {
     title = models.Note.generateWebTitle(meta.title || title)
     const opengraph = models.Note.parseOpengraph(meta, title)
     res.set({
-      'Cache-Control': 'private', // only cache by client
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
       'X-Robots-Tag': 'noindex, nofollow' // prevent crawling
     })
     return res.render('techdoc.ejs', {
