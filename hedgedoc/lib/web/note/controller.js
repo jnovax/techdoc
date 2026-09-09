@@ -4,6 +4,7 @@ const models = require('../../models')
 const logger = require('../../logger')
 const config = require('../../config')
 const errors = require('../../errors')
+const realtime = require('../../realtime')
 
 const noteUtil = require('./util')
 const noteActions = require('./actions')
@@ -140,3 +141,117 @@ exports.downloadMarkdown = function (req, res, note) {
   })
   res.send(body)
 }
+
+function findNoteWithParanoid (noteId, paranoid, callback) {
+  if (!noteId) return callback(null, null)
+  if (models.Note.checkNoteIdValid(noteId)) {
+    return models.Note.findOne({
+      where: { id: noteId },
+      paranoid
+    }).then(note => callback(null, note)).catch(err => callback(err, null))
+  }
+  models.Note.parseNoteId(noteId, function (err, id) {
+    if (err) return callback(err, null)
+    if (!id) {
+      return models.Note.findOne({
+        where: {
+          [models.Sequelize.Op.or]: [
+            { alias: noteId },
+            { shortid: noteId }
+          ]
+        },
+        paranoid
+      }).then(note => callback(null, note)).catch(err => callback(err, null))
+    }
+    models.Note.findOne({
+      where: { id },
+      paranoid
+    }).then(note => callback(null, note)).catch(err => callback(err, null))
+  })
+}
+
+exports.trashNote = function (req, res, next) {
+  if (!req.isAuthenticated || !req.isAuthenticated()) {
+    return res.status(403).json({ error: 'Forbidden' })
+  }
+  const noteId = req.params.noteId
+  findNoteWithParanoid(noteId, true, function (err, note) {
+    if (err) {
+      logger.error(err)
+      return res.status(500).json({ error: 'Internal server error' })
+    }
+    if (!note) {
+      return res.status(404).json({ error: 'Note not found' })
+    }
+    if (note.ownerId !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden' })
+    }
+    note.destroy().then(function () {
+      if (realtime && realtime.io) {
+        try {
+          realtime.io.to(note.id).emit('delete')
+          if (note.alias) {
+            realtime.io.to(note.alias).emit('delete')
+          }
+        } catch (e) {
+          logger.error('Failed to broadcast socket delete:', e)
+        }
+      }
+      return res.json({ success: true, message: 'Đã chuyển tài liệu vào thùng rác' })
+    }).catch(function (err) {
+      logger.error(err)
+      return res.status(500).json({ error: 'Internal server error' })
+    })
+  })
+}
+
+exports.restoreNote = function (req, res, next) {
+  if (!req.isAuthenticated || !req.isAuthenticated()) {
+    return res.status(403).json({ error: 'Forbidden' })
+  }
+  const noteId = req.params.noteId
+  findNoteWithParanoid(noteId, false, function (err, note) {
+    if (err) {
+      logger.error(err)
+      return res.status(500).json({ error: 'Internal server error' })
+    }
+    if (!note) {
+      return res.status(404).json({ error: 'Note not found' })
+    }
+    if (note.ownerId !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden' })
+    }
+    note.restore().then(function () {
+      return res.json({ success: true, message: 'Đã khôi phục tài liệu thành công' })
+    }).catch(function (err) {
+      logger.error(err)
+      return res.status(500).json({ error: 'Internal server error' })
+    })
+  })
+}
+
+exports.forceDeleteNote = function (req, res, next) {
+  if (!req.isAuthenticated || !req.isAuthenticated()) {
+    return res.status(403).json({ error: 'Forbidden' })
+  }
+  const noteId = req.params.noteId
+  findNoteWithParanoid(noteId, false, function (err, note) {
+    if (err) {
+      logger.error(err)
+      return res.status(500).json({ error: 'Internal server error' })
+    }
+    if (!note) {
+      return res.status(404).json({ error: 'Note not found' })
+    }
+    if (note.ownerId !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden' })
+    }
+    note.destroy({ force: true }).then(function () {
+      return res.json({ success: true, message: 'Đã xóa vĩnh viễn tài liệu' })
+    }).catch(function (err) {
+      logger.error(err)
+      return res.status(500).json({ error: 'Internal server error' })
+    })
+  })
+}
+
