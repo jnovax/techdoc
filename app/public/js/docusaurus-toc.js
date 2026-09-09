@@ -73,7 +73,7 @@
   function buildTOC() {
     var doc = document.getElementById('doc') || document.querySelector('.markdown-body');
     var tocContainer = document.getElementById('docusaurusToc');
-    var mainContainer = document.querySelector('.docusaurus-container');
+    var mainContainer = document.querySelector('.docusaurus-layout-wrapper') || document.querySelector('.docusaurus-container');
     if (!doc || !tocContainer) return false;
 
     // Decorate admonitions when markdown content is available

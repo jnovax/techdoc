@@ -154,78 +154,262 @@ body.docusaurus-layout {
   color: var(--ifm-color-content-secondary);
 }
 
-.docusaurus-nav-btn {
+.docusaurus-nav-btn,
+.docusaurus-flat-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
   text-decoration: none !important;
-  transition: all 0.15s ease;
+  box-shadow: none !important; /* Pure flat design */
   border: 1px solid transparent;
   cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
-.docusaurus-nav-btn-outline {
-  color: #334155 !important;
+.docusaurus-nav-btn-outline,
+.docusaurus-flat-btn-default {
+  color: #475569 !important;
   border-color: #cbd5e1;
-  background: #ffffff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  background-color: #ffffff;
+  box-shadow: none !important;
 }
 
-.docusaurus-nav-btn-outline:hover {
-  background: #f8fafc;
-  color: #0f172a !important;
+.docusaurus-nav-btn-outline:hover,
+.docusaurus-flat-btn-default:hover {
+  background-color: #f8fafc;
   border-color: #94a3b8;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  color: #1e293b !important;
+  box-shadow: none !important;
 }
 
-.docusaurus-nav-btn-primary {
+.docusaurus-nav-btn-primary,
+.docusaurus-flat-btn-primary {
   color: #ffffff !important;
   background-color: var(--ifm-color-primary);
-  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
+  border-color: var(--ifm-color-primary);
+  box-shadow: none !important;
 }
 
-.docusaurus-nav-btn-primary:hover {
+.docusaurus-nav-btn-primary:hover,
+.docusaurus-flat-btn-primary:hover {
   background-color: var(--ifm-color-primary-dark);
-  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4);
+  border-color: var(--ifm-color-primary-dark);
+  box-shadow: none !important;
 }
 
-.docusaurus-nav-btn-danger {
+.docusaurus-nav-btn-danger,
+.docusaurus-flat-btn-danger {
   color: #dc2626 !important;
-  border-color: #fecaca;
-  background: #fff;
+  border-color: #fca5a5;
+  background-color: #ffffff;
+  box-shadow: none !important;
 }
 
-.docusaurus-nav-btn-danger:hover {
+.docusaurus-nav-btn-danger:hover,
+.docusaurus-flat-btn-danger:hover {
   background-color: #fef2f2;
-  border-color: #f87171;
+  border-color: #ef4444;
   color: #b91c1c !important;
+  box-shadow: none !important;
 }
 
-/* --- Documentation Content Container --- */
+/* Sidebar Toggle Flat Button */
+.docusaurus-sidebar-toggle {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: #475569;
+  cursor: pointer;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  margin-right: 4px;
+}
+
+.docusaurus-sidebar-toggle:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.docusaurus-sidebar-toggle:active {
+  background: #e2e8f0;
+}
+
+/* --- Documentation Content Container (Widescreen 3-Column Layout) --- */
+.docusaurus-layout-wrapper,
 .docusaurus-container {
   display: flex;
-  justify-content: center;
-  max-width: 900px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  max-width: 1600px;
+  width: 100%;
   margin: 0 auto;
-  padding: 40px 28px 96px;
-  transition: max-width 0.2s ease;
+  padding: 24px 32px 80px;
+  gap: 36px;
+  box-sizing: border-box;
+  transition: max-width 0.25s ease;
 }
 
-.docusaurus-container.has-toc {
-  max-width: 1200px;
-  justify-content: space-between;
-  gap: 52px;
+.docusaurus-container.has-toc,
+.docusaurus-layout-wrapper.has-toc {
+  max-width: 1600px;
+  gap: 36px;
 }
 
 .docusaurus-main-content {
   flex: 1;
-  max-width: 840px;
   min-width: 0;
   width: 100%;
+  max-width: none;
+}
+
+/* --- Left Collapsible Sidebar (Recent Notes & Quick Switcher) --- */
+.docusaurus-left-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 76px;
+  height: calc(100vh - 96px);
+  overflow-y: auto;
+  border-right: 1px solid var(--ifm-toc-border-color);
+  padding-right: 16px;
+  box-sizing: border-box;
+  transition: width 0.25s ease, margin-left 0.25s ease, opacity 0.2s ease, padding 0.25s ease;
+}
+
+.docusaurus-left-sidebar.collapsed {
+  width: 0 !important;
+  margin-left: -280px !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none;
+  overflow: hidden;
+  border-right: none !important;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.sidebar-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--ifm-color-content-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sidebar-close-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.sidebar-close-btn:hover {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.sidebar-search-box {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.sidebar-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.sidebar-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 10px 6px 28px;
+  font-size: 12.5px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #1e293b;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.sidebar-search-input:focus {
+  background: #ffffff;
+  border-color: #2563eb;
+}
+
+.sidebar-notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-note-item {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  border-radius: 6px;
+  text-decoration: none !important;
+  color: #334155;
+  transition: all 0.15s ease;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-note-item:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.sidebar-note-item.active {
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 600;
+  border-left-color: #2563eb;
+}
+
+.sidebar-note-item-title {
+  font-size: 13px;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-note-item-time {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.sidebar-empty-hint {
+  font-size: 12px;
+  color: #94a3b8;
+  text-align: center;
+  padding: 16px 8px;
 }
 
 /* --- Right Sticky TOC Sidebar --- */
@@ -292,6 +476,44 @@ body.docusaurus-layout {
   background-color: rgba(37, 99, 235, 0.06);
 }
 
+/* --- Document Hero Header --- */
+.doc-hero-header {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.doc-hero-title {
+  font-size: 2.35rem !important; /* ~38px */
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.025em !important;
+  margin: 0 0 14px 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-bottom: none !important;
+}
+
+.doc-hero-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.doc-hero-meta .meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.doc-hero-meta .meta-item i {
+  color: #94a3b8;
+}
+
 /* --- Docusaurus Typography & Elements --- */
 #doc.markdown-body,
 .markdown-body {
@@ -301,6 +523,11 @@ body.docusaurus-layout {
   color: var(--ifm-color-content) !important;
   letter-spacing: -0.003em !important;
   text-shadow: none !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 /* Headings */
@@ -584,13 +811,31 @@ body.docusaurus-layout {
   .docusaurus-toc-sidebar {
     display: none !important;
   }
-  .docusaurus-container {
-    padding: 24px 16px 60px;
+  .docusaurus-left-sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    z-index: 1050;
+    background: #ffffff;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+    padding: 16px;
+    height: calc(100vh - 60px);
+  }
+  .docusaurus-left-sidebar.collapsed {
+    margin-left: -290px !important;
+  }
+  .docusaurus-container,
+  .docusaurus-layout-wrapper {
+    padding: 18px 16px 60px;
+    gap: 0;
   }
   .docusaurus-navbar {
-    padding: 0 16px;
+    padding: 0 14px;
   }
   .docusaurus-navbar-title {
-    max-width: 220px;
+    max-width: 200px;
+  }
+  .doc-hero-title {
+    font-size: 1.85rem !important;
   }
 }
