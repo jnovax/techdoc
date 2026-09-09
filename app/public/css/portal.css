@@ -29,15 +29,18 @@ body {
 .portal-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
   text-decoration: none !important;
-  color: #0f172a !important;
-  font-size: 19px;
-  font-weight: 700;
+  transition: opacity 0.15s ease;
+}
+
+.portal-brand:hover {
+  opacity: 0.85;
 }
 
 .portal-brand img {
-  height: 34px;
+  height: 36px;
+  width: auto;
+  display: block;
 }
 
 .portal-search-bar {

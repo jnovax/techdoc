@@ -36,11 +36,13 @@ function runTests() {
   assert.ok(prettyHtml.includes('class="doc-hero-header"'), 'pretty.ejs should include .doc-hero-header');
   assert.ok(prettyHtml.includes('docusaurus-flat-btn'), 'pretty.ejs should use docusaurus-flat-btn');
 
-  // Test 7: Consistent Navbar Brand & Logo with Dashboard
-  assert.ok(prettyHtml.includes('banner/banner_vertical_color.svg'), 'pretty.ejs should use banner_vertical_color.svg like dashboard');
+  // Test 7: Consistent Navbar Brand & Logo with Features and Dashboard (banner_h_bw.svg)
+  const bodyPath = path.join(__dirname, '../public/views/index/body.ejs');
+  const bodyHtml = fs.readFileSync(bodyPath, 'utf8');
+  assert.ok(prettyHtml.includes('banner/banner_h_bw.svg'), 'pretty.ejs should use banner_h_bw.svg like features');
+  assert.ok(bodyHtml.includes('banner/banner_h_bw.svg'), 'index/body.ejs should use banner_h_bw.svg like features');
   assert.ok(prettyHtml.includes('portal-brand'), 'pretty.ejs should use portal-brand class');
-  assert.ok(css.includes('font-size: 19px'), 'docusaurus-navbar-brand should use 19px font-size');
-  assert.ok(css.includes('height: 34px'), 'docusaurus-navbar-brand img should use height 34px');
+  assert.ok(css.includes('height: 36px'), 'docusaurus-navbar-brand img should use height 36px');
 
   console.log('All Balanced Widescreen Layout & Flat UI tests passed successfully!');
 }

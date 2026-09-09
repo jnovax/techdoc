@@ -99,11 +99,7 @@ body.docusaurus-layout {
 .docusaurus-navbar-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
   text-decoration: none !important;
-  font-weight: 700;
-  font-size: 19px;
-  color: #0f172a !important;
   transition: opacity 0.15s ease;
 }
 
@@ -112,8 +108,9 @@ body.docusaurus-layout {
 }
 
 .docusaurus-navbar-brand img {
-  height: 34px;
+  height: 36px;
   width: auto;
+  display: block;
 }
 
 .docusaurus-navbar-separator {
