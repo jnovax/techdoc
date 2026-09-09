@@ -35,9 +35,6 @@
     <!-- Docusaurus Modern Sticky Navbar -->
     <header class="docusaurus-navbar">
         <div class="docusaurus-navbar-left">
-            <button type="button" class="docusaurus-sidebar-toggle" id="sidebarToggleBtn" title="Đóng/mở danh sách tài liệu">
-                <i class="fa fa-bars"></i>
-            </button>
             <a href="<%- serverURL %>/" class="docusaurus-navbar-brand">
                 <img src="<%- serverURL %>/icons/apple-touch-icon.png" alt="TechDoc">
                 <span>TechDoc</span>
@@ -64,26 +61,9 @@
         </div>
     </header>
 
-    <!-- Main 3-Column Widescreen Layout: Left Sidebar + Fluid Reading Column + Sticky TOC Sidebar -->
+    <!-- Main Container: Clean Reading Column + Sticky TOC Sidebar -->
     <div class="docusaurus-layout-wrapper docusaurus-container">
-        <!-- 1. Left Collapsible Sidebar -->
-        <aside id="docusaurusLeftSidebar" class="docusaurus-left-sidebar">
-            <div class="sidebar-header">
-                <span class="sidebar-title"><i class="fa fa-clock-o"></i> Ghi chú gần đây</span>
-                <button type="button" class="sidebar-close-btn" id="sidebarCloseBtn" title="Thu gọn sidebar">
-                    <i class="fa fa-angle-left"></i>
-                </button>
-            </div>
-            <div class="sidebar-search-box">
-                <i class="fa fa-search sidebar-search-icon"></i>
-                <input type="text" id="sidebarQuickSearch" class="sidebar-search-input" placeholder="Lọc nhanh ghi chú...">
-            </div>
-            <div class="sidebar-notes-list" id="sidebarNotesList">
-                <div class="sidebar-empty-hint"><i class="fa fa-spinner fa-spin"></i> Đang tải danh sách...</div>
-            </div>
-        </aside>
-
-        <!-- 2. Main Content Column -->
+        <!-- Main Content Column -->
         <main class="docusaurus-main-content">
             <!-- Document Hero Header -->
             <div class="doc-hero-header">
@@ -106,7 +86,7 @@
             <% } %>
         </main>
 
-        <!-- 3. Right Sticky TOC Sidebar -->
+        <!-- Right Sticky TOC Sidebar -->
         <aside id="docusaurusToc" class="docusaurus-toc-sidebar"></aside>
     </div>
 
@@ -141,7 +121,6 @@
 <script src="<%- serverURL %>/build/MathJax/config/Safe.js" defer></script>
 <%- include('build/pretty-pack-scripts') %>
 <script src="<%- serverURL %>/js/inpage-search.js" defer></script>
-<script src="<%- serverURL %>/js/docusaurus-toc.js?v=20260909_docusaurus_v3" defer></script>
-<script src="<%- serverURL %>/js/pretty-sidebar.js?v=20260909_1" defer></script>
+<script src="<%- serverURL %>/js/docusaurus-toc.js?v=20260909_clean_v5" defer></script>
 <script src="<%- serverURL %>/js/pretty-trash.js?v=20260909_1" defer></script>
 <%- include('shared/ga') %>

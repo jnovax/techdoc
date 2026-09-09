@@ -82,7 +82,7 @@ body.docusaurus-layout {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 28px;
+  padding: 0 48px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
@@ -217,199 +217,38 @@ body.docusaurus-layout {
   box-shadow: none !important;
 }
 
-/* Sidebar Toggle Flat Button */
-.docusaurus-sidebar-toggle {
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  padding: 6px 10px;
-  color: #475569;
-  cursor: pointer;
-  font-size: 15px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
-  margin-right: 4px;
-}
-
-.docusaurus-sidebar-toggle:hover {
-  background: #f1f5f9;
-  color: #0f172a;
-}
-
-.docusaurus-sidebar-toggle:active {
-  background: #e2e8f0;
-}
-
-/* --- Documentation Content Container (Widescreen 3-Column Layout) --- */
+/* --- Documentation Content Container --- */
 .docusaurus-layout-wrapper,
 .docusaurus-container {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: flex-start;
-  max-width: 1600px;
+  max-width: 1360px;
   width: 100%;
   margin: 0 auto;
-  padding: 24px 32px 80px;
-  gap: 36px;
+  padding: 40px 48px 96px;
+  gap: 60px;
   box-sizing: border-box;
-  transition: max-width 0.25s ease;
+  transition: max-width 0.2s ease;
 }
 
 .docusaurus-container.has-toc,
 .docusaurus-layout-wrapper.has-toc {
-  max-width: 1600px;
-  gap: 36px;
+  max-width: 1360px;
+  gap: 60px;
 }
 
 .docusaurus-main-content {
   flex: 1;
   min-width: 0;
+  max-width: 960px;
   width: 100%;
-  max-width: none;
 }
 
-/* --- Left Collapsible Sidebar (Recent Notes & Quick Switcher) --- */
-.docusaurus-left-sidebar {
-  width: 280px;
-  flex-shrink: 0;
-  position: sticky;
-  top: 76px;
-  height: calc(100vh - 96px);
-  overflow-y: auto;
-  border-right: 1px solid var(--ifm-toc-border-color);
-  padding-right: 16px;
-  box-sizing: border-box;
-  transition: width 0.25s ease, margin-left 0.25s ease, opacity 0.2s ease, padding 0.25s ease;
-}
-
-.docusaurus-left-sidebar.collapsed {
-  width: 0 !important;
-  margin-left: -280px !important;
-  padding: 0 !important;
-  opacity: 0 !important;
-  pointer-events: none;
-  overflow: hidden;
-  border-right: none !important;
-}
-
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.sidebar-title {
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  color: var(--ifm-color-content-secondary);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.sidebar-close-btn {
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 4px;
-  transition: all 0.15s ease;
-}
-
-.sidebar-close-btn:hover {
-  background: #f1f5f9;
-  color: #334155;
-}
-
-.sidebar-search-box {
-  position: relative;
-  margin-bottom: 12px;
-}
-
-.sidebar-search-icon {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #94a3b8;
-  font-size: 12px;
-}
-
-.sidebar-search-input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 6px 10px 6px 28px;
-  font-size: 12.5px;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  background: #f8fafc;
-  color: #1e293b;
-  outline: none;
-  transition: all 0.15s ease;
-}
-
-.sidebar-search-input:focus {
-  background: #ffffff;
-  border-color: #2563eb;
-}
-
-.sidebar-notes-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.sidebar-note-item {
-  display: flex;
-  flex-direction: column;
-  padding: 8px 10px;
-  border-radius: 6px;
-  text-decoration: none !important;
-  color: #334155;
-  transition: all 0.15s ease;
-  border-left: 3px solid transparent;
-}
-
-.sidebar-note-item:hover {
-  background: #f1f5f9;
-  color: #0f172a;
-}
-
-.sidebar-note-item.active {
-  background: #eff6ff;
-  color: #2563eb;
-  font-weight: 600;
-  border-left-color: #2563eb;
-}
-
-.sidebar-note-item-title {
-  font-size: 13px;
-  line-height: 1.4;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.sidebar-note-item-time {
-  font-size: 11px;
-  color: #94a3b8;
-  margin-top: 2px;
-}
-
-.sidebar-empty-hint {
-  font-size: 12px;
-  color: #94a3b8;
-  text-align: center;
-  padding: 16px 8px;
+.docusaurus-container:not(.has-toc) .docusaurus-main-content,
+.docusaurus-layout-wrapper:not(.has-toc) .docusaurus-main-content {
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 /* --- Right Sticky TOC Sidebar --- */
@@ -811,26 +650,13 @@ body.docusaurus-layout {
   .docusaurus-toc-sidebar {
     display: none !important;
   }
-  .docusaurus-left-sidebar {
-    position: fixed;
-    top: 60px;
-    left: 0;
-    z-index: 1050;
-    background: #ffffff;
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
-    padding: 16px;
-    height: calc(100vh - 60px);
-  }
-  .docusaurus-left-sidebar.collapsed {
-    margin-left: -290px !important;
-  }
   .docusaurus-container,
   .docusaurus-layout-wrapper {
-    padding: 18px 16px 60px;
+    padding: 24px 20px 60px;
     gap: 0;
   }
   .docusaurus-navbar {
-    padding: 0 14px;
+    padding: 0 16px;
   }
   .docusaurus-navbar-title {
     max-width: 200px;

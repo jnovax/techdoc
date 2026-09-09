@@ -79,6 +79,19 @@
     // Decorate admonitions when markdown content is available
     decorateAdmonitions();
 
+    // Deduplicate Document Hero Header vs first h1 in #doc
+    var heroTitleElem = document.querySelector('.doc-hero-title');
+    if (heroTitleElem) {
+      var heroTitle = (heroTitleElem.textContent || '').trim().toLowerCase();
+      var firstH = doc.querySelector('h1');
+      if (firstH && heroTitle) {
+        var hText = (firstH.textContent || '').trim().toLowerCase();
+        if (hText === heroTitle || heroTitle.indexOf(hText) !== -1 || hText.indexOf(heroTitle) !== -1) {
+          firstH.style.display = 'none';
+        }
+      }
+    }
+
     // In modern documentation (like Docusaurus), TOC only lists h2 and h3 sections
     var headings = doc.querySelectorAll('h2, h3');
     if (headings.length === 0) {
