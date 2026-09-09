@@ -53,6 +53,11 @@
             <a href="#" class="docusaurus-nav-btn docusaurus-nav-btn-primary ui-edit" title="Chỉnh sửa tài liệu">
                 <i class="fa fa-pencil"></i> <span class="hidden-xs">Chỉnh sửa</span>
             </a>
+            <% if ((typeof ownerprofile !== 'undefined' && ownerprofile && typeof owner !== 'undefined' && typeof lastchangeuser !== 'undefined' && owner === lastchangeuser) || (typeof owner !== 'undefined' && owner && typeof ownerprofile !== 'undefined' && ownerprofile)) { %>
+            <button type="button" class="docusaurus-nav-btn docusaurus-nav-btn-danger ui-trash" title="Chuyển tài liệu vào thùng rác">
+                <i class="fa fa-trash-o"></i> <span class="hidden-xs">Chuyển vào thùng rác</span>
+            </button>
+            <% } %>
         </div>
     </header>
 
@@ -73,7 +78,25 @@
     <!-- Hidden compatibility elements for pretty-pack-scripts -->
     <span class="ui-lastchange" style="display:none;" data-createtime="<%- createtime %>" data-updatetime="<%- updatetime %>"></span>
     <div class="ui-toc" style="display:none;"></div>
-    <div id="ui-toc-affix" class="ui-affix-toc" style="display:none;"></div>
+    <!-- Trash Confirm Modal -->
+    <div class="modal fade pretty-trash-modal" tabindex="-1" role="dialog" aria-labelledby="prettyTrashModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="prettyTrashModalLabel"><i class="fa fa-trash-o text-danger"></i> Chuyển vào thùng rác?</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn chuyển tài liệu này vào thùng rác không?</p>
+                    <small class="text-muted">Bạn có thể khôi phục lại tài liệu trong tab Thùng rác trên trang chủ.</small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-danger" id="prettyTrashConfirmBtn">Chuyển vào thùng rác</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
@@ -84,4 +107,88 @@
 <%- include('build/pretty-pack-scripts') %>
 <script src="<%- serverURL %>/js/inpage-search.js" defer></script>
 <script src="<%- serverURL %>/js/docusaurus-toc.js?v=20260909_2" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var trashBtn = document.querySelector('.ui-trash');
+    var confirmBtn = document.getElementById('prettyTrashConfirmBtn');
+
+    function showModal(selector) {
+        if (window.jQuery && typeof window.jQuery(selector).modal === 'function') {
+            window.jQuery(selector).modal('show');
+        } else {
+            var el = document.querySelector(selector);
+            if (el) {
+                el.classList.add('in');
+                el.style.display = 'block';
+            }
+        }
+    }
+
+    function hideModal(selector) {
+        if (window.jQuery && typeof window.jQuery(selector).modal === 'function') {
+            window.jQuery(selector).modal('hide');
+        } else {
+            var el = document.querySelector(selector);
+            if (el) {
+                el.classList.remove('in');
+                el.style.display = 'none';
+            }
+        }
+    }
+
+    document.addEventListener('click', function (e) {
+        if (e.target.matches('[data-dismiss="modal"]') || e.target.closest('[data-dismiss="modal"]')) {
+            var modal = e.target.closest('.modal');
+            if (modal) {
+                if (window.jQuery && typeof window.jQuery(modal).modal === 'function') {
+                    window.jQuery(modal).modal('hide');
+                } else {
+                    modal.classList.remove('in');
+                    modal.style.display = 'none';
+                }
+            }
+        }
+    });
+
+    if (trashBtn) {
+        trashBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            showModal('.pretty-trash-modal');
+        });
+    }
+
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', function () {
+            confirmBtn.disabled = true;
+            var path = window.location.pathname.replace(/^\/+/, '');
+            var parts = path.split('/');
+            var noteId = parts[parts.length - 1];
+            if (parts.length > 1 && parts[0] === 's') {
+                noteId = parts[1];
+            }
+            fetch('<%- serverURL %>/' + encodeURIComponent(noteId) + '/trash', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(function (res) {
+                return res.json();
+            }).then(function (data) {
+                if (data && data.success) {
+                    window.location.href = '<%- serverURL %>/';
+                } else {
+                    confirmBtn.disabled = false;
+                    hideModal('.pretty-trash-modal');
+                    alert(data && data.error ? data.error : 'Không thể chuyển vào thùng rác');
+                }
+            }).catch(function () {
+                confirmBtn.disabled = false;
+                hideModal('.pretty-trash-modal');
+                alert('Có lỗi xảy ra khi thực hiện yêu cầu.');
+            });
+        });
+    }
+});
+</script>
 <%- include('shared/ga') %>
