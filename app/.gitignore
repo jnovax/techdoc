@@ -82,6 +82,7 @@ public/uploads/*
 *.db
 *.rdb
 *.sql
+.yarn/
 
 # Dependencies & Package Managers
 node_modules/

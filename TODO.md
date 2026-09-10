@@ -1,2 +1,0 @@
-- Fix hết lỗi client
-- Chuyển sang dùng image base, ko phải hedgedoc
