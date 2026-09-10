@@ -2065,8 +2065,13 @@ ui.toolbar.both.click(function () {
   changeMode(modeType.both)
 })
 
-ui.toolbar.night.click(function () {
-  toggleNightMode()
+ui.toolbar.night.click(function (e) {
+  e.preventDefault()
+  if (window.TechDocTheme && typeof window.TechDocTheme.toggle === 'function') {
+    window.TechDocTheme.toggle()
+  } else {
+    toggleNightMode()
+  }
 })
 // permission
 // freely
@@ -2102,17 +2107,17 @@ $('.ui-delete-modal-confirm').click(function () {
 })
 
 function toggleNightMode () {
+  if (window.TechDocTheme && typeof window.TechDocTheme.toggle === 'function') {
+    window.TechDocTheme.toggle()
+    return
+  }
   const $body = $('body')
   const isActive = store.get('nightMode') === true
   $body.toggleClass('night', !isActive)
   ui.toolbar.night.toggleClass('active', !isActive)
   store.set('nightMode', !isActive)
-  if (window.TechDocTheme) {
-    window.TechDocTheme.apply(!isActive ? 'dark' : 'light', true)
-  } else {
-    document.documentElement.setAttribute('data-theme', !isActive ? 'dark' : 'light')
-    localStorage.setItem('theme', !isActive ? 'dark' : 'light')
-  }
+  document.documentElement.setAttribute('data-theme', !isActive ? 'dark' : 'light')
+  localStorage.setItem('theme', !isActive ? 'dark' : 'light')
 }
 
 function emitPermission (_permission) {

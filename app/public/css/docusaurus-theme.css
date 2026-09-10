@@ -240,47 +240,62 @@ body.docusaurus-layout {
   transition: all 0.2s ease;
 }
 
-/* Theme Toggle Button (Docusaurus Style) */
+/* Theme Toggle Button (Docusaurus Style) - Unified across all pages */
 .docusaurus-theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 6px;
-  border: 1px solid var(--ifm-toc-border-color);
-  background: var(--ifm-background-surface-color);
-  color: var(--ifm-color-content-secondary);
-  cursor: pointer;
-  transition: all 0.15s ease;
-  font-size: 15px;
-  padding: 0;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  max-width: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  border-radius: 6px !important;
+  border: 1px solid var(--ifm-toc-border-color) !important;
+  background: var(--ifm-background-surface-color) !important;
+  color: var(--ifm-color-content-secondary) !important;
+  cursor: pointer !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  margin: 0 !important;
   box-shadow: none !important;
+  outline: none !important;
+  text-decoration: none !important;
+  vertical-align: middle !important;
 }
 
-.docusaurus-theme-toggle:hover {
-  background-color: var(--ifm-table-stripe-background);
-  color: var(--ifm-color-primary);
-  border-color: var(--ifm-color-primary);
+.docusaurus-theme-toggle:hover,
+.docusaurus-theme-toggle:focus {
+  background-color: var(--ifm-table-stripe-background) !important;
+  color: var(--ifm-color-primary) !important;
+  border-color: var(--ifm-color-primary) !important;
+  outline: none !important;
+  text-decoration: none !important;
 }
 
 .docusaurus-theme-toggle .theme-icon-light {
-  display: none;
+  display: none !important;
 }
 
 .docusaurus-theme-toggle .theme-icon-dark {
-  display: inline-block;
+  display: inline-block !important;
+  color: inherit !important;
 }
 
 [data-theme='dark'] .docusaurus-theme-toggle .theme-icon-light,
-body.night .docusaurus-theme-toggle .theme-icon-light {
-  display: inline-block;
-  color: #f59e0b;
+body.night .docusaurus-theme-toggle .theme-icon-light,
+.night .docusaurus-theme-toggle .theme-icon-light {
+  display: inline-block !important;
+  color: #f59e0b !important; /* Glowing warm amber Docusaurus sun */
 }
 
 [data-theme='dark'] .docusaurus-theme-toggle .theme-icon-dark,
-body.night .docusaurus-theme-toggle .theme-icon-dark {
-  display: none;
+body.night .docusaurus-theme-toggle .theme-icon-dark,
+.night .docusaurus-theme-toggle .theme-icon-dark {
+  display: none !important;
 }
 
 .docusaurus-nav-btn,
@@ -893,13 +908,27 @@ body.night .mermaid #crosshead path {
 }
 
 /* Images */
-#doc.markdown-body img,
-.markdown-body img {
+#doc.markdown-body img:not(.emoji),
+.markdown-body img:not(.emoji) {
   max-width: 100% !important;
   height: auto !important;
   border-radius: 8px !important;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07) !important;
   margin: 1rem 0 !important;
+}
+
+#doc.markdown-body img.emoji,
+.markdown-body img.emoji {
+  max-width: none !important;
+  height: 1.25em !important;
+  width: 1.25em !important;
+  margin: 0 0.15em !important;
+  vertical-align: -0.2em !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  display: inline-block !important;
 }
 
 #doc.markdown-body table img,
@@ -938,40 +967,280 @@ body.night .mermaid #crosshead path {
   margin-bottom: 0.5rem !important;
 }
 
-/* Admonition Classes (Docusaurus Infima Style) */
-.alert--note,
-.admonition-note {
-  border-left-color: var(--ifm-alert-note-border) !important;
-  background-color: var(--ifm-alert-note-bg) !important;
-  color: var(--ifm-alert-note-text) !important;
+/* ==========================================================================
+   HedgeDoc Alert Area & Callouts
+   ========================================================================== */
+#doc.markdown-body .alert,
+.markdown-body .alert,
+.alert {
+  position: relative !important;
+  padding: 14px 18px !important;
+  margin: 1.25rem 0 !important;
+  border-radius: 8px !important;
+  border: 1px solid transparent !important;
+  border-left-width: 5px !important;
+  border-left-style: solid !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  box-sizing: border-box !important;
 }
 
-.alert--tip,
-.admonition-tip {
-  border-left-color: var(--ifm-alert-tip-border) !important;
+#doc.markdown-body .alert p,
+.markdown-body .alert p,
+.alert p {
+  color: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+#doc.markdown-body .alert p:not(:last-child),
+.markdown-body .alert p:not(:last-child),
+.alert p:not(:last-child) {
+  margin-bottom: 0.5rem !important;
+}
+
+#doc.markdown-body .alert h1,
+#doc.markdown-body .alert h2,
+#doc.markdown-body .alert h3,
+#doc.markdown-body .alert h4,
+#doc.markdown-body .alert h5,
+#doc.markdown-body .alert h6,
+.markdown-body .alert h1,
+.markdown-body .alert h2,
+.markdown-body .alert h3,
+.markdown-body .alert h4,
+.markdown-body .alert h5,
+.markdown-body .alert h6,
+.alert h1,
+.alert h2,
+.alert h3,
+.alert h4,
+.alert h5,
+.alert h6 {
+  color: inherit !important;
+  margin-top: 0 !important;
+  margin-bottom: 0.5rem !important;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+}
+
+#doc.markdown-body .alert ul,
+#doc.markdown-body .alert ol,
+.markdown-body .alert ul,
+.markdown-body .alert ol,
+.alert ul,
+.alert ol {
+  color: inherit !important;
+  margin-bottom: 0 !important;
+  padding-left: 24px !important;
+}
+
+#doc.markdown-body .alert a,
+.markdown-body .alert a,
+.alert a {
+  color: inherit !important;
+  text-decoration: underline !important;
+  font-weight: 600 !important;
+}
+
+#doc.markdown-body .alert code,
+.markdown-body .alert code,
+.alert code {
+  color: inherit !important;
+  background-color: rgba(0, 0, 0, 0.07) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+}
+
+/* --- Specific Alert Types (Light Theme) --- */
+
+/* Success / Tip */
+#doc.markdown-body .alert-success,
+#doc.markdown-body .alert--success,
+#doc.markdown-body .alert--tip,
+#doc.markdown-body .admonition-tip,
+.markdown-body .alert-success,
+.markdown-body .alert--success,
+.markdown-body .alert--tip,
+.markdown-body .admonition-tip,
+.alert-success {
   background-color: var(--ifm-alert-tip-bg) !important;
+  border-color: rgba(16, 185, 129, 0.25) !important;
+  border-left-color: var(--ifm-alert-tip-border) !important;
   color: var(--ifm-alert-tip-text) !important;
 }
 
-.alert--info,
-.admonition-info {
-  border-left-color: var(--ifm-alert-info-border) !important;
+/* Info / Note */
+#doc.markdown-body .alert-info,
+#doc.markdown-body .alert-primary,
+#doc.markdown-body .alert--info,
+#doc.markdown-body .alert--note,
+#doc.markdown-body .admonition-note,
+#doc.markdown-body .admonition-info,
+.markdown-body .alert-info,
+.markdown-body .alert-primary,
+.markdown-body .alert--info,
+.markdown-body .alert--note,
+.markdown-body .admonition-note,
+.markdown-body .admonition-info,
+.alert-info,
+.alert-primary {
   background-color: var(--ifm-alert-info-bg) !important;
+  border-color: rgba(56, 189, 248, 0.25) !important;
+  border-left-color: var(--ifm-alert-info-border) !important;
   color: var(--ifm-alert-info-text) !important;
 }
 
-.alert--warning,
-.admonition-warning {
-  border-left-color: var(--ifm-alert-warning-border) !important;
+/* Warning */
+#doc.markdown-body .alert-warning,
+#doc.markdown-body .alert--warning,
+#doc.markdown-body .admonition-warning,
+.markdown-body .alert-warning,
+.markdown-body .alert--warning,
+.markdown-body .admonition-warning,
+.alert-warning {
   background-color: var(--ifm-alert-warning-bg) !important;
+  border-color: rgba(245, 158, 11, 0.25) !important;
+  border-left-color: var(--ifm-alert-warning-border) !important;
   color: var(--ifm-alert-warning-text) !important;
 }
 
-.alert--danger,
-.admonition-danger {
-  border-left-color: var(--ifm-alert-danger-border) !important;
+/* Danger */
+#doc.markdown-body .alert-danger,
+#doc.markdown-body .alert--danger,
+#doc.markdown-body .admonition-danger,
+.markdown-body .alert-danger,
+.markdown-body .alert--danger,
+.markdown-body .admonition-danger,
+.alert-danger {
   background-color: var(--ifm-alert-danger-bg) !important;
+  border-color: rgba(239, 68, 68, 0.25) !important;
+  border-left-color: var(--ifm-alert-danger-border) !important;
   color: var(--ifm-alert-danger-text) !important;
+}
+
+/* --- Dark Theme Alert Styling --- */
+html[data-theme='dark'] #doc.markdown-body .alert,
+body.night #doc.markdown-body .alert,
+.night #doc.markdown-body .alert,
+html[data-theme='dark'] .markdown-body .alert,
+body.night .markdown-body .alert,
+.night .markdown-body .alert,
+html[data-theme='dark'] .alert,
+body.night .alert,
+.night .alert {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
+}
+
+html[data-theme='dark'] #doc.markdown-body .alert code,
+body.night #doc.markdown-body .alert code,
+.night #doc.markdown-body .alert code,
+html[data-theme='dark'] .markdown-body .alert code,
+body.night .markdown-body .alert code,
+.night .markdown-body .alert code {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Dark Mode: Success */
+[data-theme='dark'] .alert-success,
+[data-theme='dark'] .alert--success,
+[data-theme='dark'] .alert--tip,
+html[data-theme='dark'] #doc.markdown-body .alert-success,
+html[data-theme='dark'] #doc.markdown-body .alert--success,
+html[data-theme='dark'] #doc.markdown-body .alert--tip,
+html[data-theme='dark'] #doc.markdown-body .admonition-tip,
+body.night #doc.markdown-body .alert-success,
+body.night #doc.markdown-body .alert--success,
+body.night #doc.markdown-body .alert--tip,
+body.night #doc.markdown-body .admonition-tip,
+.night #doc.markdown-body .alert-success,
+.night #doc.markdown-body .alert--success,
+.night #doc.markdown-body .alert--tip,
+.night #doc.markdown-body .admonition-tip,
+html[data-theme='dark'] .markdown-body .alert-success,
+body.night .markdown-body .alert-success,
+.night .markdown-body .alert-success {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  border-left-color: #10b981 !important;
+  color: #a7f3d0 !important;
+}
+
+/* Dark Mode: Info */
+[data-theme='dark'] .alert-info,
+[data-theme='dark'] .alert-primary,
+[data-theme='dark'] .alert--info,
+[data-theme='dark'] .alert--note,
+html[data-theme='dark'] #doc.markdown-body .alert-info,
+html[data-theme='dark'] #doc.markdown-body .alert-primary,
+html[data-theme='dark'] #doc.markdown-body .alert--info,
+html[data-theme='dark'] #doc.markdown-body .alert--note,
+html[data-theme='dark'] #doc.markdown-body .admonition-note,
+html[data-theme='dark'] #doc.markdown-body .admonition-info,
+body.night #doc.markdown-body .alert-info,
+body.night #doc.markdown-body .alert-primary,
+body.night #doc.markdown-body .alert--info,
+body.night #doc.markdown-body .alert--note,
+body.night #doc.markdown-body .admonition-note,
+body.night #doc.markdown-body .admonition-info,
+.night #doc.markdown-body .alert-info,
+.night #doc.markdown-body .alert-primary,
+.night #doc.markdown-body .alert--info,
+.night #doc.markdown-body .alert--note,
+.night #doc.markdown-body .admonition-note,
+.night #doc.markdown-body .admonition-info,
+html[data-theme='dark'] .markdown-body .alert-info,
+body.night .markdown-body .alert-info,
+.night .markdown-body .alert-info {
+  background-color: rgba(56, 189, 248, 0.15) !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  border-left-color: #38bdf8 !important;
+  color: #bae6fd !important;
+}
+
+/* Dark Mode: Warning */
+[data-theme='dark'] .alert-warning,
+[data-theme='dark'] .alert--warning,
+html[data-theme='dark'] #doc.markdown-body .alert-warning,
+html[data-theme='dark'] #doc.markdown-body .alert--warning,
+html[data-theme='dark'] #doc.markdown-body .admonition-warning,
+body.night #doc.markdown-body .alert-warning,
+body.night #doc.markdown-body .alert--warning,
+body.night #doc.markdown-body .admonition-warning,
+.night #doc.markdown-body .alert-warning,
+.night #doc.markdown-body .alert--warning,
+.night #doc.markdown-body .admonition-warning,
+html[data-theme='dark'] .markdown-body .alert-warning,
+body.night .markdown-body .alert-warning,
+.night .markdown-body .alert-warning {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+  border-left-color: #f59e0b !important;
+  color: #fef08a !important;
+}
+
+/* Dark Mode: Danger */
+[data-theme='dark'] .alert-danger,
+[data-theme='dark'] .alert--danger,
+html[data-theme='dark'] #doc.markdown-body .alert-danger,
+html[data-theme='dark'] #doc.markdown-body .alert--danger,
+html[data-theme='dark'] #doc.markdown-body .admonition-danger,
+body.night #doc.markdown-body .alert-danger,
+body.night #doc.markdown-body .alert--danger,
+body.night #doc.markdown-body .admonition-danger,
+.night #doc.markdown-body .alert-danger,
+.night #doc.markdown-body .alert--danger,
+.night #doc.markdown-body .admonition-danger,
+html[data-theme='dark'] .markdown-body .alert-danger,
+body.night .markdown-body .alert-danger,
+.night .markdown-body .alert-danger {
+  background-color: rgba(239, 68, 68, 0.15) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  border-left-color: #ef4444 !important;
+  color: #fecaca !important;
 }
 
 .admonition-heading {

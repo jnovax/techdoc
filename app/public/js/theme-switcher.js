@@ -52,15 +52,24 @@
     // Update active state and icons of night buttons
     var nightBtns = document.querySelectorAll('.ui-night')
     for (var j = 0; j < nightBtns.length; j++) {
-      var icon = nightBtns[j].querySelector('i')
       if (isDark) {
         nightBtns[j].classList.add('active')
+      } else {
+        nightBtns[j].classList.remove('active')
+      }
+
+      // Do NOT mutate inner <i> classes if using .docusaurus-theme-toggle (controlled via CSS)
+      if (nightBtns[j].classList.contains('docusaurus-theme-toggle')) {
+        continue
+      }
+
+      var icon = nightBtns[j].querySelector('i')
+      if (isDark) {
         if (icon) {
           icon.classList.remove('fa-moon-o')
           icon.classList.add('fa-sun-o')
         }
       } else {
-        nightBtns[j].classList.remove('active')
         if (icon) {
           icon.classList.remove('fa-sun-o')
           icon.classList.add('fa-moon-o')
@@ -69,7 +78,14 @@
     }
   }
 
+  var lastToggleTime = 0
   function toggleTheme () {
+    var now = Date.now()
+    if (now - lastToggleTime < 250) {
+      return // Debounce rapid / duplicate clicks
+    }
+    lastToggleTime = now
+
     var current = document.documentElement.getAttribute('data-theme') ||
       (document.body && document.body.classList.contains('night') ? 'dark' : 'light')
     var next = current === 'dark' ? 'light' : 'dark'
@@ -90,7 +106,7 @@
     applyTheme(getSavedTheme(), false)
 
     document.addEventListener('click', function (e) {
-      var btn = e.target.closest('#docusaurusThemeToggle, #portalThemeToggle, .docusaurus-theme-toggle')
+      var btn = e.target.closest('#docusaurusThemeToggle, #portalThemeToggle, #editorThemeToggle, #editorThemeToggleMobile, #loginThemeToggle, .docusaurus-theme-toggle')
       if (btn) {
         e.preventDefault()
         e.stopPropagation()

@@ -98,10 +98,14 @@ md.renderer.rules.code_block = (tokens, idx, options, env, self) => {
   return `<pre><code>${md.utils.escapeHtml(tokens[idx].content)}</code></pre>\n`
 }
 function renderContainer (tokens, idx, options, env, self) {
-  tokens[idx].attrJoin('role', 'alert')
-  tokens[idx].attrJoin('class', 'alert')
-  tokens[idx].attrJoin('class', `alert-${tokens[idx].info.trim()}`)
-  addPart(tokens, idx)
+  if (tokens[idx].nesting === 1) {
+    tokens[idx].attrJoin('role', 'alert')
+    tokens[idx].attrJoin('class', 'alert')
+    const type = tokens[idx].info.trim().split(/\s+/)[0]
+    tokens[idx].attrJoin('class', `alert-${type}`)
+    tokens[idx].attrJoin('class', `alert--${type}`)
+    addPart(tokens, idx)
+  }
   return self.renderToken(...arguments)
 }
 
@@ -109,6 +113,9 @@ md.use(markdownitContainer, 'success', { render: renderContainer })
 md.use(markdownitContainer, 'info', { render: renderContainer })
 md.use(markdownitContainer, 'warning', { render: renderContainer })
 md.use(markdownitContainer, 'danger', { render: renderContainer })
+md.use(markdownitContainer, 'primary', { render: renderContainer })
+md.use(markdownitContainer, 'tip', { render: renderContainer })
+md.use(markdownitContainer, 'note', { render: renderContainer })
 
 window.preventSyncScrollToEdit = false
 window.preventSyncScrollToView = false

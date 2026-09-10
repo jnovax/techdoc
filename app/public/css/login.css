@@ -154,3 +154,72 @@ body.login-page {
 .login-footer a:hover {
   text-decoration: underline;
 }
+
+/* ==========================================================================
+   Dark Mode Support for Login Page
+   ========================================================================== */
+html[data-theme='dark'] body.login-page,
+body.night.login-page {
+  background: #18191a !important;
+  color: #e3e3e3 !important;
+}
+
+html[data-theme='dark'] .login-card,
+body.night .login-card {
+  background: #242526 !important;
+  border-color: #2e3035 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+html[data-theme='dark'] .login-title,
+body.night .login-title {
+  color: #f8fafc !important;
+}
+
+html[data-theme='dark'] .login-subtitle,
+body.night .login-subtitle {
+  color: #94a3b8 !important;
+}
+
+html[data-theme='dark'] .login-form label,
+body.night .login-form label {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme='dark'] .login-input,
+body.night .login-input {
+  background: #1e1f21 !important;
+  border-color: #3b3d45 !important;
+  color: #f8fafc !important;
+}
+
+html[data-theme='dark'] .login-input:focus,
+body.night .login-input:focus {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2) !important;
+}
+
+html[data-theme='dark'] .login-oauth-btn,
+body.night .login-oauth-btn {
+  background: #1e1f21 !important;
+  border-color: #3b3d45 !important;
+  color: #e2e8f0 !important;
+}
+
+html[data-theme='dark'] .login-oauth-btn:hover,
+body.night .login-oauth-btn:hover {
+  background: #2a2c30 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .auth-tabs,
+body.night .auth-tabs {
+  background: #1e1f21 !important;
+}
+
+html[data-theme='dark'] .auth-tab-btn.active,
+body.night .auth-tab-btn.active {
+  background: #2e3035 !important;
+  color: #ffffff !important;
+}
+

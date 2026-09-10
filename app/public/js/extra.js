@@ -1112,15 +1112,22 @@ if (currentEmojify && typeof currentEmojify.setConfig === 'function') {
 md.renderer.rules.emoji = (token, idx) => (currentEmojify && typeof currentEmojify.replace === 'function') ? currentEmojify.replace(`:${token[idx].markup}:`) : `:${token[idx].markup}:`
 
 function renderContainer (tokens, idx, options, env, self) {
-  tokens[idx].attrJoin('role', 'alert')
-  tokens[idx].attrJoin('class', 'alert')
-  tokens[idx].attrJoin('class', `alert-${tokens[idx].info.trim()}`)
+  if (tokens[idx].nesting === 1) {
+    tokens[idx].attrJoin('role', 'alert')
+    tokens[idx].attrJoin('class', 'alert')
+    const type = tokens[idx].info.trim().split(/\s+/)[0]
+    tokens[idx].attrJoin('class', `alert-${type}`)
+    tokens[idx].attrJoin('class', `alert--${type}`)
+  }
   return self.renderToken(...arguments)
 }
 md.use(markdownitContainer, 'success', { render: renderContainer })
 md.use(markdownitContainer, 'info', { render: renderContainer })
 md.use(markdownitContainer, 'warning', { render: renderContainer })
 md.use(markdownitContainer, 'danger', { render: renderContainer })
+md.use(markdownitContainer, 'primary', { render: renderContainer })
+md.use(markdownitContainer, 'tip', { render: renderContainer })
+md.use(markdownitContainer, 'note', { render: renderContainer })
 
 const defaultImageRender = md.renderer.rules.image
 md.renderer.rules.image = function (tokens, idx, options, env, self) {

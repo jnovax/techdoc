@@ -93,6 +93,35 @@ function runTests () {
   const nginxConfContent = fs.readFileSync(path.join(__dirname, '../../nginx/default.conf'), 'utf8')
   assert.ok(nginxConfContent.includes('try_files $uri @node_app;'), 'nginx/default.conf must fallback to @node_app for static assets')
 
+  // Test 14: Check Alert Area Callout & Emoji isolation styles
+  assert.ok(css.includes('.alert-success'), 'docusaurus-theme.css must style alert-success')
+  assert.ok(css.includes('.alert-info'), 'docusaurus-theme.css must style alert-info')
+  assert.ok(css.includes('.alert-warning'), 'docusaurus-theme.css must style alert-warning')
+  assert.ok(css.includes('.alert-danger'), 'docusaurus-theme.css must style alert-danger')
+  assert.ok(css.includes("[data-theme='dark'] .alert-success"), 'docusaurus-theme.css must style dark alert-success')
+  assert.ok(css.includes('#doc.markdown-body img:not(.emoji)'), 'docusaurus-theme.css must not apply image box-shadow to emojis')
+  assert.ok(css.includes('#doc.markdown-body img.emoji'), 'docusaurus-theme.css must have dedicated img.emoji styling')
+
+  // Test 15: Check renderContainer in extra.js and syncscroll.js handles closing tags cleanly
+  assert.ok(extraJs.includes('if (tokens[idx].nesting === 1)'), 'extra.js renderContainer must only add attributes to open tags')
+  const syncscrollJs = fs.readFileSync(path.join(__dirname, '../public/js/lib/syncscroll.js'), 'utf8')
+  assert.ok(syncscrollJs.includes('if (tokens[idx].nesting === 1)'), 'syncscroll.js renderContainer must only add attributes to open tags')
+
+  // Test 16: Check Unified Docusaurus Theme Toggle Icon across all views
+  const techdocHeader = fs.readFileSync(path.join(__dirname, '../public/views/techdoc/header.ejs'), 'utf8')
+  assert.ok(techdocHeader.includes('id="editorThemeToggle"'), 'techdoc/header.ejs must have editorThemeToggle')
+  assert.ok(techdocHeader.includes('id="editorThemeToggleMobile"'), 'techdoc/header.ejs must have editorThemeToggleMobile')
+  assert.ok(techdocHeader.includes('docusaurus-theme-toggle'), 'techdoc/header.ejs must use docusaurus-theme-toggle class')
+  assert.ok(techdocHeader.includes('theme-icon-light') && techdocHeader.includes('theme-icon-dark'), 'techdoc/header.ejs must use dual-icon pattern')
+
+  const loginView = fs.readFileSync(path.join(__dirname, '../public/views/login.ejs'), 'utf8')
+  assert.ok(loginView.includes('id="loginThemeToggle"'), 'login.ejs must have loginThemeToggle')
+  assert.ok(loginView.includes('theme-icon-light') && loginView.includes('theme-icon-dark'), 'login.ejs must use dual-icon pattern')
+
+  assert.ok(prettyHtml.includes('theme-icon-light') && prettyHtml.includes('theme-icon-dark'), 'pretty.ejs must use dual-icon pattern')
+  assert.ok(bodyHtml.includes('theme-icon-light') && bodyHtml.includes('theme-icon-dark'), 'index/body.ejs must use dual-icon pattern')
+  assert.ok(css.includes('#f59e0b'), 'docusaurus-theme.css must define glowing amber color for dark mode sun icon')
+
   console.log('All Docusaurus Dark/Light Theme, Diagram & CSP Nonce tests passed successfully!')
 }
 
