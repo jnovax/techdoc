@@ -51,6 +51,10 @@
         </div>
 
         <div class="portal-actions">
+            <button type="button" class="docusaurus-theme-toggle" id="portalThemeToggle" title="Chuyển đổi giao diện sáng/tối" aria-label="Chuyển đổi giao diện sáng/tối" style="margin-right: 4px;">
+                <i class="fa fa-sun-o theme-icon-light" aria-hidden="true"></i>
+                <i class="fa fa-moon-o theme-icon-dark" aria-hidden="true"></i>
+            </button>
             <% if (!signin) { %>
                 <% if (allowAnonymous && !disableNoteCreation) { %>
                     <a href="<%- serverURL %>/new" class="portal-btn portal-btn-outline">

@@ -126,6 +126,7 @@ exports.getPublishData = function (req, res, note, callback) {
     body: markdown,
     theme: meta.slideOptions && isRevealTheme(meta.slideOptions.theme),
     meta: JSON.stringify(extracted.meta),
+    isSlide: Boolean(extracted.meta && extracted.meta.type === 'slide'),
     owner: note.owner ? note.owner.id : null,
     ownerprofile: note.owner ? models.User.getProfile(note.owner) : null,
     lastchangeuser: note.lastchangeuser ? note.lastchangeuser.id : null,

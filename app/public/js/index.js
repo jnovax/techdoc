@@ -678,6 +678,7 @@ $(document).ready(function () {
   if (store.get('nightMode') === true) {
     $body.addClass('night')
     ui.toolbar.night.addClass('active')
+    document.documentElement.setAttribute('data-theme', 'dark')
   }
 
   // showup
@@ -2106,6 +2107,12 @@ function toggleNightMode () {
   $body.toggleClass('night', !isActive)
   ui.toolbar.night.toggleClass('active', !isActive)
   store.set('nightMode', !isActive)
+  if (window.TechDocTheme) {
+    window.TechDocTheme.apply(!isActive ? 'dark' : 'light', true)
+  } else {
+    document.documentElement.setAttribute('data-theme', !isActive ? 'dark' : 'light')
+    localStorage.setItem('theme', !isActive ? 'dark' : 'light')
+  }
 }
 
 function emitPermission (_permission) {
@@ -3465,8 +3472,10 @@ function updateViewInner () {
       separator: '^(\r\n?|\n)---(\r\n?|\n)$',
       verticalSeparator: '^(\r\n?|\n)----(\r\n?|\n)$'
     }
+    const rawVal = editor.getValue()
+    const cleanVal = rawVal.replace(/^\s*---[\s\S]*?---\s*(\r\n?|\n)/, '')
     const slides = window.RevealMarkdown.slidify(
-      editor.getValue(),
+      cleanVal,
       slideOptions
     )
     ui.area.markdown.html(slides)
@@ -3474,9 +3483,13 @@ function updateViewInner () {
     // prevent XSS
     ui.area.markdown.html(preventXSS(ui.area.markdown.html()))
     ui.area.markdown.addClass('slides')
+    $('.ui-slide-quick-btn').removeClass('hidden').find('a').attr('href', noteurl + '/slide')
+    $('.ui-extra-slide-item').removeClass('hidden')
     appState.syncscroll = false
     checkSyncToggle()
   } else {
+    $('.ui-extra-slide-item').addClass('hidden')
+    $('.ui-slide-quick-btn').addClass('hidden')
     if (lastMeta.type && lastMeta.type === 'slide') {
       refreshView()
       ui.area.markdown.removeClass('slides')

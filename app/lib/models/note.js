@@ -447,6 +447,7 @@ module.exports = function (sequelize, DataTypes) {
   Note.parseMeta = function (meta) {
     const _meta = {}
     if (meta) {
+      if (meta.type && (typeof meta.type === 'string')) { _meta.type = meta.type }
       if (meta.title && (typeof meta.title === 'string' || typeof meta.title === 'number')) { _meta.title = meta.title }
       if (meta.description && (typeof meta.description === 'string' || typeof meta.description === 'number')) { _meta.description = meta.description }
       if (meta.robots && (typeof meta.robots === 'string' || typeof meta.robots === 'number')) { _meta.robots = meta.robots }

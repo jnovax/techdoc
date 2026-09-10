@@ -318,3 +318,140 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* --- Docusaurus Dark Mode for Document Portal --- */
+[data-theme='dark'] body,
+body.night {
+  background-color: #18191a !important;
+  color: #e3e3e3 !important;
+}
+
+[data-theme='dark'] .portal-navbar,
+body.night .portal-navbar {
+  background: #1b1b1d;
+  border-bottom-color: #2e3035;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme='dark'] .portal-search-input,
+body.night .portal-search-input {
+  background: #242526;
+  border-color: #383a40;
+  color: #e3e3e3;
+}
+
+[data-theme='dark'] .portal-search-input:focus,
+body.night .portal-search-input:focus {
+  background: #1b1b1d;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+[data-theme='dark'] .portal-search-icon,
+body.night .portal-search-icon {
+  color: #64748b;
+}
+
+[data-theme='dark'] .portal-btn-outline,
+body.night .portal-btn-outline {
+  background: #242526;
+  border-color: #383a40;
+  color: #e3e3e3;
+}
+
+[data-theme='dark'] .portal-btn-outline:hover,
+body.night .portal-btn-outline:hover {
+  background: #2d2f31;
+  border-color: #4b5563;
+  color: #ffffff;
+}
+
+[data-theme='dark'] .portal-heading,
+body.night .portal-heading {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .portal-subheading,
+body.night .portal-subheading {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .portal-tab-btn,
+body.night .portal-tab-btn {
+  color: #94a3b8;
+  background: transparent;
+}
+
+[data-theme='dark'] .portal-tab-btn:hover,
+body.night .portal-tab-btn:hover {
+  background: #242526;
+  color: #ffffff;
+}
+
+[data-theme='dark'] .portal-tab-btn.active,
+body.night .portal-tab-btn.active {
+  background: rgba(56, 189, 248, 0.12) !important;
+  color: #38bdf8 !important;
+}
+
+[data-theme='dark'] .note-card,
+body.night .note-card {
+  background: #242526;
+  border-color: #2e3035;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] .note-card:hover,
+body.night .note-card:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='dark'] .note-title,
+body.night .note-title {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .note-snippet,
+body.night .note-snippet {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .note-footer,
+body.night .note-footer {
+  border-top-color: #2e3035;
+  color: #64748b;
+}
+
+[data-theme='dark'] .note-author,
+body.night .note-author {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .portal-empty h3,
+body.night .portal-empty h3 {
+  color: #f1f5f9;
+}
+
+[data-theme='dark'] .portal-empty p,
+body.night .portal-empty p {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .portal-empty i,
+body.night .portal-empty i {
+  color: #475569;
+}
+
+[data-theme='dark'] .note-card-trash,
+body.night .note-card-trash {
+  background: #2a1b1e !important;
+  border-left: 4px solid #f43f5e !important;
+}
+
+[data-theme='dark'] .portal-tab-btn.tab-trash.active,
+body.night .portal-tab-btn.tab-trash.active {
+  background: rgba(244, 63, 94, 0.15) !important;
+  color: #fb7185 !important;
+}
+

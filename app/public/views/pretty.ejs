@@ -28,7 +28,21 @@
     <link rel="stylesheet" href='<%- serverURL %>/build/emojify.js/dist/css/basic/emojify.min.css'>
     <%- include('build/pretty-pack-header') %>
     <link rel="stylesheet" href="<%- serverURL %>/css/inpage-search.css">
-    <link rel="stylesheet" href="<%- serverURL %>/css/docusaurus-theme.css?v=20260909_widescreen_v6">
+    <link rel="stylesheet" href="<%- serverURL %>/css/docusaurus-theme.css?v=20260910_slide_v1">
+    <script nonce="<%- cspNonce %>">
+        (function() {
+            var theme = localStorage.getItem('theme') || (localStorage.getItem('nightMode') === 'true' ? 'dark' : null);
+            if (!theme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                theme = 'dark';
+            }
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.documentElement.classList.add('night');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
 </head>
 
 <body class="docusaurus-layout" style="display:none;">
@@ -57,12 +71,21 @@
             <span class="docusaurus-view-badge hidden-xs">
                 <i class="fa fa-eye"></i> <%- viewcount %> lượt xem
             </span>
+            <button type="button" class="docusaurus-theme-toggle" id="docusaurusThemeToggle" title="Chuyển đổi giao diện sáng/tối" aria-label="Chuyển đổi giao diện sáng/tối">
+                <i class="fa fa-sun-o theme-icon-light" aria-hidden="true"></i>
+                <i class="fa fa-moon-o theme-icon-dark" aria-hidden="true"></i>
+            </button>
             <a href="<%- serverURL %>/" class="docusaurus-flat-btn docusaurus-flat-btn-default" title="Quay lại danh sách ghi chú">
                 <i class="fa fa-arrow-left"></i> <span class="hidden-xs">Trang chủ</span>
             </a>
             <a href="#" class="docusaurus-flat-btn docusaurus-flat-btn-primary ui-edit" title="Chỉnh sửa tài liệu">
                 <i class="fa fa-pencil"></i> <span class="hidden-xs">Chỉnh sửa</span>
             </a>
+            <% if (typeof noteId !== 'undefined' && noteId && typeof isSlide !== 'undefined' && isSlide) { %>
+            <a href="<%- serverURL %>/p/<%- noteId %>" class="docusaurus-flat-btn docusaurus-flat-btn-default ui-slide" id="techdocSlideBtn" title="Trình chiếu toàn màn hình (Slide Mode)" target="_blank" rel="noopener">
+                <i class="fa fa-tv"></i> <span class="hidden-xs">Trình chiếu</span>
+            </a>
+            <% } %>
             <% if (typeof isOwner !== 'undefined' && isOwner) { %>
             <button type="button" class="docusaurus-flat-btn docusaurus-flat-btn-danger ui-trash" title="Chuyển tài liệu vào thùng rác">
                 <i class="fa fa-trash-o"></i> <span class="hidden-xs">Chuyển vào thùng rác</span>
@@ -131,6 +154,7 @@
 <script src="<%- serverURL %>/build/MathJax/config/Safe.js" defer></script>
 <%- include('build/pretty-pack-scripts') %>
 <script src="<%- serverURL %>/js/inpage-search.js" defer></script>
+<script src="<%- serverURL %>/js/theme-switcher.js" defer></script>
 <script src="<%- serverURL %>/js/docusaurus-toc.js?v=20260909_clean_v5" defer></script>
 <script src="<%- serverURL %>/js/pretty-trash.js?v=20260909_1" defer></script>
 <%- include('shared/ga') %>

@@ -387,11 +387,20 @@ export function finishView (view) {
   })
   // mermaid
   const mermaids = view.find('div.mermaid.raw').removeClass('raw')
+  if (mermaids.length > 0) {
+    try {
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'default'
+      })
+    } catch (e) {
+      mermaid.startOnLoad = false
+    }
+  }
   mermaids.each((key, value) => {
     const $value = $(value)
     const $ele = $(value).closest('pre')
     try {
-      mermaid.startOnLoad = false
       mermaid.mermaidAPI.parse($value.text())
       $ele.addClass('mermaid')
       $ele.text($value.text())

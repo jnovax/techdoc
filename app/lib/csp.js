@@ -110,6 +110,7 @@ function addReportURI (directives) {
 
 CspStrategy.addNonceToLocals = function (req, res, next) {
   res.locals.nonce = uuidv4()
+  res.locals.cspNonce = res.locals.nonce
   next()
 }
 

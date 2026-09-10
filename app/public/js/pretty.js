@@ -35,16 +35,21 @@ if (md.meta.type && md.meta.type === 'slide') {
     separator: '^(\r\n?|\n)---(\r\n?|\n)$',
     verticalSeparator: '^(\r\n?|\n)----(\r\n?|\n)$'
   }
-  const slides = window.RevealMarkdown.slidify(text, slideOptions)
+  const cleanText = text.replace(/^\s*---[\s\S]*?---\s*(\r\n?|\n)/, '')
+  const slides = window.RevealMarkdown.slidify(cleanText, slideOptions)
   markdown.html(slides)
   window.RevealMarkdown.initialize()
   // prevent XSS
   markdown.html(preventXSS(markdown.html()))
   markdown.addClass('slides')
+  $('#techdocSlideBtn').removeClass('hidden')
+  $('#docusaurusToc').hide()
 } else {
   if (lastMeta.type && lastMeta.type === 'slide') {
     refreshView()
     markdown.removeClass('slides')
+    $('#techdocSlideBtn').addClass('hidden')
+    $('#docusaurusToc').show()
   }
   // only render again when meta changed
   if (JSON.stringify(md.meta) !== JSON.stringify(lastMeta)) {

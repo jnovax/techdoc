@@ -55,7 +55,8 @@ const slideOptions = {
   separator: '^(\r\n?|\n)---(\r\n?|\n)$',
   verticalSeparator: '^(\r\n?|\n)----(\r\n?|\n)$'
 }
-const slides = RevealMarkdown.slidify(body, slideOptions)
+const cleanBody = body.replace(/^\s*---[\s\S]*?---\s*(\r\n?|\n)/, '')
+const slides = RevealMarkdown.slidify(cleanBody, slideOptions)
 $('.slides').html(slides)
 RevealMarkdown.initialize()
 removeDOMEvents($('.slides'))

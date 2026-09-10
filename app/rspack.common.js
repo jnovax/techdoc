@@ -71,9 +71,10 @@ module.exports = {
     }),
     new HtmlRspackPlugin({
       template: 'public/views/includes/scripts.ejs',
-      chunks: ['slide-pack'],
+      chunks: ['common', 'slide-pack'],
       filename: path.join(__dirname, 'public/views/build/slide-pack-scripts.ejs'),
-      inject: false
+      inject: false,
+      chunksSortMode: 'manual'
     }),
     new rspack.CopyRspackPlugin({
       patterns: [

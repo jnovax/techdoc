@@ -105,9 +105,15 @@ exports.doAction = function (req, res, next) {
       case 'pretty': // pretty deprecated
         res.redirect(config.serverURL + '/s/' + (note.alias || note.shortid))
         break
-      case 'slide':
-        res.redirect(config.serverURL + '/p/' + (note.alias || note.shortid))
+      case 'slide': {
+        const extracted = models.Note.extractMeta(note.content)
+        if (extracted.meta && extracted.meta.type === 'slide') {
+          res.redirect(config.serverURL + '/p/' + (note.alias || note.shortid))
+        } else {
+          res.redirect(config.serverURL + '/s/' + (note.alias || note.shortid))
+        }
         break
+      }
       case 'download':
         exports.downloadMarkdown(req, res, note)
         break

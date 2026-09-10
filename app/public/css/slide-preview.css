@@ -1,116 +1,437 @@
+/* ==========================================================================
+   TechDoc Slide Preview - Modern 16:9 Presentation Cards
+   ========================================================================== */
+
+/* Main slides container */
+#doc.markdown-body.slides,
 .markdown-body.slides {
   position: relative;
   z-index: 1;
-  color: #222;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 1.5rem 0.5rem 3rem 0.5rem;
+  background: transparent !important;
+  text-align: center !important;
 }
 
+/* Remove legacy giant shadow that leaked across navbar and pages */
+#doc.markdown-body.slides::before,
 .markdown-body.slides::before {
-  content: '';
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  background-color: currentColor;
-  box-shadow: 0 0 0 50vw;
+  display: none !important;
+  content: none !important;
+  box-shadow: none !important;
 }
 
+/* Individual Slide Card */
+#doc.markdown-body.slides section[data-markdown],
 .markdown-body.slides section[data-markdown] {
   position: relative;
-  margin-bottom: 1.5em;
-  background-color: #fff;
-  text-align: center;
+  width: 100%;
+  max-width: 880px;
+  min-height: 460px;
+  aspect-ratio: 16 / 9;
+  margin: 2rem auto 2.5rem auto !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  float: none !important;
+  box-sizing: border-box;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 48px 48px !important;
+  border-radius: 12px !important;
+  text-align: center !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  overflow: visible !important;
+}
+
+@media (max-aspect-ratio: 16/9), (max-width: 768px) {
+  #doc.markdown-body.slides section[data-markdown],
+  .markdown-body.slides section[data-markdown] {
+    aspect-ratio: auto;
+    min-height: 360px;
+    padding: 32px 20px !important;
+  }
+}
+
+/* Remove previous padding-bottom 56.23% aspect ratio hack */
+#doc.markdown-body.slides section[data-markdown]::before,
+.markdown-body.slides section[data-markdown]::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Slide content wrapper: avoid truncation, centered content */
+#doc.markdown-body.slides section[data-markdown] > div:first-child,
+.markdown-body.slides section[data-markdown] > div:first-child {
+  position: static !important;
+  transform: none !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  max-height: none !important;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center !important;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* --------------------------------------------------------------------------
+   Light Theme Styling
+   -------------------------------------------------------------------------- */
+#doc.markdown-body.slides section[data-markdown],
+.markdown-body.slides section[data-markdown] {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #1e293b !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 25px -5px rgba(0, 0, 0, 0.08) !important;
+}
+
+#doc.markdown-body.slides section[data-markdown]:hover,
+.markdown-body.slides section[data-markdown]:hover {
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.06) !important;
+}
+
+#doc.markdown-body.slides section[data-markdown] h1,
+#doc.markdown-body.slides section[data-markdown] h2,
+#doc.markdown-body.slides section[data-markdown] h3,
+#doc.markdown-body.slides section[data-markdown] h4,
+#doc.markdown-body.slides section[data-markdown] h5,
+#doc.markdown-body.slides section[data-markdown] h6,
+.markdown-body.slides section[data-markdown] h1,
+.markdown-body.slides section[data-markdown] h2,
+.markdown-body.slides section[data-markdown] h3,
+.markdown-body.slides section[data-markdown] h4,
+.markdown-body.slides section[data-markdown] h5,
+.markdown-body.slides section[data-markdown] h6 {
+  color: #0f172a !important;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+#doc.markdown-body.slides section[data-markdown] p,
+.markdown-body.slides section[data-markdown] p {
+  color: #334155 !important;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+#doc.markdown-body.slides section[data-markdown] a,
+.markdown-body.slides section[data-markdown] a {
+  color: #2563eb !important;
+  text-decoration: none;
+  text-align: center !important;
+}
+
+#doc.markdown-body.slides section[data-markdown] a:hover,
+.markdown-body.slides section[data-markdown] a:hover {
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   Dark Theme Styling
+   -------------------------------------------------------------------------- */
+html[data-theme='dark'] #doc.markdown-body.slides section[data-markdown],
+html[data-theme='dark'] .markdown-body.slides section[data-markdown],
+body.night #doc.markdown-body.slides section[data-markdown],
+body.night .markdown-body.slides section[data-markdown],
+.night #doc.markdown-body.slides section[data-markdown],
+.night .markdown-body.slides section[data-markdown] {
+  background-color: #242526 !important;
+  border: 1px solid #383b40 !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+html[data-theme='dark'] #doc.markdown-body.slides section[data-markdown]:hover,
+html[data-theme='dark'] .markdown-body.slides section[data-markdown]:hover,
+body.night #doc.markdown-body.slides section[data-markdown]:hover,
+body.night .markdown-body.slides section[data-markdown]:hover,
+.night #doc.markdown-body.slides section[data-markdown]:hover,
+.night .markdown-body.slides section[data-markdown]:hover {
+  border-color: #4b5563 !important;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.65) !important;
+}
+
+html[data-theme='dark'] #doc.markdown-body.slides section[data-markdown] h1,
+html[data-theme='dark'] #doc.markdown-body.slides section[data-markdown] h2,
+html[data-theme='dark'] #doc.markdown-body.slides section[data-markdown] h3,
+html[data-theme='dark'] #doc.markdown-body.slides section[data-markdown] h4,
+html[data-theme='dark'] #doc.markdown-body.slides section[data-markdown] h5,
+html[data-theme='dark'] #doc.markdown-body.slides section[data-markdown] h6,
+html[data-theme='dark'] .markdown-body.slides section[data-markdown] h1,
+html[data-theme='dark'] .markdown-body.slides section[data-markdown] h2,
+html[data-theme='dark'] .markdown-body.slides section[data-markdown] h3,
+html[data-theme='dark'] .markdown-body.slides section[data-markdown] h4,
+html[data-theme='dark'] .markdown-body.slides section[data-markdown] h5,
+html[data-theme='dark'] .markdown-body.slides section[data-markdown] h6,
+body.night #doc.markdown-body.slides section[data-markdown] h1,
+body.night #doc.markdown-body.slides section[data-markdown] h2,
+body.night #doc.markdown-body.slides section[data-markdown] h3,
+body.night #doc.markdown-body.slides section[data-markdown] h4,
+body.night #doc.markdown-body.slides section[data-markdown] h5,
+body.night #doc.markdown-body.slides section[data-markdown] h6,
+body.night .markdown-body.slides section[data-markdown] h1,
+body.night .markdown-body.slides section[data-markdown] h2,
+body.night .markdown-body.slides section[data-markdown] h3,
+body.night .markdown-body.slides section[data-markdown] h4,
+body.night .markdown-body.slides section[data-markdown] h5,
+body.night .markdown-body.slides section[data-markdown] h6,
+.night #doc.markdown-body.slides section[data-markdown] h1,
+.night #doc.markdown-body.slides section[data-markdown] h2,
+.night #doc.markdown-body.slides section[data-markdown] h3,
+.night #doc.markdown-body.slides section[data-markdown] h4,
+.night #doc.markdown-body.slides section[data-markdown] h5,
+.night #doc.markdown-body.slides section[data-markdown] h6,
+.night .markdown-body.slides section[data-markdown] h1,
+.night .markdown-body.slides section[data-markdown] h2,
+.night .markdown-body.slides section[data-markdown] h3,
+.night .markdown-body.slides section[data-markdown] h4,
+.night .markdown-body.slides section[data-markdown] h5,
+.night .markdown-body.slides section[data-markdown] h6 {
+  color: #f8fafc !important;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  text-align: center !important;
+}
+
+html[data-theme='dark'] #doc.markdown-body.slides section[data-markdown] p,
+html[data-theme='dark'] .markdown-body.slides section[data-markdown] p,
+body.night #doc.markdown-body.slides section[data-markdown] p,
+body.night .markdown-body.slides section[data-markdown] p,
+.night #doc.markdown-body.slides section[data-markdown] p,
+.night .markdown-body.slides section[data-markdown] p {
+  color: #cbd5e1 !important;
+  text-align: center !important;
+}
+
+html[data-theme='dark'] #doc.markdown-body.slides section[data-markdown] a,
+html[data-theme='dark'] .markdown-body.slides section[data-markdown] a,
+body.night #doc.markdown-body.slides section[data-markdown] a,
+body.night .markdown-body.slides section[data-markdown] a,
+.night #doc.markdown-body.slides section[data-markdown] a,
+.night .markdown-body.slides section[data-markdown] a {
+  color: #38bdf8 !important;
+  text-align: center !important;
+}
+
+/* --------------------------------------------------------------------------
+   Lists, Tables, Code Blocks, Quotes
+   -------------------------------------------------------------------------- */
+.markdown-body.slides section[data-markdown] ul,
+.markdown-body.slides section[data-markdown] ol {
+  display: inline-block;
+  text-align: left;
+  margin: 0.5rem auto 1rem auto;
+  padding-left: 2rem;
+  max-width: 90%;
+  font-size: 1.1rem;
+  line-height: 1.6;
 }
 
 .markdown-body.slides section[data-markdown] code {
   text-align: left;
+  font-size: 0.95em;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
 }
 
-.markdown-body.slides section[data-markdown]::before {
-  content: '';
-  display: block;
-  padding-bottom: 56.23%;
+.markdown-body.slides section[data-markdown] pre {
+  text-align: left;
+  max-width: 90%;
+  margin: 1rem auto;
+  border-radius: 8px;
+  overflow-x: auto;
 }
 
-.markdown-body.slides section[data-markdown] > div:first-child {
-  position: absolute;
-  top: 50%;
-  left: 1em;
-  right: 1em;
-  transform: translateY(-50%);
-  max-height: 100%;
+.markdown-body.slides section[data-markdown] pre code {
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+/* Light code colors */
+.markdown-body.slides section[data-markdown] :not(pre) > code {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border: 1px solid #e2e8f0;
+}
+
+.markdown-body.slides section[data-markdown] pre {
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0;
+}
+
+/* Dark code colors */
+html[data-theme='dark'] .markdown-body.slides section[data-markdown] :not(pre) > code,
+body.night .markdown-body.slides section[data-markdown] :not(pre) > code,
+.night .markdown-body.slides section[data-markdown] :not(pre) > code {
+  background-color: #1e1e24 !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #334155;
+}
+
+html[data-theme='dark'] .markdown-body.slides section[data-markdown] pre,
+body.night .markdown-body.slides section[data-markdown] pre,
+.night .markdown-body.slides section[data-markdown] pre {
+  background-color: #18191a !important;
+  border: 1px solid #383b40;
+}
+
+/* Tables */
+.markdown-body.slides table {
+  width: auto;
+  max-width: 90%;
+  margin: 1rem auto;
+  border-collapse: collapse;
+  display: table;
+  border-radius: 6px;
   overflow: hidden;
 }
 
-.markdown-body.slides > section > section + section::after {
-  content: '';
-  position: absolute;
-  top: -1.5em;
-  right: 1em;
-  height: 1.5em;
-  border: 3px solid #777;
-}
-
-.markdown-body.slides aside.notes {
-  display: none;
-}
-
-.markdown-body.slides section[data-markdown] > div:first-child > ul,
-.markdown-body.slides section[data-markdown] > div:first-child > ol {
-  display: inline-block;
+.markdown-body.slides table th,
+.markdown-body.slides table td {
   text-align: left;
-  margin: 0 0 0 1em;
-  padding: 0;
+  padding: 0.5em 1em;
+  border: 1px solid #e2e8f0;
 }
 
-.markdown-body.slides table {
-  width: 50%;
-  margin: 0 auto;
-  border-collapse: collapse;
-  border-spacing: 0;
-  display: table;
-}
-
-.markdown-body.slides table th, .markdown-body.slides table td {
-  text-align: left;
-  padding: 0.2em 0.5em 0.2em 0.5em;
-  border:none;
-  border-bottom: 1px solid;
+.markdown-body.slides table th {
+  background-color: #f1f5f9;
+  font-weight: 600;
 }
 
 .markdown-body.slides table tr {
-  border-top: 0;
-  background-color: #fff;
+  background-color: #ffffff;
 }
 
 .markdown-body.slides table tr:nth-child(2n) {
-  background-color: inherit;
+  background-color: #f8fafc;
 }
 
-.markdown-body.slides table tbody tr:last-child th, .markdown-body.slides table tbody tr:last-child td {
-  border-bottom: none;
+html[data-theme='dark'] .markdown-body.slides table th,
+html[data-theme='dark'] .markdown-body.slides table td,
+body.night .markdown-body.slides table th,
+body.night .markdown-body.slides table td,
+.night .markdown-body.slides table th,
+.night .markdown-body.slides table td {
+  border: 1px solid #334155;
+  color: #cbd5e1;
 }
 
-.markdown-body.slides h1, .markdown-body.slides h2 {
-    border-bottom: 0;
+html[data-theme='dark'] .markdown-body.slides table th,
+body.night .markdown-body.slides table th,
+.night .markdown-body.slides table th {
+  background-color: #1a1b1e;
+  color: #f8fafc;
 }
 
-.night .markdown-body.slides h1,
-.night .markdown-body.slides h2,
-.night .markdown-body.slides h3,
-.night .markdown-body.slides h4,
-.night .markdown-body.slides h5,
-.night .markdown-body.slides h6 {
-    color: black;
+html[data-theme='dark'] .markdown-body.slides table tr,
+body.night .markdown-body.slides table tr,
+.night .markdown-body.slides table tr {
+  background-color: #242526;
 }
 
-.markdown-body section > section:last-child {
-	margin-bottom: 1.5em !important;
+html[data-theme='dark'] .markdown-body.slides table tr:nth-child(2n),
+body.night .markdown-body.slides table tr:nth-child(2n),
+.night .markdown-body.slides table tr:nth-child(2n) {
+  background-color: #1e1e24;
 }
 
-/* slides previews get a black background, controlled by js */
+/* Ensure fragments in preview mode are visible */
+.markdown-body.slides .fragment {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Vertical slide branching indicator */
+.markdown-body.slides > section > section + section {
+  margin-top: 1.5rem !important;
+}
+
+.markdown-body.slides > section > section + section::after {
+  content: '↓';
+  position: absolute;
+  top: -1.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #94a3b8;
+  width: 28px;
+  height: 28px;
+  line-height: 26px;
+  text-align: center;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 50%;
+}
+
+html[data-theme='dark'] .markdown-body.slides > section > section + section::after,
+body.night .markdown-body.slides > section > section + section::after,
+.night .markdown-body.slides > section > section + section::after {
+  background: #242526;
+  border-color: #4b5563;
+  color: #94a3b8;
+}
+
+/* Aside notes (Reveal.js presenter notes) */
+.markdown-body.slides aside.notes {
+  display: none !important;
+}
+
+/* Slides preview backdrop in editor */
 .ui-view-area.black {
-  background-color: black !important;;
+  background-color: #f1f5f9 !important;
 }
+
+html[data-theme='dark'] .ui-view-area.black,
+body.night .ui-view-area.black {
+  background-color: #111827 !important;
+}
+
+/* Docusaurus Full-width Adjustment for Slide Notes in Reading Mode */
+.docusaurus-layout-wrapper:has(.markdown-body.slides) .docusaurus-toc-sidebar,
+.markdown-body.slides ~ #docusaurusToc {
+  display: none !important;
+}
+
+.docusaurus-layout-wrapper:has(.markdown-body.slides) .docusaurus-main-content {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+}
+
+/* Ensure infobar in editor view mode is centered and does not push/overlap slide cards */
+.ui-view-area:has(#doc.slides) .ui-infobar,
+.ui-view-area:has(.markdown-body.slides) .ui-infobar,
+.ui-view-area.black .ui-infobar {
+  max-width: 880px !important;
+  margin-top: 20px !important;
+  margin-bottom: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  clear: both !important;
+}
+

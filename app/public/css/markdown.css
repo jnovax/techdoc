@@ -14,9 +14,6 @@
     border: inherit !important;
 }
 
-.night .markdown-body pre {
-  filter: invert(100%);
-}
 
 .markdown-body code {
     color: inherit !important;
@@ -135,15 +132,6 @@
     white-space: inherit;
 }
 
-.night .markdown-body pre.graphviz {
-    filter: none;
-}
-
-.night .markdown-body pre.mermaid .titleText,
-.night .markdown-body pre.mermaid text,
-.night .markdown-body pre.mermaid .sectionTitle{
-    fill: white;
-}
 
 .markdown-body pre.flow-chart > code,
 .markdown-body pre.sequence-diagram > code,
@@ -167,9 +155,6 @@
     filter: none;
 }
 
-.night pre rect{
-    fill: transparent;
-}
 
 .markdown-body pre > code.wrap {
     white-space: pre-wrap;       /* Since CSS 2.1 */

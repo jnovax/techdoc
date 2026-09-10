@@ -3,7 +3,10 @@
    Based on Docusaurus v3 Infima Design Tokens & Typography System
    ========================================================================== */
 
-:root {
+:root,
+[data-theme='light'] {
+  --ifm-color-scheme: light;
+
   /* Font Families */
   --ifm-font-family-base: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --ifm-font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -18,7 +21,11 @@
   --ifm-color-content-secondary: #525860;
   --ifm-color-primary: #2563eb;
   --ifm-color-primary-dark: #1d4ed8;
+  --ifm-color-primary-darker: #1e40af;
+  --ifm-color-primary-light: #3b82f6;
+  --ifm-color-primary-lighter: #60a5fa;
   --ifm-background-color: #ffffff;
+  --ifm-background-surface-color: #ffffff;
 
   /* Heading Sizes & Colors */
   --ifm-h1-font-size: 2.5rem;   /* 40px */
@@ -51,9 +58,91 @@
   /* Tables & Navigation */
   --ifm-table-border-color: #ebedf0;
   --ifm-table-head-background: #f6f8fa;
+  --ifm-table-stripe-background: #fbfcfe;
   --ifm-toc-border-color: #ebedf0;
   --ifm-toc-link-color: #525860;
   --ifm-toc-link-active: #2563eb;
+  --ifm-toc-link-hover-bg: rgba(37, 99, 235, 0.04);
+  --ifm-toc-link-active-bg: rgba(37, 99, 235, 0.06);
+
+  /* Navbar & Chrome */
+  --ifm-navbar-background-color: #ffffff;
+  --ifm-navbar-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --ifm-badge-background-color: #f1f5f9;
+  --ifm-hero-border-color: #e2e8f0;
+
+  /* Code & Syntax */
+  --ifm-code-background: #f1f5f9;
+  --ifm-code-border: #e2e8f0;
+  --ifm-code-color: #e11d48;
+  --ifm-pre-background: #1e1e2e;
+  --ifm-pre-border: #313244;
+  --ifm-pre-color: #cdd6f4;
+}
+
+[data-theme='dark'],
+body.night,
+.night {
+  --ifm-color-scheme: dark;
+
+  /* Core Colors */
+  --ifm-color-content: #e3e3e3;
+  --ifm-color-content-secondary: #94a3b8;
+  --ifm-color-primary: #38bdf8;
+  --ifm-color-primary-dark: #0284c7;
+  --ifm-color-primary-darker: #0369a1;
+  --ifm-color-primary-light: #7dd3fc;
+  --ifm-color-primary-lighter: #bae6fd;
+  --ifm-background-color: #18191a;
+  --ifm-background-surface-color: #242526;
+
+  /* Heading Sizes & Colors */
+  --ifm-heading-color: #ffffff;
+
+  /* Admonition Callouts (Docusaurus Dark Tint) */
+  --ifm-alert-note-border: #3b82f6;
+  --ifm-alert-note-bg: rgba(59, 130, 246, 0.12);
+  --ifm-alert-note-text: #93c5fd;
+
+  --ifm-alert-tip-border: #10b981;
+  --ifm-alert-tip-bg: rgba(16, 185, 129, 0.12);
+  --ifm-alert-tip-text: #86efac;
+
+  --ifm-alert-info-border: #38bdf8;
+  --ifm-alert-info-bg: rgba(56, 189, 248, 0.12);
+  --ifm-alert-info-text: #7dd3fc;
+
+  --ifm-alert-warning-border: #f59e0b;
+  --ifm-alert-warning-bg: rgba(245, 158, 11, 0.12);
+  --ifm-alert-warning-text: #fde047;
+
+  --ifm-alert-danger-border: #ef4444;
+  --ifm-alert-danger-bg: rgba(239, 68, 68, 0.12);
+  --ifm-alert-danger-text: #fca5a5;
+
+  /* Tables & Navigation */
+  --ifm-table-border-color: #2e3035;
+  --ifm-table-head-background: #242526;
+  --ifm-table-stripe-background: #1e1f21;
+  --ifm-toc-border-color: #2e3035;
+  --ifm-toc-link-color: #94a3b8;
+  --ifm-toc-link-active: #38bdf8;
+  --ifm-toc-link-hover-bg: rgba(56, 189, 248, 0.06);
+  --ifm-toc-link-active-bg: rgba(56, 189, 248, 0.1);
+
+  /* Navbar & Chrome */
+  --ifm-navbar-background-color: #1b1b1d;
+  --ifm-navbar-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --ifm-badge-background-color: #242526;
+  --ifm-hero-border-color: #2e3035;
+
+  /* Code & Syntax */
+  --ifm-code-background: #282a36;
+  --ifm-code-border: #383a40;
+  --ifm-code-color: #f472b6;
+  --ifm-pre-background: #141517;
+  --ifm-pre-border: #2e3035;
+  --ifm-pre-color: #e2e8f0;
 }
 
 /* --- Global Reset & Root Layout --- */
@@ -77,13 +166,14 @@ body.docusaurus-layout {
   top: 0;
   z-index: 1000;
   height: 60px;
-  background: #ffffff;
+  background: var(--ifm-navbar-background-color);
   border-bottom: 1px solid var(--ifm-toc-border-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 48px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  box-shadow: var(--ifm-navbar-shadow);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .docusaurus-navbar-left {
@@ -114,14 +204,14 @@ body.docusaurus-layout {
 }
 
 .docusaurus-navbar-separator {
-  color: #cbd5e1;
+  color: var(--ifm-toc-border-color);
   font-weight: 300;
   font-size: 18px;
   user-select: none;
 }
 
 .docusaurus-navbar-title {
-  color: var(--ifm-color-content-secondary);
+  color: var(--ifm-color-content);
   font-weight: 600;
   font-size: 15px;
   max-width: 420px;
@@ -141,11 +231,56 @@ body.docusaurus-layout {
   align-items: center;
   gap: 6px;
   padding: 5px 12px;
-  background-color: #f1f5f9;
+  background-color: var(--ifm-badge-background-color);
+  border: 1px solid var(--ifm-toc-border-color);
   border-radius: 9999px;
   font-size: 13px;
   font-weight: 500;
   color: var(--ifm-color-content-secondary);
+  transition: all 0.2s ease;
+}
+
+/* Theme Toggle Button (Docusaurus Style) */
+.docusaurus-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  border: 1px solid var(--ifm-toc-border-color);
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-color-content-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 15px;
+  padding: 0;
+  box-shadow: none !important;
+}
+
+.docusaurus-theme-toggle:hover {
+  background-color: var(--ifm-table-stripe-background);
+  color: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+}
+
+.docusaurus-theme-toggle .theme-icon-light {
+  display: none;
+}
+
+.docusaurus-theme-toggle .theme-icon-dark {
+  display: inline-block;
+}
+
+[data-theme='dark'] .docusaurus-theme-toggle .theme-icon-light,
+body.night .docusaurus-theme-toggle .theme-icon-light {
+  display: inline-block;
+  color: #f59e0b;
+}
+
+[data-theme='dark'] .docusaurus-theme-toggle .theme-icon-dark,
+body.night .docusaurus-theme-toggle .theme-icon-dark {
+  display: none;
 }
 
 .docusaurus-nav-btn,
@@ -166,17 +301,17 @@ body.docusaurus-layout {
 
 .docusaurus-nav-btn-outline,
 .docusaurus-flat-btn-default {
-  color: #475569 !important;
-  border-color: #cbd5e1;
-  background-color: #ffffff;
+  color: var(--ifm-color-content) !important;
+  border-color: var(--ifm-toc-border-color);
+  background-color: var(--ifm-background-surface-color);
   box-shadow: none !important;
 }
 
 .docusaurus-nav-btn-outline:hover,
 .docusaurus-flat-btn-default:hover {
-  background-color: #f8fafc;
-  border-color: #94a3b8;
-  color: #1e293b !important;
+  background-color: var(--ifm-table-stripe-background);
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary) !important;
   box-shadow: none !important;
 }
 
@@ -199,7 +334,7 @@ body.docusaurus-layout {
 .docusaurus-flat-btn-danger {
   color: #dc2626 !important;
   border-color: #fca5a5;
-  background-color: #ffffff;
+  background-color: var(--ifm-background-surface-color);
   box-shadow: none !important;
 }
 
@@ -209,6 +344,24 @@ body.docusaurus-layout {
   border-color: #ef4444;
   color: #b91c1c !important;
   box-shadow: none !important;
+}
+
+[data-theme='dark'] .docusaurus-nav-btn-danger,
+[data-theme='dark'] .docusaurus-flat-btn-danger,
+body.night .docusaurus-nav-btn-danger,
+body.night .docusaurus-flat-btn-danger {
+  color: #f87171 !important;
+  border-color: rgba(239, 68, 68, 0.4);
+  background-color: var(--ifm-background-surface-color);
+}
+
+[data-theme='dark'] .docusaurus-nav-btn-danger:hover,
+[data-theme='dark'] .docusaurus-flat-btn-danger:hover,
+body.night .docusaurus-nav-btn-danger:hover,
+body.night .docusaurus-flat-btn-danger:hover {
+  background-color: rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+  color: #fca5a5 !important;
 }
 
 /* --- Documentation Content Container --- */
@@ -299,27 +452,27 @@ body.docusaurus-layout {
 
 .docusaurus-toc-link:hover {
   color: var(--ifm-toc-link-active);
-  background-color: rgba(37, 99, 235, 0.04);
+  background-color: var(--ifm-toc-link-hover-bg);
 }
 
 .docusaurus-toc-link.active {
   color: var(--ifm-toc-link-active) !important;
   font-weight: 600 !important;
   border-left-color: var(--ifm-toc-link-active) !important;
-  background-color: rgba(37, 99, 235, 0.06);
+  background-color: var(--ifm-toc-link-active-bg);
 }
 
 /* --- Document Hero Header --- */
 .doc-hero-header {
   margin-bottom: 28px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--ifm-hero-border-color);
 }
 
 .doc-hero-title {
   font-size: 2.35rem !important; /* ~38px */
   font-weight: 800 !important;
-  color: #0f172a !important;
+  color: var(--ifm-heading-color) !important;
   line-height: 1.25 !important;
   letter-spacing: -0.025em !important;
   margin: 0 0 14px 0 !important;
@@ -334,7 +487,7 @@ body.docusaurus-layout {
   flex-wrap: wrap;
   gap: 16px;
   font-size: 13px;
-  color: #64748b;
+  color: var(--ifm-color-content-secondary);
 }
 
 .doc-hero-meta .meta-item {
@@ -439,18 +592,226 @@ body.docusaurus-layout {
   margin-bottom: 0.25rem !important;
 }
 
-/* Code Blocks */
-#doc.markdown-body pre,
-.markdown-body pre {
-  background-color: #1e1e2e !important;
+/* Code Blocks (excluding visual diagrams) */
+#doc.markdown-body pre:not(.mermaid):not(.sequence-diagram):not(.flow-chart):not(.graphviz):not(.abc),
+.markdown-body pre:not(.mermaid):not(.sequence-diagram):not(.flow-chart):not(.graphviz):not(.abc) {
+  background-color: var(--ifm-pre-background) !important;
   border-radius: 8px !important;
-  border: 1px solid #313244 !important;
+  border: 1px solid var(--ifm-pre-border) !important;
   padding: 18px 22px !important;
-  color: #cdd6f4 !important;
+  color: var(--ifm-pre-color) !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
   margin: 1.5rem 0 !important;
   overflow-x: auto !important;
   line-height: 1.6 !important;
+}
+
+/* --- Diagrams & Visual Charts (Mermaid, Sequence, Flowchart, Graphviz, ABC) --- */
+/* Light Mode: Clean crisp white card with comfortable padding and subtle border */
+#doc.markdown-body pre.mermaid,
+#doc.markdown-body pre.sequence-diagram,
+#doc.markdown-body pre.flow-chart,
+#doc.markdown-body pre.graphviz,
+#doc.markdown-body pre.abc,
+.markdown-body pre.mermaid,
+.markdown-body pre.sequence-diagram,
+.markdown-body pre.flow-chart,
+.markdown-body pre.graphviz,
+.markdown-body pre.abc,
+.mermaid,
+.sequence-diagram,
+.flow-chart,
+.graphviz,
+.abc {
+  background-color: #ffffff !important;
+  border: 1px solid var(--ifm-table-border-color, #ebedf0) !important;
+  border-radius: 8px !important;
+  padding: 24px 20px !important;
+  margin: 1.5rem 0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  text-align: center !important;
+  overflow-x: auto !important;
+  line-height: normal !important;
+  color: #1c1e21 !important;
+}
+
+#doc.markdown-body pre.mermaid > svg,
+#doc.markdown-body pre.sequence-diagram > svg,
+#doc.markdown-body pre.flow-chart > svg,
+#doc.markdown-body pre.graphviz > svg,
+#doc.markdown-body pre.abc > svg,
+.markdown-body pre.mermaid > svg,
+.markdown-body pre.sequence-diagram > svg,
+.markdown-body pre.flow-chart > svg,
+.markdown-body pre.graphviz > svg,
+.markdown-body pre.abc > svg {
+  max-width: 100% !important;
+  height: auto !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  background-color: transparent !important;
+}
+
+/* --- Unified Clean White Card Style for All Diagrams (Light & Dark Mode) --- */
+/* In both Light & Dark modes, all diagrams (Mermaid, UML Sequence, Flowchart, Graphviz, ABC)
+   render consistently on an elegant, elevated white card with crisp contrast */
+[data-theme='dark'] #doc.markdown-body pre.mermaid,
+[data-theme='dark'] #doc.markdown-body pre.sequence-diagram,
+[data-theme='dark'] #doc.markdown-body pre.flow-chart,
+[data-theme='dark'] #doc.markdown-body pre.graphviz,
+[data-theme='dark'] #doc.markdown-body pre.abc,
+[data-theme='dark'] .markdown-body pre.mermaid,
+[data-theme='dark'] .markdown-body pre.sequence-diagram,
+[data-theme='dark'] .markdown-body pre.flow-chart,
+[data-theme='dark'] .markdown-body pre.graphviz,
+[data-theme='dark'] .markdown-body pre.abc,
+[data-theme='dark'] .mermaid,
+[data-theme='dark'] .sequence-diagram,
+[data-theme='dark'] .flow-chart,
+[data-theme='dark'] .graphviz,
+[data-theme='dark'] .abc,
+body.night #doc.markdown-body pre.mermaid,
+body.night #doc.markdown-body pre.sequence-diagram,
+body.night #doc.markdown-body pre.flow-chart,
+body.night #doc.markdown-body pre.graphviz,
+body.night #doc.markdown-body pre.abc,
+body.night .markdown-body pre.mermaid,
+body.night .markdown-body pre.sequence-diagram,
+body.night .markdown-body pre.flow-chart,
+body.night .markdown-body pre.graphviz,
+body.night .markdown-body pre.abc,
+body.night .mermaid,
+body.night .sequence-diagram,
+body.night .flow-chart,
+body.night .graphviz,
+body.night .abc {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+  color: #1c1e21 !important;
+  filter: none !important;
+}
+
+/* Ensure all diagram SVGs have clean transparent/white background and no invert filter */
+#doc.markdown-body pre.mermaid > svg,
+#doc.markdown-body pre.sequence-diagram > svg,
+#doc.markdown-body pre.flow-chart > svg,
+#doc.markdown-body pre.graphviz > svg,
+#doc.markdown-body pre.abc > svg,
+.markdown-body pre.mermaid > svg,
+.markdown-body pre.sequence-diagram > svg,
+.markdown-body pre.flow-chart > svg,
+.markdown-body pre.graphviz > svg,
+.markdown-body pre.abc > svg,
+.mermaid > svg,
+.sequence-diagram > svg,
+.flow-chart > svg,
+.graphviz > svg,
+.abc > svg {
+  max-width: 100% !important;
+  height: auto !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  background-color: transparent !important;
+  filter: none !important;
+}
+
+/* High contrast text on the white card across both themes */
+.mermaid svg text,
+.sequence-diagram svg text,
+.flow-chart svg text,
+.graphviz svg text,
+[data-theme='dark'] .mermaid svg text,
+[data-theme='dark'] .sequence-diagram svg text,
+[data-theme='dark'] .flow-chart svg text,
+[data-theme='dark'] .graphviz svg text,
+body.night .mermaid svg text,
+body.night .sequence-diagram svg text,
+body.night .flow-chart svg text,
+body.night .graphviz svg text {
+  fill: #1c1e21 !important;
+  color: #1c1e21 !important;
+}
+
+/* Graphviz: Outer canvas white/transparent, crisp text and borders */
+.graphviz svg > g > polygon:first-child,
+[data-theme='dark'] .graphviz svg > g > polygon:first-child,
+body.night .graphviz svg > g > polygon:first-child {
+  fill: #ffffff !important;
+  stroke: transparent !important;
+}
+
+/* Sheet Music: Always authentic crisp black notes on clean white sheet */
+.abc svg,
+[data-theme='dark'] .abc svg,
+body.night .abc svg {
+  filter: none !important;
+  background-color: #ffffff !important;
+}
+
+/* Mermaid labels on white card */
+.mermaid .label,
+.mermaid .labelText,
+.mermaid .messageText,
+.mermaid .loopText,
+.mermaid text.actor,
+[data-theme='dark'] .mermaid .label,
+[data-theme='dark'] .mermaid .labelText,
+[data-theme='dark'] .mermaid .messageText,
+[data-theme='dark'] .mermaid .loopText,
+[data-theme='dark'] .mermaid text.actor,
+body.night .mermaid .label,
+body.night .mermaid .labelText,
+body.night .mermaid .messageText,
+body.night .mermaid .loopText,
+body.night .mermaid text.actor {
+  fill: #1c1e21 !important;
+  color: #1c1e21 !important;
+}
+
+.mermaid foreignObject,
+.mermaid foreignObject div,
+.mermaid foreignObject span,
+[data-theme='dark'] .mermaid foreignObject,
+[data-theme='dark'] .mermaid foreignObject div,
+[data-theme='dark'] .mermaid foreignObject span,
+body.night .mermaid foreignObject,
+body.night .mermaid foreignObject div,
+body.night .mermaid foreignObject span {
+  color: #1c1e21 !important;
+  fill: #1c1e21 !important;
+}
+
+/* Mermaid edge paths and arrowheads on white card */
+.mermaid .edgePath .path,
+.mermaid .messageLine0,
+.mermaid .messageLine1,
+.mermaid .loopLine,
+.mermaid .actor-line,
+[data-theme='dark'] .mermaid .edgePath .path,
+[data-theme='dark'] .mermaid .messageLine0,
+[data-theme='dark'] .mermaid .messageLine1,
+[data-theme='dark'] .mermaid .loopLine,
+[data-theme='dark'] .mermaid .actor-line,
+body.night .mermaid .edgePath .path,
+body.night .mermaid .messageLine0,
+body.night .mermaid .messageLine1,
+body.night .mermaid .loopLine,
+body.night .mermaid .actor-line {
+  stroke: #333333 !important;
+}
+
+.mermaid #arrowhead,
+.mermaid #arrowhead path,
+.mermaid #crosshead path,
+[data-theme='dark'] .mermaid #arrowhead,
+[data-theme='dark'] .mermaid #arrowhead path,
+[data-theme='dark'] .mermaid #crosshead path,
+body.night .mermaid #arrowhead,
+body.night .mermaid #arrowhead path,
+body.night .mermaid #crosshead path {
+  fill: #333333 !important;
+  stroke: #333333 !important;
 }
 
 #doc.markdown-body code,
@@ -460,9 +821,9 @@ body.docusaurus-layout {
 
 #doc.markdown-body :not(pre) > code,
 .markdown-body :not(pre) > code {
-  background-color: #f1f5f9 !important;
-  border: 1px solid #e2e8f0 !important;
-  color: #e11d48 !important;
+  background-color: var(--ifm-code-background) !important;
+  border: 1px solid var(--ifm-code-border) !important;
+  color: var(--ifm-code-color) !important;
   font-size: 88% !important;
   border-radius: 4px !important;
   padding: 2px 6px !important;
@@ -482,7 +843,7 @@ body.docusaurus-layout {
   overflow: hidden !important;
   margin: 2rem 0 !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-  background-color: #ffffff !important;
+  background-color: var(--ifm-background-surface-color) !important;
 }
 
 #doc.markdown-body table th,
@@ -528,7 +889,7 @@ body.docusaurus-layout {
 
 #doc.markdown-body table tr:hover td,
 .markdown-body table tr:hover td {
-  background-color: #fbfcfe !important;
+  background-color: var(--ifm-table-stripe-background) !important;
 }
 
 /* Images */
@@ -562,7 +923,7 @@ body.docusaurus-layout {
   color: var(--ifm-alert-note-text) !important;
   font-size: 16px !important;
   margin: 1.5rem 0 !important;
-  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.05) !important;
+  box-shadow: none !important;
 }
 
 #doc.markdown-body blockquote p,
@@ -659,3 +1020,66 @@ body.docusaurus-layout {
     font-size: 1.85rem !important;
   }
 }
+
+/* --- Dark Theme Modals & Dialogs --- */
+[data-theme='dark'] .modal-content,
+body.night .modal-content {
+  background-color: var(--ifm-background-surface-color) !important;
+  border: 1px solid var(--ifm-toc-border-color) !important;
+  color: var(--ifm-color-content) !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme='dark'] .modal-header,
+[data-theme='dark'] .modal-footer,
+body.night .modal-header,
+body.night .modal-footer {
+  border-color: var(--ifm-toc-border-color) !important;
+}
+
+[data-theme='dark'] .modal-title,
+body.night .modal-title {
+  color: var(--ifm-heading-color) !important;
+}
+
+[data-theme='dark'] .modal-body,
+body.night .modal-body {
+  color: var(--ifm-color-content) !important;
+}
+
+[data-theme='dark'] .modal-body .text-muted,
+body.night .modal-body .text-muted {
+  color: var(--ifm-color-content-secondary) !important;
+}
+
+[data-theme='dark'] .close,
+body.night .close {
+  color: var(--ifm-color-content-secondary) !important;
+  text-shadow: none !important;
+  opacity: 0.7 !important;
+}
+
+[data-theme='dark'] .close:hover,
+body.night .close:hover {
+  color: var(--ifm-color-content) !important;
+  opacity: 1 !important;
+}
+
+/* ==========================================================================
+   Slide Preview Support for Docusaurus Layout
+   ========================================================================== */
+.docusaurus-layout-wrapper:has(#doc.slides) {
+  max-width: 1200px !important;
+}
+
+.docusaurus-layout-wrapper:has(#doc.slides) .docusaurus-main-content {
+  max-width: 100% !important;
+  width: 100% !important;
+  flex: 1 1 100% !important;
+}
+
+.docusaurus-layout-wrapper:has(#doc.slides) .docusaurus-toc-sidebar {
+  display: none !important;
+}
+
+

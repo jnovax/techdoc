@@ -32,7 +32,7 @@
                 <li class="dropdown-header"><%= __('Extra') %></li>
                 <li role="presentation"><a role="menuitem" class="ui-extra-revision" tabindex="-1" data-toggle="modal" data-target="#revisionModal"><i class="fa fa-history fa-fw"></i> <%= __('Revision') %></a>
                 </li>
-                <li role="presentation"><a role="menuitem" class="ui-extra-slide" tabindex="-1" href="#" target="_blank" rel="noopener"><i class="fa fa-tv fa-fw"></i> <%= __('Slide Mode') %></a>
+                <li role="presentation" class="ui-extra-slide-item hidden"><a role="menuitem" class="ui-extra-slide" tabindex="-1" href="#" target="_blank" rel="noopener"><i class="fa fa-tv fa-fw"></i> <%= __('Slide Mode') %></a>
                 </li>
                 <% if(enableGitHubGist || enableDropBoxSave || enableGitlabSnippets) { %>
                 <li class="divider"></li>
@@ -132,6 +132,11 @@
                     <i class="fa fa-share-square-o"></i> <%= __('Publish') %>
                 </a>
             </li>
+            <li class="ui-slide-quick-btn hidden">
+                <a href="#" target="_blank" rel="noopener" class="ui-slide-quick-action" title="Trình chiếu toàn màn hình (Slide Mode)">
+                    <i class="fa fa-tv"></i> <%= __('Slide Mode') %>
+                </a>
+            </li>
             <li>
                 <a data-toggle="dropdown">
                     <%= __('Menu') %> <i class="fa fa-caret-down"></i>
@@ -140,7 +145,7 @@
                     <li class="dropdown-header"><%= __('Extra') %></li>
                     <li role="presentation"><a role="menuitem" class="ui-extra-revision" tabindex="-1" data-toggle="modal" data-target="#revisionModal"><i class="fa fa-history fa-fw"></i> <%= __('Revision') %></a>
                     </li>
-                    <li role="presentation"><a role="menuitem" class="ui-extra-slide" tabindex="-1" href="#" target="_blank" rel="noopener"><i class="fa fa-tv fa-fw"></i> <%= __('Slide Mode') %></a>
+                    <li role="presentation" class="ui-extra-slide-item hidden"><a role="menuitem" class="ui-extra-slide" tabindex="-1" href="#" target="_blank" rel="noopener"><i class="fa fa-tv fa-fw"></i> <%= __('Slide Mode') %></a>
                     </li>
                     <% if(enableGitHubGist || enableDropBoxSave || enableGitlabSnippets) { %>
                     <li class="divider"></li>

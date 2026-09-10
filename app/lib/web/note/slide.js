@@ -32,6 +32,9 @@ exports.showPublishSlide = function (req, res, next) {
         return errors.errorNotFound(res)
       }
       noteUtil.getPublishData(req, res, note, (data) => {
+        if (!data.isSlide) {
+          return res.redirect(config.serverURL + '/s/' + (note.alias || note.shortid))
+        }
         res.set({
           'Cache-Control': 'no-cache, no-store, must-revalidate'
         })

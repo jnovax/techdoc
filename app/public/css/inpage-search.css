@@ -263,6 +263,71 @@ mark.techdoc-search-match.techdoc-search-current {
   color: #ef4444;
 }
 
+/* Night theme for inline navbar search */
+[data-theme='dark'] .techdoc-navbar-search,
+.night .techdoc-navbar-search {
+  background: #242526;
+  border-color: #383a40;
+}
+
+[data-theme='dark'] .techdoc-navbar-search:focus-within,
+.night .techdoc-navbar-search:focus-within {
+  background: #1b1b1d;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+[data-theme='dark'] .techdoc-navbar-search-input,
+.night .techdoc-navbar-search-input {
+  color: #e3e3e3;
+}
+
+[data-theme='dark'] .techdoc-navbar-search-input::placeholder,
+.night .techdoc-navbar-search-input::placeholder {
+  color: #64748b;
+}
+
+[data-theme='dark'] .techdoc-navbar-search-kbd,
+.night .techdoc-navbar-search-kbd {
+  background: #1b1b1d;
+  border-color: #383a40;
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .techdoc-navbar-search-counter,
+.night .techdoc-navbar-search-counter {
+  color: #38bdf8;
+}
+
+[data-theme='dark'] .techdoc-navbar-search-btn,
+.night .techdoc-navbar-search-btn {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .techdoc-navbar-search-btn:hover,
+.night .techdoc-navbar-search-btn:hover {
+  background: #334155;
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .techdoc-navbar-search-btn.search-clear-btn:hover,
+.night .techdoc-navbar-search-btn.search-clear-btn:hover {
+  background: #451a1a;
+  color: #f87171;
+}
+
+[data-theme='dark'] mark.techdoc-search-match,
+.night mark.techdoc-search-match {
+  background-color: #854d0e !important;
+  color: #fef08a !important;
+}
+
+[data-theme='dark'] mark.techdoc-search-current,
+.night mark.techdoc-search-current {
+  background-color: #eab308 !important;
+  color: #0f172a !important;
+}
+
 @media (max-width: 768px) {
   .techdoc-navbar-search {
     min-width: 130px;
