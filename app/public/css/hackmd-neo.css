@@ -1,0 +1,607 @@
+/* ==========================================================================
+   HackMD Neo Design System & UI Components for TechDoc
+   Includes: Design Tokens, Navbar, Segmented Mode Controls, Infobar,
+             Neo Buttons, Forms, Modals, and Dual-Mode Responsive TOC
+   ========================================================================== */
+
+/* --- 1. Design Tokens --- */
+:root,
+[data-theme='light'] {
+  --neo-bg-default: #ffffff;
+  --neo-bg-surface: #f8fafc;
+  --neo-bg-subtle: #f1f5f9;
+  --neo-border-default: #e2e8f0;
+  --neo-border-subtle: #cbd5e1;
+  --neo-text-default: #0f172a;
+  --neo-text-subtle: #64748b;
+  --neo-text-muted: #94a3b8;
+  --neo-primary: #2563eb;
+  --neo-primary-hover: #1d4ed8;
+  --neo-primary-light: rgba(37, 99, 235, 0.08);
+  --neo-primary-border: rgba(37, 99, 235, 0.25);
+  --neo-danger: #ef4444;
+  --neo-danger-light: rgba(239, 68, 68, 0.1);
+  --neo-warning: #f59e0b;
+  --neo-warning-light: rgba(245, 158, 11, 0.1);
+  --neo-success: #10b981;
+  --neo-success-light: rgba(16, 185, 129, 0.1);
+  --neo-radius-sm: 4px;
+  --neo-radius-md: 6px;
+  --neo-radius-lg: 8px;
+  --neo-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --neo-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --neo-shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'],
+body.night,
+.night {
+  --neo-bg-default: #121314;
+  --neo-bg-surface: #18191b;
+  --neo-bg-subtle: #222427;
+  --neo-border-default: #2d3136;
+  --neo-border-subtle: #3f444c;
+  --neo-text-default: #f1f5f9;
+  --neo-text-subtle: #94a3b8;
+  --neo-text-muted: #64748b;
+  --neo-primary: #38bdf8;
+  --neo-primary-hover: #60a5fa;
+  --neo-primary-light: rgba(56, 189, 248, 0.12);
+  --neo-primary-border: rgba(56, 189, 248, 0.3);
+  --neo-danger: #ef4444;
+  --neo-danger-light: rgba(239, 68, 68, 0.18);
+  --neo-warning: #f59e0b;
+  --neo-warning-light: rgba(245, 158, 11, 0.18);
+  --neo-success: #10b981;
+  --neo-success-light: rgba(16, 185, 129, 0.18);
+  --neo-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --neo-shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
+  --neo-shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.65);
+}
+
+/* --- 2. Top Navbar Overhaul --- */
+.navbar-default {
+  background-color: var(--neo-bg-default) !important;
+  border-color: var(--neo-border-default) !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: 1px solid var(--neo-border-default) !important;
+  box-shadow: var(--neo-shadow-sm) !important;
+  min-height: 52px !important;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.navbar-default .navbar-brand {
+  height: 52px;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-default .navbar-brand img {
+  height: 28px;
+  width: auto;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: var(--neo-text-subtle) !important;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: var(--neo-text-default) !important;
+}
+
+/* --- 3. Segmented Mode Switcher (View / Both / Edit) --- */
+.navbar-nav .btn-group[data-toggle="buttons"] {
+  display: inline-flex !important;
+  align-items: center;
+  background-color: var(--neo-bg-subtle) !important;
+  padding: 3px !important;
+  border-radius: var(--neo-radius-md) !important;
+  border: 1px solid var(--neo-border-default) !important;
+  margin: 9px 0 0 10px !important;
+  box-shadow: none !important;
+}
+
+.navbar-nav .btn-group[data-toggle="buttons"] > .btn {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--neo-text-subtle) !important;
+  border-radius: var(--neo-radius-sm) !important;
+  padding: 5px 14px !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  transition: all 0.15s ease !important;
+  cursor: pointer;
+}
+
+.navbar-nav .btn-group[data-toggle="buttons"] > .btn:hover {
+  color: var(--neo-text-default) !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+}
+
+body.night .navbar-nav .btn-group[data-toggle="buttons"] > .btn:hover,
+[data-theme='dark'] .navbar-nav .btn-group[data-toggle="buttons"] > .btn:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.navbar-nav .btn-group[data-toggle="buttons"] > .btn.active {
+  background: var(--neo-bg-default) !important;
+  color: var(--neo-primary) !important;
+  box-shadow: var(--neo-shadow-sm) !important;
+  font-weight: 600 !important;
+}
+
+/* Theme Toggle Button in Workspace */
+.navbar-default .docusaurus-theme-toggle {
+  background: transparent;
+  border: 1px solid var(--neo-border-default);
+  color: var(--neo-text-subtle);
+  border-radius: var(--neo-radius-md);
+  padding: 5px 9px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.navbar-default .docusaurus-theme-toggle:hover {
+  color: var(--neo-primary);
+  border-color: var(--neo-primary);
+  background: var(--neo-primary-light);
+}
+
+/* --- 4. Infobar & Permission Selector --- */
+.ui-infobar {
+  background-color: var(--neo-bg-default) !important;
+  border-bottom: 1px solid var(--neo-border-default) !important;
+  padding: 8px 24px !important;
+  color: var(--neo-text-subtle) !important;
+  font-size: 12.5px !important;
+  line-height: 1.5 !important;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.ui-infobar small {
+  font-size: 100%;
+}
+
+.ui-permission-label {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  background: var(--neo-bg-subtle) !important;
+  color: var(--neo-text-subtle) !important;
+  border: 1px solid var(--neo-border-default) !important;
+  border-radius: var(--neo-radius-sm) !important;
+  padding: 3px 9px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease !important;
+  cursor: pointer;
+}
+
+.ui-permission-label:hover,
+.ui-permission-label:focus {
+  color: var(--neo-text-default) !important;
+  border-color: var(--neo-border-subtle) !important;
+  background: var(--neo-bg-surface) !important;
+}
+
+/* Dropdown Menus */
+.dropdown-menu {
+  background-color: var(--neo-bg-default) !important;
+  border: 1px solid var(--neo-border-default) !important;
+  border-radius: var(--neo-radius-md) !important;
+  box-shadow: var(--neo-shadow-md) !important;
+  padding: 5px 0 !important;
+  margin-top: 4px !important;
+}
+
+.dropdown-menu > li > a {
+  color: var(--neo-text-default) !important;
+  font-size: 13px !important;
+  padding: 7px 16px !important;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  background-color: var(--neo-primary-light) !important;
+  color: var(--neo-primary) !important;
+}
+
+.dropdown-menu .divider {
+  background-color: var(--neo-border-default) !important;
+  margin: 5px 0 !important;
+}
+
+.dropdown-menu .dropdown-header {
+  color: var(--neo-text-muted) !important;
+  font-size: 11px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 6px 16px 3px 16px !important;
+}
+
+/* --- 5. Neo Button System (.neo-btn) --- */
+.neo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 8px 16px;
+  border-radius: var(--neo-radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none !important;
+  transition: all 0.15s ease;
+}
+
+.neo-btn-primary {
+  background-color: var(--neo-primary) !important;
+  color: #ffffff !important;
+  border-color: var(--neo-primary) !important;
+  box-shadow: var(--neo-shadow-sm);
+}
+
+.neo-btn-primary:hover,
+.neo-btn-primary:focus {
+  background-color: var(--neo-primary-hover) !important;
+  border-color: var(--neo-primary-hover) !important;
+}
+
+.neo-btn-tertiary,
+.neo-btn-default {
+  background-color: var(--neo-bg-default) !important;
+  color: var(--neo-text-default) !important;
+  border-color: var(--neo-border-default) !important;
+}
+
+.neo-btn-tertiary:hover,
+.neo-btn-default:hover {
+  background-color: var(--neo-bg-subtle) !important;
+  color: var(--neo-text-default) !important;
+  border-color: var(--neo-border-subtle) !important;
+}
+
+.neo-btn-danger,
+.neo-btn-danger-primary {
+  background-color: var(--neo-danger) !important;
+  color: #ffffff !important;
+  border-color: var(--neo-danger) !important;
+}
+
+.neo-btn-danger:hover,
+.neo-btn-danger-primary:hover {
+  opacity: 0.9;
+}
+
+.neo-btn-ghost {
+  background: transparent !important;
+  color: var(--neo-primary) !important;
+  border-color: transparent !important;
+}
+
+.neo-btn-ghost:hover {
+  background: var(--neo-primary-light) !important;
+}
+
+/* Compatibility overrides for Bootstrap default buttons in Modals */
+.modal-footer .btn-default {
+  background-color: var(--neo-bg-default) !important;
+  color: var(--neo-text-default) !important;
+  border: 1px solid var(--neo-border-default) !important;
+  border-radius: var(--neo-radius-md) !important;
+  font-weight: 500 !important;
+  padding: 7px 15px !important;
+  box-shadow: none !important;
+  transition: all 0.15s ease;
+}
+
+.modal-footer .btn-default:hover {
+  background-color: var(--neo-bg-subtle) !important;
+  border-color: var(--neo-border-subtle) !important;
+}
+
+.modal-footer .btn-primary {
+  background-color: var(--neo-primary) !important;
+  border: 1px solid var(--neo-primary) !important;
+  color: #ffffff !important;
+  border-radius: var(--neo-radius-md) !important;
+  font-weight: 500 !important;
+  padding: 7px 15px !important;
+  box-shadow: var(--neo-shadow-sm) !important;
+}
+
+.modal-footer .btn-danger {
+  background-color: var(--neo-danger) !important;
+  border: 1px solid var(--neo-danger) !important;
+  color: #ffffff !important;
+  border-radius: var(--neo-radius-md) !important;
+  font-weight: 500 !important;
+  padding: 7px 15px !important;
+}
+
+/* --- 6. Form Controls & Modals --- */
+.form-control {
+  background-color: var(--neo-bg-default) !important;
+  color: var(--neo-text-default) !important;
+  border: 1px solid var(--neo-border-default) !important;
+  border-radius: var(--neo-radius-md) !important;
+  box-shadow: none !important;
+  height: 38px !important;
+  padding: 7px 12px !important;
+  font-size: 13.5px !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-control:focus {
+  border-color: var(--neo-primary) !important;
+  box-shadow: 0 0 0 2px var(--neo-primary-border) !important;
+  outline: none !important;
+}
+
+.modal-backdrop {
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+
+.modal-content {
+  background-color: var(--neo-bg-default) !important;
+  color: var(--neo-text-default) !important;
+  border: 1px solid var(--neo-border-default) !important;
+  border-radius: var(--neo-radius-lg) !important;
+  box-shadow: var(--neo-shadow-lg) !important;
+  overflow: hidden !important;
+}
+
+.modal-header {
+  background-color: var(--neo-bg-surface) !important;
+  border-bottom: 1px solid var(--neo-border-default) !important;
+  padding: 14px 20px !important;
+  border-top-left-radius: var(--neo-radius-lg) !important;
+  border-top-right-radius: var(--neo-radius-lg) !important;
+}
+
+.modal-header .modal-title {
+  color: var(--neo-text-default) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+}
+
+.modal-header .close {
+  color: var(--neo-text-subtle) !important;
+  opacity: 0.8 !important;
+  font-size: 20px !important;
+  margin-top: -2px !important;
+  text-shadow: none !important;
+  transition: color 0.15s ease;
+}
+
+.modal-header .close:hover {
+  color: var(--neo-text-default) !important;
+  opacity: 1 !important;
+}
+
+.modal-body {
+  padding: 20px !important;
+  color: var(--neo-text-default) !important;
+  background-color: var(--neo-bg-default) !important;
+}
+
+.modal-footer {
+  background-color: var(--neo-bg-surface) !important;
+  border-top: 1px solid var(--neo-border-default) !important;
+  padding: 12px 20px !important;
+  border-bottom-left-radius: var(--neo-radius-lg) !important;
+  border-bottom-right-radius: var(--neo-radius-lg) !important;
+}
+
+/* --- 7. HackMD Neo Dual-Mode Responsive TOC --- */
+.neo-toc-wrapper {
+  position: relative;
+}
+
+/* 7.1 View Mode: Sticky Sidebar */
+.neo-toc-sidebar {
+  display: none; /* Controlled by JS / Mode */
+  position: fixed;
+  top: 72px;
+  width: 250px;
+  max-height: calc(100vh - 90px);
+  overflow-y: auto;
+  padding: 12px 14px 16px 16px;
+  border-left: 1px solid var(--neo-border-default);
+  background: transparent;
+  z-index: 100;
+  scrollbar-width: thin;
+}
+
+.neo-toc-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.neo-toc-sidebar::-webkit-scrollbar-thumb {
+  background: var(--neo-border-default);
+  border-radius: 4px;
+}
+
+.neo-toc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--neo-border-default);
+}
+
+.neo-toc-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--neo-text-muted);
+}
+
+.neo-toc-action-btn {
+  background: transparent;
+  border: none;
+  color: var(--neo-text-muted);
+  font-size: 12px;
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: var(--neo-radius-sm);
+  transition: all 0.15s ease;
+}
+
+.neo-toc-action-btn:hover {
+  color: var(--neo-text-default);
+  background: var(--neo-bg-subtle);
+}
+
+.neo-toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.neo-toc-item {
+  margin-bottom: 2px;
+}
+
+.neo-toc-item.level-3 {
+  padding-left: 14px;
+}
+
+.neo-toc-item.level-4 {
+  padding-left: 26px;
+}
+
+.neo-toc-link {
+  display: block;
+  font-size: 13px;
+  color: var(--neo-text-subtle);
+  text-decoration: none !important;
+  line-height: 1.4;
+  padding: 4px 6px 4px 8px;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--neo-radius-sm) var(--neo-radius-sm) 0;
+  transition: all 0.15s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.neo-toc-link:hover {
+  color: var(--neo-primary);
+  background-color: var(--neo-primary-light);
+}
+
+.neo-toc-link.active {
+  color: var(--neo-primary) !important;
+  font-weight: 600 !important;
+  border-left-color: var(--neo-primary) !important;
+  background-color: var(--neo-primary-light);
+}
+
+/* 7.2 Both Mode & Mobile: Floating Trigger & Drawer */
+.neo-toc-floating {
+  display: none; /* Controlled by JS / Mode */
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.neo-toc-trigger-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  background-color: var(--neo-bg-default);
+  color: var(--neo-text-subtle);
+  border: 1px solid var(--neo-border-default);
+  border-radius: 20px;
+  box-shadow: var(--neo-shadow-sm);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.neo-toc-trigger-btn:hover {
+  color: var(--neo-primary);
+  border-color: var(--neo-primary);
+  background-color: var(--neo-primary-light);
+}
+
+.neo-toc-drawer {
+  display: none;
+  position: absolute;
+  top: 40px;
+  right: 0;
+  width: 290px;
+  max-height: 480px;
+  background-color: var(--neo-bg-default);
+  border: 1px solid var(--neo-border-default);
+  border-radius: var(--neo-radius-md);
+  box-shadow: var(--neo-shadow-lg);
+  padding: 12px 14px;
+  z-index: 1010;
+  overflow-y: auto;
+  animation: neoFadeSlideDown 0.15s ease-out;
+}
+
+.neo-toc-drawer.is-open {
+  display: block;
+}
+
+.neo-toc-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--neo-border-default);
+}
+
+.neo-toc-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--neo-text-muted);
+  font-size: 14px;
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: var(--neo-radius-sm);
+  transition: all 0.15s ease;
+}
+
+.neo-toc-close-btn:hover {
+  color: var(--neo-text-default);
+  background-color: var(--neo-bg-subtle);
+}
+
+@keyframes neoFadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
