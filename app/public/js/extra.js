@@ -788,24 +788,7 @@ function toggleTodoEvent (e) {
   }
 }
 
-// remove hash
-function removeHash () {
-  history.pushState('', document.title, window.location.pathname + window.location.search)
-}
 
-let tocExpand = false
-
-function checkExpandToggle () {
-  const toc = $('.ui-toc-dropdown .toc')
-  const toggle = $('.expand-toggle')
-  if (!tocExpand) {
-    toc.removeClass('expand')
-    toggle.text('Expand all')
-  } else {
-    toc.addClass('expand')
-    toggle.text('Collapse all')
-  }
-}
 
 // toc
 export function generateToc (id) {
