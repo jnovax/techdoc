@@ -809,8 +809,11 @@ function checkExpandToggle () {
 
 // toc
 export function generateToc (id) {
+  if (window.updateNeoToc && typeof window.updateNeoToc === 'function') {
+    window.updateNeoToc()
+  }
   const target = $(`#${id}`)
-  if (target.length === 0) return
+  if (target.length === 0 || target.is(':hidden')) return
   target.html('')
   /* eslint-disable no-unused-vars */
   const toc = new window.Toc('doc', {
@@ -823,31 +826,6 @@ export function generateToc (id) {
   })
   /* eslint-enable no-unused-vars */
   if (target.text() === 'undefined') { target.html('') }
-  const tocMenu = $('<div class="toc-menu"></div')
-  const toggle = $('<a class="expand-toggle" href="#">Expand all</a>')
-  const backtotop = $('<a class="back-to-top" href="#">Back to top</a>')
-  const gotobottom = $('<a class="go-to-bottom" href="#">Go to bottom</a>')
-  checkExpandToggle()
-  toggle.click(e => {
-    e.preventDefault()
-    e.stopPropagation()
-    tocExpand = !tocExpand
-    checkExpandToggle()
-  })
-  backtotop.click(e => {
-    e.preventDefault()
-    e.stopPropagation()
-    if (window.scrollToTop) { window.scrollToTop() }
-    removeHash()
-  })
-  gotobottom.click(e => {
-    e.preventDefault()
-    e.stopPropagation()
-    if (window.scrollToBottom) { window.scrollToBottom() }
-    removeHash()
-  })
-  tocMenu.append(toggle).append(backtotop).append(gotobottom)
-  target.append(tocMenu)
 }
 
 // smooth all hash trigger scrolling

@@ -34,16 +34,39 @@
             </small>
         </div>
         <div id="doc" class="markdown-body container-fluid"></div>
-        <div class="ui-toc dropup unselectable hidden-print" style="display:none;">
-            <div class="pull-right dropdown">
-                <a id="tocLabel" class="ui-toc-label btn btn-default" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Table of content">
-                    <i class="fa fa-bars"></i>
-                </a>
-                <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
-                </ul>
+        <!-- Neo TOC Wrapper (Dual Mode: Sticky Sidebar & Floating Drawer) -->
+        <div id="neoTocWrapper" class="neo-toc-wrapper unselectable hidden-print">
+            <!-- View Mode: Sticky Sidebar -->
+            <aside id="neoTocSidebar" class="neo-toc-sidebar" aria-label="Mục lục bài viết">
+                <div class="neo-toc-header">
+                    <span class="neo-toc-title">MỤC LỤC</span>
+                    <button type="button" class="neo-toc-action-btn neo-toc-expand-toggle" title="Mở rộng / Thu gọn">
+                        <i class="fa fa-angle-double-down"></i>
+                    </button>
+                </div>
+                <nav class="neo-toc-nav" id="neoTocContentSidebar"></nav>
+            </aside>
+
+            <!-- Both Mode & Mobile: Floating Trigger & Drawer -->
+            <div id="neoTocFloating" class="neo-toc-floating">
+                <button type="button" class="neo-toc-trigger-btn" id="neoTocTriggerBtn" title="Xem mục lục">
+                    <i class="fa fa-list-ul"></i>
+                    <span class="neo-toc-trigger-label">Mục lục</span>
+                </button>
+                <div class="neo-toc-drawer" id="neoTocDrawer">
+                    <div class="neo-toc-drawer-header">
+                        <span class="neo-toc-title">MỤC LỤC</span>
+                        <button type="button" class="neo-toc-close-btn" id="neoTocCloseBtn" title="Đóng mục lục">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                    <nav class="neo-toc-nav" id="neoTocContentDrawer"></nav>
+                </div>
             </div>
         </div>
-        <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:51px;display:none;"></div>
+        <!-- Hidden stubs for backwards compatibility -->
+        <div id="ui-toc" class="ui-toc-dropdown" style="display:none;"></div>
+        <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown" style="display:none;"></div>
     </div>
 </div>
 <!-- clipboard modal -->
