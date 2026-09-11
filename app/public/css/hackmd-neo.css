@@ -138,24 +138,28 @@ body.night .navbar-nav .btn-group[data-toggle="buttons"] > .btn:hover,
   font-weight: 600 !important;
 }
 
-/* Theme Toggle Button in Workspace */
-.navbar-default .docusaurus-theme-toggle {
-  background: transparent;
-  border: 1px solid var(--neo-border-default);
-  color: var(--neo-text-subtle);
-  border-radius: var(--neo-radius-md);
-  padding: 5px 9px;
+/* Theme Toggle & Search Trigger Buttons in Workspace */
+.navbar-default .docusaurus-theme-toggle,
+.navbar-default .techdoc-search-nav-trigger {
+  background: transparent !important;
+  border: 1px solid var(--neo-border-default) !important;
+  color: var(--neo-text-subtle) !important;
+  border-radius: var(--neo-radius-md) !important;
+  padding: 5px 9px !important;
+  height: 32px !important;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   transition: all 0.15s ease;
+  box-shadow: none !important;
 }
 
-.navbar-default .docusaurus-theme-toggle:hover {
-  color: var(--neo-primary);
-  border-color: var(--neo-primary);
-  background: var(--neo-primary-light);
+.navbar-default .docusaurus-theme-toggle:hover,
+.navbar-default .techdoc-search-nav-trigger:hover {
+  color: var(--neo-primary) !important;
+  border-color: var(--neo-primary) !important;
+  background: var(--neo-primary-light) !important;
 }
 
 /* --- 4. Infobar & Permission Selector --- */
